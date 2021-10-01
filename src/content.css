@@ -1,0 +1,333 @@
+#yipyip-drag-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2147483003;
+  pointer-events: none;
+}
+
+#yipyip-drag-container.dragging {
+  pointer-events: all;
+}
+
+#yipyip-container {
+  position: fixed;
+  z-index: 2147483003;
+  pointer-events: all;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(180, 180, 180, 0.20);
+  background-color: rgba(45, 45, 45, 0.5);
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -ms-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+#yipyip-drag-handle {
+  cursor: grab;
+  padding: 0 15px;
+  height: 100%;
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -ms-box-orient: vertical;
+  -moz-box-orient: vertical;
+  box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+.yipyip-drag-handle-row {
+  margin: 2px 0;
+  box-sizing: border-box;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -ms-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  box-sizing: border-box;
+}
+
+.yipyip-drag-handle-item {
+  height: 2px;
+  width: 2px;
+  min-width: 2px;
+  margin: 0 2px;
+  -webkit-border-radius: 50%;
+  -moz-border-radius: 50%;
+  -ms-border-radius: 50%;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.65);
+}
+
+#yipyip-input-container {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  font-size: 13px;
+  line-height: 1.35em;
+  box-sizing: border-box;
+}
+
+#yipyip-input, #yipyip-matches-summary {
+  color: white;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+  font-size: 13px;
+  line-height: 1.35em;
+  box-sizing: border-box;
+}
+
+#yipyip-input {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  padding: 0;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+#yipyip-matches-summary {
+  position: relative;
+  display: inline-block;
+  margin-left: 10px;
+}
+
+#yipyip-input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgba(255, 255, 255, 0.65);
+  opacity: 1; /* Firefox */
+}
+
+#yipyip-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: rgba(255, 255, 255, 0.65);
+}
+
+#yipyip-input::-ms-input-placeholder { /* Microsoft Edge */
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.yipyip-selection {
+  position: fixed;
+  border-radius: 9px;
+  z-index: 2147483003;
+  display: block;
+  border: 3px solid blue;
+  opacity: 0.3;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.yipyip-selection.yipyip-selected-selection {
+  opacity: 1;
+}
+
+.yipyip-highlight {
+  display: inline;
+  padding: 0;
+  margin: 0;
+  background-color: yellow;
+  position: relative;
+  top: unset;
+  left: unset;
+  bottom: unset;
+  right: unset;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  color: black;
+}
+
+#yipyip-info-dropdown-button {
+  position: relative;
+  margin: 0 6px 0 12px;
+  height: 36px;
+  width: 36px;
+  min-width: 36px;
+  -webkit-border-radius: 7px;
+  -moz-border-radius: 7px;
+  -ms-border-radius: 7px;
+  border-radius: 7px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -ms-box-orient: vertical;
+  -moz-box-orient: vertical;
+  box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+}
+
+#yipyip-info-dropdown-button:hover {
+  background-color: rgba(45, 45, 45, 0.25);
+}
+
+#yipyip-keyboard-icon-container {
+  height: 20px;
+  width: 20px;
+}
+
+#yipyip-keyboard-icon {
+  fill: rgba(255, 255, 255, 0.65);
+}
+
+#yipyip-info-dropdown-button:hover #yipyip-keyboard-icon {
+  fill: rgba(255, 255, 255, 0.75);
+}
+
+.yipyip-tooltip-panel {
+  background-color: rgba(45, 45, 45, 0.5);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  position: fixed;
+  z-index: 2147483004;
+  -webkit-border-radius: 12px;
+  -moz-border-radius: 12px;
+  -ms-border-radius: 12px;
+  border-radius: 12px;
+}
+
+.yipyip-tooltip-arrow {
+  position: fixed;
+  border-style: solid;
+  border-color: rgba(45, 45, 45, 0.5) transparent;
+  z-index: 2147483004;
+}
+
+#yipyip-info-panel {
+  width: 300px;
+  padding: 20px;
+}
+
+#yipyip-info-panel ol {
+  list-style-type: decimal;
+  padding-inline-start: 30px;
+}
+
+#yipyip-info-panel ol li {
+}
+
+.yipyip-info-panel-section {
+
+}
+
+.yipyip-info-panel-section-header {
+  margin-bottom: 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.yipyip-info-panel-list-item, .yipyip-info-panel-row {
+  padding: 7px 0;
+  font-size: 13px;
+  font-weight: 400;
+  color: white;
+}
+
+.yipyip-info-panel-row {
+  padding-left: 15px;
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: center;
+}
+
+.yipyip-info-panel-shortcut-key {
+  display: inline-block;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.27);
+  min-width: 16px;
+  font-size: 12px;
+  color: white;
+  font-weight: 500;
+  height: 22px;
+  line-height: 22px;
+  padding: 0 5px;
+  margin-right: 5px;
+  margin-left: 0px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  -ms-border-radius: 4px;
+  border-radius: 4px;
+}
+
+.yipyip-info-panel-shortcut-text {
+  margin-left: 3px;
+}

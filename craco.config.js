@@ -1,0 +1,61 @@
+const { getPlugin, pluginByName } = require("@craco/craco");
+
+function removeContentHashFromMiniCssExtractPlugin(webpackConfig) {
+  const { isFound, match } = getPlugin(webpackConfig, pluginByName("MiniCssExtractPlugin"));
+  if (isFound) {
+    match.options.filename = 'static/css/[name].css'
+  }
+}
+
+function unsetDefaultMainEntryInManifestPlugin(webpackConfig) {
+  const { isFound, match } = getPlugin(webpackConfig, pluginByName("ManifestPlugin"));
+  if (isFound) {
+    // Solution to remove the default "main" entry point found here: https://github.com/timarney/react-app-rewired/issues/421
+    // Code copied from here https://github.com/vl4d1m1r4/cra-multi-entry/blob/8c62e9168e638e4c841fff87291cec6a99eb4ea9/config-overrides.js
+    match.opts.generate = (seed, files, entrypoints) => {
+      const manifestFiles = files.reduce((manifest, file) => {
+        manifest[file.name] = file.path;
+        return manifest;
+      }, seed);
+
+      const entrypointFiles = {};
+      Object.keys(entrypoints).forEach(entrypoint => {
+        entrypointFiles[entrypoint] = entrypoints[entrypoint].filter(fileName => !fileName.endsWith('.map'));
+      });
+
+      return {
+        files: manifestFiles,
+        entrypoints: entrypointFiles,
+      };
+    }
+  }
+}
+
+module.exports = {
+  webpack: {
+    configure: (webpackConfig, {env, paths}) => {
+      removeContentHashFromMiniCssExtractPlugin(webpackConfig)
+      unsetDefaultMainEntryInManifestPlugin(webpackConfig)
+
+      return {
+        ...webpackConfig,
+        entry: {
+          content: './src/content.js',
+        },
+        output: {
+          ...webpackConfig.output,
+          filename: 'static/js/[name].js',
+        },
+        optimization: {
+          ...webpackConfig.optimization,
+          splitChunks: {
+            cacheGroups: {
+          		default: false
+          	}
+          },
+          runtimeChunk: false,
+        }
+      }
+    },
+  }
+}
