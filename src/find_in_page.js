@@ -2,7 +2,7 @@ import { YIPYIP_ROOT_ID } from "./constants.js";
 import Utils from "./utils.js";
 
 const LINK_OR_BUTTON_TYPES = ['BUTTON', 'A', 'LINK', 'INPUT'];
-const LINK_OR_BUTTON_ROLE_VALUES = ['link', 'button'];
+const LINK_OR_BUTTON_ROLE_VALUES = ['link', 'button', 'checkbox'];
 const DO_NOT_SEARCH_NODE_TYPES = ['SCRIPT'];
 
 const HIDDEN_ATTRIBUTES_SETTINGS_BY_NODENAME = {
@@ -23,12 +23,12 @@ const HIDDEN_ATTRIBUTES_SETTINGS_BY_NODENAME = {
   },
   'DIV': {
     attributeFilter: 'role',
-    attributeFilterValues: ['link', 'button'],
+    attributeFilterValues: ['link', 'button', 'checkbox'],
     attributes: ['title', 'aria-label', 'data-tooltip']
   },
   'SPAN': {
     attributeFilter: 'role',
-    attributeFilterValues: ['link', 'button'],
+    attributeFilterValues: ['link', 'button', 'checkbox'],
     attributes: ['title', 'aria-label', 'data-tooltip']
   },
 };
@@ -51,7 +51,7 @@ function selectorsForNodeTypeWithHiddenAttributes(nodeName) {
 
 function findNodesInPageMatchingText(text) {
   if (text.length > 1) {
-    const matchingNodes = findMatchesInNode(text, document.body)
+    const matchingNodes = findMatchesInNode(text, document.body);
     const matchingLinksAndButtons = matchingNodes.filter(node => isLinkOrButton(node));
     return { matchingNodes, matchingLinksAndButtons }
   } else {
@@ -62,17 +62,16 @@ function findNodesInPageMatchingText(text) {
 function findMatchesInNode(text, node, parentNode=null, matches=[]) {
   if (!canSearchNode(node)) { return matches }
 
-
   if (node.nodeType === Node.TEXT_NODE && nodeContainsText(node, text) && parentNode && !matches.includes(parentNode)) {
     matches.push(parentNode)
   } else if (node.nodeType === Node.ELEMENT_NODE && isVisible(node)) {
-    matches.concat(findMatchesInElement(text, node, parentNode, matches))
+    matches.concat(findMatchesInElement(text, node, matches))
   }
 
   return matches
 }
 
-function findMatchesInElement(text, element, parentNode=null, matches=[]) {
+function findMatchesInElement(text, element, matches=[]) {
   const containsText = nodeContainsText(element, text);
   const elementHasChildren = element.childNodes && element.childNodes.length > 0;
   const searchableChildren = element.querySelectorAll(NODES_WITH_HIDDEN_ATTRIBUTES_QUERY_SELECTOR);
@@ -119,7 +118,7 @@ function isLinkOrButton(node) {
 
 function isVisible(node) {
   const computedStyle = window.getComputedStyle(node);
-  return !!(node.offsetWidth || node.offsetHeight || node.getClientRects().length) &&
+  return !!(node.offsetWidth || node.offsetHeight || node.getClientRects().length || computedStyle.display == 'contents') &&
     computedStyle.visibility !== "hidden" && computedStyle.opacity !== '0'
 }
 
