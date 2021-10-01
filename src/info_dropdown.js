@@ -1,6 +1,6 @@
 import React from 'react';
 import useHover from './hooks/use_hover.js'
-import KeyboardIcon from './keyboard_icon.js';
+import KeyboardIcon from './icons/keyboard_icon.js';
 import InfoPanel from './info_panel.js';
 import Tooltip from './tooltip.js';
 
@@ -15,7 +15,7 @@ const InfoDropdown = (props) => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <KeyboardIcon />
+      ?
       { hover && (
           <Tooltip containerRef={containerRef}>
             <InfoPanel />

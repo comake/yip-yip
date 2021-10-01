@@ -7,7 +7,7 @@ import useDocumentEvent from "./hooks/use_document_event.js";
 import useHighlights from "./hooks/use_highlights.js";
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { F_KEY, ENTER_KEY, TAB_KEY, BACKSPACE_KEY, YIPYIP_ROOT_ID } from "./constants.js";
+import { F_KEYCODE, ENTER_KEY, TAB_KEY, BACKSPACE_KEY, YIPYIP_ROOT_ID } from "./constants.js";
 
 import Utils from "./utils.js";
 import FindInPage from "./find_in_page.js";
@@ -116,8 +116,7 @@ const YipYip = (props) => {
 
   const handleKeyEvent = React.useCallback(event => {
     const differentInputIsActive = Utils.differentInputIsActive(searchInputRef.current);
-
-    if (event.key === F_KEY && event.altKey) {
+    if (event.code === F_KEYCODE && event.altKey) {
       preventDefaultEventAndFocusInput(event)
     } else if (event.key === ENTER_KEY) {
       clickSelectedMatchingNodeAndReset(event)

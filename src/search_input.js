@@ -12,7 +12,7 @@ const SearchInput = (props) => {
         ref={inputRef}
         id={'yipyip-input'}
         type='text'
-        placeholder={'Search to YipYip!'}
+        placeholder={'YipYip!'}
         value={searchText}
         onChange={onSearchTextChange}
       />
