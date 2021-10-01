@@ -15,7 +15,14 @@ import MatchesSummary from "./matches_summary.js";
 import DraggableContainer from "./draggable_container.js";
 import InfoDropdown from "./info_dropdown.js";
 
-const SELECTION_UPDATE_TIMEOUT_DURATION = 150;
+const SELECTION_UPDATE_TIMEOUT_DURATION = 100;
+
+function scrollToNodeAtIndexInList(nodeList, selectedIndex) {
+  const selectedMatchingNode = nodeList.length > 0 ? nodeList[selectedIndex] : null;
+  if (selectedMatchingNode) {
+    selectedMatchingNode.scrollIntoViewIfNeeded()
+  }
+}
 
 const YipYip = (props) => {
   const scrollOrResizeUpdateTimeout = React.useRef();
@@ -63,11 +70,16 @@ const YipYip = (props) => {
     }
   }, [matchingLinksAndButtons, selectedSelectionIndex, resetSearchTextAndMatches])
 
-  const updateMatchingNodes = React.useCallback(() => {
+  const updateMatchingNodesAndScrollToSelectedIndex = React.useCallback(selectedIndex => {
     const { matchingNodes, matchingLinksAndButtons } = FindInPage.findNodesInPageMatchingText(searchText);
     setMatchingNodes(matchingNodes)
     setMatchingLinksAndButtons(matchingLinksAndButtons)
-  }, [searchText])
+
+    if (matchingLinksAndButtons.length > 0) {
+      scrollToNodeAtIndexInList(matchingLinksAndButtons, selectedIndex)
+      setScrollOrResizeRefresh(!scrollOrResizeRefresh)
+    }
+  }, [searchText, scrollOrResizeRefresh])
 
   const updateSelectionPositionsAfterTimeout = React.useCallback(() => {
     setHideSelections(true)
@@ -78,15 +90,16 @@ const YipYip = (props) => {
     }, SELECTION_UPDATE_TIMEOUT_DURATION)
   }, [scrollOrResizeRefresh])
 
-  const updateSelectionsAfterTimeout = React.useCallback(() => {
+  const updateSelectionAndScrollToSelectedAfterTimeout = React.useCallback(() => {
     if (selectionUpdateTimeout.current) { clearTimeout(selectionUpdateTimeout.current) }
+    const newSelectedSelectionIndex = 0;
     clearMatchingNodes()
-    setSelectedSelectionIndex(0)
+    setSelectedSelectionIndex(newSelectedSelectionIndex)
 
     selectionUpdateTimeout.current = setTimeout(() => {
-      updateMatchingNodes()
+      updateMatchingNodesAndScrollToSelectedIndex(newSelectedSelectionIndex);
     }, SELECTION_UPDATE_TIMEOUT_DURATION)
-  }, [clearMatchingNodes, updateMatchingNodes])
+  }, [clearMatchingNodes, updateMatchingNodesAndScrollToSelectedIndex])
 
   const preventDefaultEventAndSelectNextMatchingNode = React.useCallback((event, forward) => {
     event.preventDefault();
@@ -95,16 +108,9 @@ const YipYip = (props) => {
     if (matchingLinksAndButtons.length > 1) {
       const newSelectedSelectionIndex = (selectedSelectionIndex + (forward ? 1 : (matchingLinksAndButtons.length-1))) % matchingLinksAndButtons.length;
       setSelectedSelectionIndex(newSelectedSelectionIndex)
-      const selectedMatchingNode = matchingLinksAndButtons.length > 0 ? matchingLinksAndButtons[newSelectedSelectionIndex] : null
-      selectedMatchingNode.scrollIntoViewIfNeeded()
-
-      if (selectionUpdateTimeout.current) { clearTimeout(selectionUpdateTimeout.current)}
-      clearMatchingNodes()
-      updateMatchingNodes()
+      scrollToNodeAtIndexInList(matchingLinksAndButtons, newSelectedSelectionIndex)
     }
-  }, [matchingLinksAndButtons, selectedSelectionIndex, clearMatchingNodes,
-    updateMatchingNodes
-  ])
+  }, [matchingLinksAndButtons, selectedSelectionIndex, clearMatchingNodes])
 
   const preventDefaultAndClearSearchText = React.useCallback(event => {
     event.preventDefault();
@@ -133,9 +139,9 @@ const YipYip = (props) => {
   React.useEffect(() => {
     if (searchText !== prevSearchText) {
       setPrevSearchText(searchText)
-      updateSelectionsAfterTimeout()
+      updateSelectionAndScrollToSelectedAfterTimeout()
     }
-  }, [searchText, prevSearchText, updateSelectionsAfterTimeout])
+  }, [searchText, prevSearchText, updateSelectionAndScrollToSelectedAfterTimeout])
 
   const hasMatchingLinksOrButtons = React.useMemo(() => matchingLinksAndButtons.length > 0, [matchingLinksAndButtons])
   useWindowEvent('scroll', hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
