@@ -56,13 +56,29 @@ function clampNumber(number, min, max) {
   return Math.min(Math.max(number, min), max);
 }
 
+function synonymSetsToHash(synonymSets) {
+  return synonymSets.reduce((obj, synonymSet) => {
+    synonymSet.forEach((word, index) => {
+      const otherWordsInSet = synonymSet.filter(otherWordInSet => word !== otherWordInSet);
+      if (obj.hasOwnProperty(word)) {
+        obj[word] = obj[word].concat(otherWordsInSet);
+      } else {
+        obj[word] = otherWordsInSet;
+      }
+    })
+
+    return obj
+  }, [])
+}
+
 const Utils = {
   differentInputIsActive,
   clickOrFocusNode,
   keyValidForFocus,
   regexpMatchingTextAtStartOrEndOrSurroundedByNonWordChars,
   getTextContentOfNode,
-  clampNumber
+  clampNumber,
+  synonymSetsToHash
 }
 
 export default Utils

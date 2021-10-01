@@ -13,7 +13,3 @@ export const GITHUB_REPO_LINK = 'https://github.com/comake/yip-yip'
 export const YIPYIP_CONTAINER_HEIGHT = 50;
 export const YIPYIP_CONTAINER_WIDTH = 300;
 export const YIPYIP_CONTAINER_DEFAULT_EDGE_MARGIN = 10;
-
-export const SYNONYM_SETS = [
-  ['delete', 'trash', 'discard']
-];

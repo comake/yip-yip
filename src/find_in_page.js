@@ -1,5 +1,6 @@
 import { YIPYIP_ROOT_ID } from "./constants.js";
 import Utils from "./utils.js";
+import Synonyms from './synonyms/synonyms.js';
 
 const LINK_OR_BUTTON_TYPES = ['BUTTON', 'A', 'LINK', 'INPUT'];
 const LINK_OR_BUTTON_ROLE_VALUES = ['link', 'button', 'checkbox'];
@@ -62,7 +63,7 @@ function findNodesInPageMatchingText(text) {
 function findMatchesInNode(text, node, parentNode=null, matches=[]) {
   if (!canSearchNode(node)) { return matches }
 
-  if (node.nodeType === Node.TEXT_NODE && nodeContainsText(node, text) && parentNode && !matches.includes(parentNode)) {
+  if (node.nodeType === Node.TEXT_NODE && nodeContainsTextOrSynonym(node, text) && parentNode && !matches.includes(parentNode)) {
     matches.push(parentNode)
   } else if (node.nodeType === Node.ELEMENT_NODE && isVisible(node)) {
     matches.concat(findMatchesInElement(text, node, matches))
@@ -72,7 +73,7 @@ function findMatchesInNode(text, node, parentNode=null, matches=[]) {
 }
 
 function findMatchesInElement(text, element, matches=[]) {
-  const containsText = nodeContainsText(element, text);
+  const containsText = nodeContainsTextOrSynonym(element, text);
   const elementHasChildren = element.childNodes && element.childNodes.length > 0;
   const searchableChildren = element.querySelectorAll(NODES_WITH_HIDDEN_ATTRIBUTES_QUERY_SELECTOR);
   const elementHasSearchableChildren = elementHasChildren && searchableChildren.length > 0;
@@ -87,25 +88,39 @@ function findMatchesInElement(text, element, matches=[]) {
   return matches
 }
 
-function nodeContainsText(node, text) {
-  return nodeInnerTextContainsText(node, text) || nodeContainsTextInHiddenAttribute(node, text)
+function nodeContainsTextOrSynonym(node, text) {
+  const synonyms = getSynonyms(text);
+  return nodeInnerTextContainsStringInList(node, synonyms) || nodeContainsStringInListInHiddenAttribute(node, synonyms)
 }
 
-function nodeInnerTextContainsText(node, text) {
+function getSynonyms(text) {
+  const domain = window.location.host;
+  const synonymsForDomain = Synonyms.getSynonymsByDomain(domain)
+  const synonymWord = synonymsForDomain && Object.keys(synonymsForDomain).find(word => word.includes(text))
+  if (synonymWord) {
+    return [text].concat(synonymsForDomain[synonymWord])
+  } else {
+    return [text]
+  }
+}
+
+function nodeInnerTextContainsStringInList(node, strings) {
   const lowercaseText = Utils.getTextContentOfNode(node).slice().toLowerCase();
-  return lowercaseText && (lowercaseText.includes(text) || lowercaseText.replace(/\s/g, '').includes(text))
-}
-
-function nodeContainsTextInHiddenAttribute(node, text) {
-  const hiddenAttributesSettingsForNodeName = HIDDEN_ATTRIBUTES_SETTINGS_BY_NODENAME[node.nodeName];
-  return hiddenAttributesSettingsForNodeName && hiddenAttributesSettingsForNodeName.attributes.some(attributeName => {
-    return nodeAttributeContainsText(node, attributeName, text)
+  return lowercaseText && strings.some(string => {
+    return lowercaseText.includes(string) || lowercaseText.replace(/\s/g, '').includes(string)
   })
 }
 
-function nodeAttributeContainsText(node, attributeName, text) {
+function nodeContainsStringInListInHiddenAttribute(node, strings) {
+  const hiddenAttributesSettingsForNodeName = HIDDEN_ATTRIBUTES_SETTINGS_BY_NODENAME[node.nodeName];
+  return hiddenAttributesSettingsForNodeName && hiddenAttributesSettingsForNodeName.attributes.some(attributeName => {
+    return nodeAttributeContainsStringInList(node, attributeName, strings)
+  })
+}
+
+function nodeAttributeContainsStringInList(node, attributeName, strings) {
   const attributeValue = node.getAttribute(attributeName);
-  return attributeValue != null && attributeValue.toLowerCase().includes(text)
+  return attributeValue != null && strings.some(string => attributeValue.toLowerCase().includes(string))
 }
 
 function canSearchNode(node) {

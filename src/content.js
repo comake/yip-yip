@@ -109,8 +109,9 @@ const YipYip = (props) => {
       const newSelectedSelectionIndex = (selectedSelectionIndex + (forward ? 1 : (matchingLinksAndButtons.length-1))) % matchingLinksAndButtons.length;
       setSelectedSelectionIndex(newSelectedSelectionIndex)
       scrollToNodeAtIndexInList(matchingLinksAndButtons, newSelectedSelectionIndex)
+      setScrollOrResizeRefresh(!scrollOrResizeRefresh)
     }
-  }, [matchingLinksAndButtons, selectedSelectionIndex, clearMatchingNodes])
+  }, [matchingLinksAndButtons, selectedSelectionIndex, clearMatchingNodes, scrollOrResizeRefresh])
 
   const preventDefaultAndClearSearchText = React.useCallback(event => {
     event.preventDefault();
