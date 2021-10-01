@@ -1,5 +1,5 @@
 import React from 'react';
-import "./content.css";
+import "../content.css";
 
 const SELECTION_MARGIN = 7;
 

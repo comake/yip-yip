@@ -1,6 +1,6 @@
 import React from 'react';
-import { YIPYIP_CONTAINER_DEFAULT_EDGE_MARGIN, YIPYIP_CONTAINER_HEIGHT, YIPYIP_CONTAINER_WIDTH } from './constants.js'
-import Utils from './utils.js'
+import { YIPYIP_CONTAINER_DEFAULT_EDGE_MARGIN, YIPYIP_CONTAINER_HEIGHT, YIPYIP_CONTAINER_WIDTH } from '../constants.js'
+import Utils from '../lib/utils.js'
 import DragHandle from './drag_handle.js'
 
 const RIGHT_VALUE_MIN = 0;

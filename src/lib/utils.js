@@ -1,4 +1,4 @@
-import { INPUT_NODE_TYPES, KEYS_VALID_FOR_FOCUS_REGEX } from "./constants.js";
+import { INPUT_NODE_TYPES, KEYS_VALID_FOR_FOCUS_REGEX } from "../constants.js";
 
 function differentInputIsActive(inputElement) {
   return document.activeElement &&
@@ -11,7 +11,6 @@ function differentInputIsActive(inputElement) {
 
 function clickOrFocusNode(node) {
   if (INPUT_NODE_TYPES.includes(node.nodeName)) {
-    console.debug('focusing', node)
     node.focus();
   } else {
     const eventConfig = {
@@ -56,29 +55,13 @@ function clampNumber(number, min, max) {
   return Math.min(Math.max(number, min), max);
 }
 
-function synonymSetsToHash(synonymSets) {
-  return synonymSets.reduce((obj, synonymSet) => {
-    synonymSet.forEach((word, index) => {
-      const otherWordsInSet = synonymSet.filter(otherWordInSet => word !== otherWordInSet);
-      if (obj.hasOwnProperty(word)) {
-        obj[word] = obj[word].concat(otherWordsInSet);
-      } else {
-        obj[word] = otherWordsInSet;
-      }
-    })
-
-    return obj
-  }, [])
-}
-
 const Utils = {
   differentInputIsActive,
   clickOrFocusNode,
   keyValidForFocus,
   regexpMatchingTextAtStartOrEndOrSurroundedByNonWordChars,
   getTextContentOfNode,
-  clampNumber,
-  synonymSetsToHash
+  clampNumber
 }
 
 export default Utils

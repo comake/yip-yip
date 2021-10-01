@@ -1,0 +1,20 @@
+[
+  {
+    "keys": ["Tab"],
+    "text": "to jump to the next match"
+  },
+  {
+    "keys": ["Shift", "Tab"],
+    "text": "to jump to the previous match"
+  },
+  {
+    "keys": ["Enter"],
+    "text": "to click the selected match"
+  }, {
+    "keys": ["Command", "Delete"],
+    "text": "to clear the searchbar"
+  }, {
+    "keys": ["Alt", "F"],
+    "text": "to focus the searchbar (or just start typing)"
+  }
+]

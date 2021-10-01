@@ -1,7 +1,7 @@
 import React from 'react';
-import Utils from './utils.js';
+import Utils from '../lib/utils.js';
 import Portal from './portal.js';
-import useWindowSize from './hooks/use_window_size.js';
+import useWindowSize from '../hooks/use_window_size.js';
 
 const ARROW_SIZE = 15;
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import "./content.css";
+import "../content.css";
 
 const SearchInput = (props) => {
   const { searchText, updateSearchText, inputRef } = props;

@@ -1,0 +1,27 @@
+{
+  "A": {
+    "attributes": ["title", "aria-label", "href"]
+  },
+  "INPUT": {
+    "attributes": ["name", "placeholder", "value", "aria-label"]
+  },
+  "SELECT": {
+    "attributes": ["name"]
+  },
+  "TEXTAREA": {
+    "attributes": ["name", "placeholder"]
+  },
+  "BUTTON": {
+    "attributes": ["name", "aria-label"]
+  },
+  "DIV": {
+    "attributeFilter": "role",
+    "attributeFilterValues": ["link", "button", "checkbox"],
+    "attributes": ["title", "aria-label", "data-tooltip"]
+  },
+  "SPAN": {
+    "attributeFilter": "role",
+    "attributeFilterValues": ["link", "button", "checkbox"],
+    "attributes": ["title", "aria-label", "data-tooltip"]
+  }
+}

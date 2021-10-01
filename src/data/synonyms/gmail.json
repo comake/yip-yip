@@ -1,0 +1,12 @@
+{
+  "mutual": [
+    ["delete", "trash", "discard"]
+  ],
+  "directed": {
+    "new": ["compose"],
+    "tag": ["label"],
+    "last": ["newer"],
+    "previous": ["newer"],
+    "next": ["older"]
+  }
+}

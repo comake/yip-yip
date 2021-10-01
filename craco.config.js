@@ -40,7 +40,7 @@ module.exports = {
       return {
         ...webpackConfig,
         entry: {
-          content: './src/content.js',
+          content: './src/components/content.js',
         },
         output: {
           ...webpackConfig.output,

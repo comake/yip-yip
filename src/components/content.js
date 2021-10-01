@@ -1,14 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import "./content.css";
+import "../content.css";
 
-import useWindowEvent from "./hooks/use_window_event.js";
-import useDocumentEvent from "./hooks/use_document_event.js";
-import useHighlights from "./hooks/use_highlights.js";
-import { F_KEYCODE, ENTER_KEY, TAB_KEY, BACKSPACE_KEY, YIPYIP_ROOT_ID } from "./constants.js";
+import useWindowEvent from "../hooks/use_window_event.js";
+import useDocumentEvent from "../hooks/use_document_event.js";
+import useHighlights from "../hooks/use_highlights.js";
+import { F_KEYCODE, ENTER_KEY, TAB_KEY, BACKSPACE_KEY, YIPYIP_ROOT_ID } from "../constants.js";
 
-import Utils from "./utils.js";
-import FindInPage from "./find_in_page.js";
+import Utils from "../lib/utils.js";
+import FindInPage from "../lib/find_in_page.js";
 import SearchInput from "./search_input.js";
 import Selections from "./selections.js";
 import MatchesSummary from "./matches_summary.js";
@@ -111,7 +111,7 @@ const YipYip = (props) => {
       scrollToNodeAtIndexInList(matchingLinksAndButtons, newSelectedSelectionIndex)
       setScrollOrResizeRefresh(!scrollOrResizeRefresh)
     }
-  }, [matchingLinksAndButtons, selectedSelectionIndex, clearMatchingNodes, scrollOrResizeRefresh])
+  }, [matchingLinksAndButtons, selectedSelectionIndex, scrollOrResizeRefresh])
 
   const preventDefaultAndClearSearchText = React.useCallback(event => {
     event.preventDefault();

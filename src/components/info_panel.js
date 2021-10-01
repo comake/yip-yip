@@ -1,34 +1,9 @@
 import React from 'react';
-import DiscordIcon from './icons/discord_icon.js';
-import GithubIcon from './icons/github_icon.js';
-import { DISCORD_INVITE_LINK, COMAKE_LANDING_PAGE_LINK, GITHUB_REPO_LINK } from './constants.js';
-
-const howToSteps = [
-  'Type to search for buttons or links in the page',
-  'Press Tab to jump through the matches',
-  'Press enter to select a match'
-];
-
-const keyboardShortcuts = [
-  {
-    keys: ['Tab'],
-    text: 'to jump to the next match'
-  },
-  {
-    keys: ['Shift', 'Tab'],
-    text: 'to jump to the previous match'
-  },
-  {
-    keys: ['Enter'],
-    text: 'to click the selected match'
-  }, {
-    keys: ['Command', 'Delete'],
-    text: 'to clear the searchbar'
-  }, {
-    keys: ['Alt', 'F'],
-    text: 'to focus the searchbar (or just start typing)'
-  }
-]
+import DiscordIcon from './icons/discord.js';
+import GithubIcon from './icons/github.js';
+import { DISCORD_INVITE_LINK, COMAKE_LANDING_PAGE_LINK, GITHUB_REPO_LINK } from '../constants.js';
+import keyboardShortcuts from '../data/keyboard_shortcuts.json';
+import howToSteps from '../data/how_to_steps.json'
 
 const InfoPanel = () => {
   return (

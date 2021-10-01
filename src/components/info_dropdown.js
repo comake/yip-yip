@@ -1,5 +1,5 @@
 import React from 'react';
-import useHover from './hooks/use_hover.js'
+import useHover from '../hooks/use_hover.js'
 import InfoPanel from './info_panel.js';
 import Tooltip from './tooltip.js';
 

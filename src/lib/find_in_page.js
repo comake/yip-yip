@@ -1,45 +1,20 @@
-import { YIPYIP_ROOT_ID } from "./constants.js";
+import {
+  YIPYIP_ROOT_ID,
+  LINK_OR_BUTTON_TYPES,
+  LINK_OR_BUTTON_ROLE_VALUES,
+  DO_NOT_SEARCH_NODE_TYPES
+} from "../constants.js";
+
 import Utils from "./utils.js";
-import Synonyms from './synonyms/synonyms.js';
+import Synonyms from './synonyms.js';
+import hiddenAttributeSettingsByNodeName from '../data/hidden_attribute_settings.json';
 
-const LINK_OR_BUTTON_TYPES = ['BUTTON', 'A', 'LINK', 'INPUT'];
-const LINK_OR_BUTTON_ROLE_VALUES = ['link', 'button', 'checkbox'];
-const DO_NOT_SEARCH_NODE_TYPES = ['SCRIPT'];
-
-const HIDDEN_ATTRIBUTES_SETTINGS_BY_NODENAME = {
-  'A': {
-    attributes: ['title', 'aria-label', 'href']
-  },
-  'INPUT': {
-    attributes: ['name', 'placeholder', 'value', 'aria-label']
-  },
-  'SELECT': {
-    attributes: ['name'],
-  },
-  'TEXTAREA': {
-    attributes: ['name', 'placeholder']
-  },
-  'BUTTON': {
-    attributes: ['name', 'aria-label']
-  },
-  'DIV': {
-    attributeFilter: 'role',
-    attributeFilterValues: ['link', 'button', 'checkbox'],
-    attributes: ['title', 'aria-label', 'data-tooltip']
-  },
-  'SPAN': {
-    attributeFilter: 'role',
-    attributeFilterValues: ['link', 'button', 'checkbox'],
-    attributes: ['title', 'aria-label', 'data-tooltip']
-  },
-};
-
-const NODES_WITH_HIDDEN_ATTRIBUTES_QUERY_SELECTOR = Object.keys(HIDDEN_ATTRIBUTES_SETTINGS_BY_NODENAME)
+const NODES_WITH_HIDDEN_ATTRIBUTES_QUERY_SELECTOR = Object.keys(hiddenAttributeSettingsByNodeName)
   .map(nodeName => selectorsForNodeTypeWithHiddenAttributes(nodeName))
   .join(', ');
 
 function selectorsForNodeTypeWithHiddenAttributes(nodeName) {
-  const nodeNameSettings = HIDDEN_ATTRIBUTES_SETTINGS_BY_NODENAME[nodeName];
+  const nodeNameSettings = hiddenAttributeSettingsByNodeName[nodeName];
   if (!nodeNameSettings.attributeFilter) {
     return nodeName.toLowerCase()
   } else {
@@ -112,7 +87,7 @@ function nodeInnerTextContainsStringInList(node, strings) {
 }
 
 function nodeContainsStringInListInHiddenAttribute(node, strings) {
-  const hiddenAttributesSettingsForNodeName = HIDDEN_ATTRIBUTES_SETTINGS_BY_NODENAME[node.nodeName];
+  const hiddenAttributesSettingsForNodeName = hiddenAttributeSettingsByNodeName[node.nodeName];
   return hiddenAttributesSettingsForNodeName && hiddenAttributesSettingsForNodeName.attributes.some(attributeName => {
     return nodeAttributeContainsStringInList(node, attributeName, strings)
   })

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { YIPYIP_ROOT_ID } from './constants.js';
+import { YIPYIP_ROOT_ID } from '../constants.js';
 
 const Portal = (props) => {
   const { children } = props;
