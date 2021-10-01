@@ -1,9 +1,8 @@
-
 const DragHandle = (props) => {
-  const { dragRef } = props;
+  const { onMouseDown } = props;
 
   return (
-    <div ref={dragRef} id={'yipyip-drag-handle'}>
+    <div draggable onMouseDown={onMouseDown} id={'yipyip-drag-handle'}>
       { [...Array(3)].map((e, i) => {
           return (
             <div class={'yipyip-drag-handle-row'} key={i}>

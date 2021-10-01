@@ -118,7 +118,7 @@ function isLinkOrButton(node) {
 
 function isVisible(node) {
   const computedStyle = window.getComputedStyle(node);
-  return !!(node.offsetWidth || node.offsetHeight || node.getClientRects().length || computedStyle.display == 'contents') &&
+  return !!(node.offsetWidth || node.offsetHeight || node.getClientRects().length || computedStyle.display === 'contents') &&
     computedStyle.visibility !== "hidden" && computedStyle.opacity !== '0'
 }
 

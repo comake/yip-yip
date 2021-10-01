@@ -1,224 +1,210 @@
-#yipyip-drag-container {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2147483003;
-  pointer-events: none;
-}
-
-#yipyip-drag-container.dragging {
-  pointer-events: all;
-}
-
 #yipyip-container {
-  position: fixed;
-  z-index: 2147483003;
-  pointer-events: all;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  -ms-border-radius: 12px;
-  border-radius: 12px;
-  border: 1px solid rgba(180, 180, 180, 0.20);
-  background-color: rgba(45, 45, 45, 0.5);
-  box-shadow: none;
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  box-sizing: border-box;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -ms-box-orient: horizontal;
-  -moz-box-orient: horizontal;
-  box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-  box-sizing: border-box;
+  position: fixed !important;
+  z-index: 2147483003 !important;
+  pointer-events: all !important;
+  -webkit-border-radius: 12px !important;
+  -moz-border-radius: 12px !important;
+  -ms-border-radius: 12px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(180, 180, 180, 0.20) !important;
+  background-color: rgba(45, 45, 45, 0.5) !important;
+  box-shadow: none !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+  box-sizing: border-box !important;
+  display: -webkit-box !important;
+  display: -moz-box !important;
+  display: -ms-flexbox !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-box-orient: horizontal !important;
+  -ms-box-orient: horizontal !important;
+  -moz-box-orient: horizontal !important;
+  box-orient: horizontal !important;
+  -webkit-box-direction: normal !important;
+  -webkit-flex-direction: row !important;
+  -ms-flex-direction: row !important;
+  flex-direction: row !important;
+  -webkit-box-align: center !important;
+  -moz-box-align: center !important;
+  -ms-flex-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
 }
 
 #yipyip-drag-handle {
-  cursor: grab;
-  padding: 0 15px;
-  height: 100%;
-  box-sizing: border-box;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -ms-box-orient: vertical;
-  -moz-box-orient: vertical;
-  box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  -moz-box-pack: center;
-  -ms-flex-pack: center;
-  -webkit-justify-content: center;
-  justify-content: center;
+  cursor: grab !important;
+  padding: 0 15px !important;
+  height: 100% !important;
+  box-sizing: border-box !important;
+  display: -webkit-box !important;
+  display: -moz-box !important;
+  display: -ms-flexbox !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-box-orient: vertical !important;
+  -ms-box-orient: vertical !important;
+  -moz-box-orient: vertical !important;
+  box-orient: vertical !important;
+  -webkit-box-direction: normal !important;
+  -webkit-flex-direction: column !important;
+  -ms-flex-direction: column !important;
+  flex-direction: column !important;
+  -webkit-box-align: center !important;
+  -moz-box-align: center !important;
+  -ms-flex-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
+  -webkit-box-pack: center !important;
+  -moz-box-pack: center !important;
+  -ms-flex-pack: center !important;
+  -webkit-justify-content: center !important;
+  justify-content: center !important;
 }
 
 .yipyip-drag-handle-row {
-  margin: 2px 0;
-  box-sizing: border-box;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -ms-box-orient: horizontal;
-  -moz-box-orient: horizontal;
-  box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
-  -ms-flex-direction: row;
-  flex-direction: row;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
-  box-sizing: border-box;
+  margin: 2px 0 !important;
+  box-sizing: border-box !important;
+  display: -webkit-box !important;
+  display: -moz-box !important;
+  display: -ms-flexbox !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-box-orient: horizontal !important;
+  -ms-box-orient: horizontal !important;
+  -moz-box-orient: horizontal !important;
+  box-orient: horizontal !important;
+  -webkit-box-direction: normal !important;
+  -webkit-flex-direction: row !important;
+  -ms-flex-direction: row !important;
+  flex-direction: row !important;
+  -webkit-box-align: center !important;
+  -moz-box-align: center !important;
+  -ms-flex-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
 }
 
 .yipyip-drag-handle-item {
-  height: 2px;
-  width: 2px;
-  min-width: 2px;
-  margin: 0 2px;
-  -webkit-border-radius: 50%;
-  -moz-border-radius: 50%;
-  -ms-border-radius: 50%;
-  border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.65);
+  height: 2px !important;
+  width: 2px !important;
+  min-width: 2px !important;
+  margin: 0 2px !important;
+  -webkit-border-radius: 50% !important;
+  -moz-border-radius: 50% !important;
+  -ms-border-radius: 50% !important;
+  border-radius: 50% !important;
+  background-color: rgba(255, 255, 255, 0.65) !important;
 }
 
 #yipyip-input-container {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  -webkit-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  font-size: 13px;
-  line-height: 1.35em;
-  box-sizing: border-box;
+  -webkit-box-flex: 1 !important;
+  -moz-box-flex: 1 !important;
+  -webkit-flex: 1 !important;
+  -ms-flex: 1 !important;
+  flex: 1 !important;
+  font-size: 13px !important;
+  line-height: 1.35em !important;
+  box-sizing: border-box !important;
 }
 
 #yipyip-input, #yipyip-matches-summary {
-  color: white;
-  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-  font-size: 13px;
-  line-height: 1.35em;
-  box-sizing: border-box;
+  color: white !important;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.35em !important;
+  box-sizing: border-box !important;
 }
 
 #yipyip-input {
-  position: relative;
-  display: inline-block;
-  width: 100%;
-  padding: 0;
-  outline: none;
-  border: none;
-  background-color: transparent;
-  box-shadow: none;
+  position: relative !important;
+  display: inline-block !important;
+  width: 100% !important;
+  padding: 0 !important;
+  outline: none !important;
+  border: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 #yipyip-matches-summary {
-  position: relative;
-  display: inline-block;
-  margin-left: 10px;
+  position: relative !important;
+  display: inline-block !important;
+  margin-left: 10px !important;
 }
 
 #yipyip-input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: rgba(255, 255, 255, 0.65);
-  opacity: 1; /* Firefox */
+  color: rgba(255, 255, 255, 0.65) !important;
+  opacity: 1 !important; /* Firefox */
 }
 
 #yipyip-input:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.65) !important;
 }
 
 #yipyip-input::-ms-input-placeholder { /* Microsoft Edge */
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.65) !important;
 }
 
 .yipyip-selection {
-  position: fixed;
-  border-radius: 9px;
-  z-index: 2147483003;
-  display: block;
-  border: 3px solid blue;
-  opacity: 0.3;
-  pointer-events: none;
-  box-sizing: border-box;
+  position: fixed !important;
+  border-radius: 9px !important;
+  z-index: 2147483003 !important;
+  display: block !important;
+  border: 3px solid blue !important;
+  opacity: 0.3 !important;
+  pointer-events: none !important;
+  box-sizing: border-box !important;
 }
 
 .yipyip-selection.yipyip-selected-selection {
-  opacity: 1;
+  opacity: 1 !important;
 }
 
 .yipyip-highlight {
-  display: inline;
-  padding: 0;
-  margin: 0;
-  background-color: yellow;
-  position: relative;
-  top: unset;
-  left: unset;
-  bottom: unset;
-  right: unset;
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
-  color: black;
+  display: inline !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background-color: yellow !important;
+  position: relative !important;
+  top: unset !important;
+  left: unset !important;
+  bottom: unset !important;
+  right: unset !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  color: black !important;
 }
 
 #yipyip-info-dropdown-button {
-  position: relative;
-  margin: 0 6px 0 12px;
-  height: 36px;
-  width: 36px;
-  min-width: 36px;
-  -webkit-border-radius: 7px;
-  -moz-border-radius: 7px;
-  -ms-border-radius: 7px;
-  border-radius: 7px;
-  line-height: 36px;
-  text-align: center;
-  font-size: 17px;
-  font-weight: 400;
+  position: relative !important;
+  margin: 0 6px 0 12px !important;
+  height: 36px !important;
+  width: 36px !important;
+  min-width: 36px !important;
+  -webkit-border-radius: 7px !important;
+  -moz-border-radius: 7px !important;
+  -ms-border-radius: 7px !important;
+  border-radius: 7px !important;
+  line-height: 36px !important;
+  text-align: center !important;
+  font-size: 17px !important;
+  font-weight: 400 !important;
   color: rgba(255, 255, 255, 0.65);
-  cursor: pointer;
-  font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;
+  cursor: pointer !important;
+  font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif !important;
 }
 
 #yipyip-info-dropdown-button:hover {
-  background-color: rgba(45, 45, 45, 0.25);
+  background-color: rgba(45, 45, 45, 0.25) !important;
 }
 
 #yipyip-keyboard-icon-container {
-  height: 20px;
-  width: 20px;
+  height: 20px !important;
+  width: 20px !important;
 }
 
 #yipyip-keyboard-icon {
@@ -226,142 +212,143 @@
 }
 
 #yipyip-info-dropdown-button:hover #yipyip-keyboard-icon {
-  fill: rgba(255, 255, 255, 0.75);
+  fill: rgba(255, 255, 255, 0.75) !important;
 }
 
 .yipyip-tooltip-panel {
-  background-color: rgba(45, 45, 45, 0.5);
-  -webkit-backdrop-filter: blur(16px);
-  backdrop-filter: blur(16px);
-  position: fixed;
-  z-index: 2147483004;
-  -webkit-border-radius: 12px;
-  -moz-border-radius: 12px;
-  -ms-border-radius: 12px;
-  border-radius: 12px;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
+  background-color: rgba(45, 45, 45, 0.5) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  backdrop-filter: blur(16px) !important;
+  position: fixed !important;
+  z-index: 2147483004 !important;
+  -webkit-border-radius: 12px !important;
+  -moz-border-radius: 12px !important;
+  -ms-border-radius: 12px !important;
+  border-radius: 12px !important;
 }
 
 .yipyip-tooltip-arrow {
-  position: fixed;
-  border-style: solid;
-  border-color: rgba(45, 45, 45, 0.5) transparent;
-  z-index: 2147483004;
+  position: fixed !important;
+  border-style: solid !important;
+  border-color: rgba(45, 45, 45, 0.5) transparent !important;
+  z-index: 2147483004 !important;
 }
 
 #yipyip-info-panel {
-  width: 380px;
-  min-width: 380px;
-  padding: 20px;
+  width: 380px !important;
+  min-width: 380px !important;
+  padding: 20px !important;
 }
 
 #yipyip-info-panel ol {
-  list-style-type: decimal;
-  padding-inline-start: 30px;
-  margin-block-start: 0px;
-  margin-block-end: 0px;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
+  list-style-type: decimal !important;
+  padding-inline-start: 30px !important;
+  margin-block-start: 0px !important;
+  margin-block-end: 0px !important;
+  margin-inline-start: 0px !important;
+  margin-inline-end: 0px !important;
 }
 
 .yipyip-info-panel-section-header {
-  margin-bottom: 12px;
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 12px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: rgba(255, 255, 255, 0.65) !important;
 }
 
 .yipyip-info-panel-margin-top-section-header {
-  margin-top: 15px;
+  margin-top: 15px !important;
 }
 
 .yipyip-info-panel-section-header a,
 .yipyip-info-panel-section-header a:hover {
-  color: rgba(255, 255, 255, 0.65);
-  text-decoration: underline;
+  color: rgba(255, 255, 255, 0.65) !important;
+  text-decoration: underline !important;
 }
 
 .yipyip-info-panel-list-item, .yipyip-info-panel-row {
-  padding: 7px 0;
-  font-size: 13px;
-  font-weight: 400;
-  color: white;
+  padding: 7px 0 !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: white !important;
 }
 
 .yipyip-info-panel-row {
-  padding-left: 15px;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
+  padding-left: 15px !important;
+  display: -webkit-box !important;
+  display: -moz-box !important;
+  display: -ms-flexbox !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-box-align: center !important;
+  -moz-box-align: center !important;
+  -ms-flex-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
 }
 
 .yipyip-info-panel-shortcut-key {
-  display: inline-block;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.27);
-  min-width: 16px;
-  font-size: 12px;
-  color: white;
-  font-weight: 500;
-  height: 22px;
-  line-height: 22px;
-  padding: 0 5px;
-  margin-right: 5px;
-  margin-left: 0px;
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  border-radius: 4px;
-  white-space: nowrap;
+  display: inline-block !important;
+  text-align: center !important;
+  border: 1px solid rgba(255,255,255,0.27) !important;
+  min-width: 16px !important;
+  font-size: 12px !important;
+  color: white !important;
+  font-weight: 500 !important;
+  height: 22px !important;
+  line-height: 22px !important;
+  padding: 0 5px !important;
+  margin-right: 5px !important;
+  margin-left: 0px !important;
+  -webkit-border-radius: 4px !important;
+  -moz-border-radius: 4px !important;
+  -ms-border-radius: 4px !important;
+  border-radius: 4px !important;
+  white-space: nowrap !important;
 }
 
 .yipyip-info-panel-shortcut-text {
-  margin-left: 3px;
+  margin-left: 3px !important;
 }
 
 .yipyip-info-panel-button {
-  text-decoration: none;
-  margin: 10px 15px 0 15px;
-  padding: 7px 15px;
-  background-color: none;
-  color: white;
-  font-size: 13px;
-  font-weight: 500;
-  appearance: none;
-  outline: none;
+  text-decoration: none !important;
+  margin: 10px 15px 0 15px !important;
+  padding: 7px 15px !important;
+  background-color: none !important;
+  color: white !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  appearance: none !important;
+  outline: none !important;
   border: 1px solid rgba(255,255,255,0.65);
-  -webkit-border-radius: 7px;
-  -moz-border-radius: 7px;
-  -ms-border-radius: 7px;
-  border-radius: 7px;
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  -ms-flex-align: center;
-  -webkit-align-items: center;
-  align-items: center;
+  -webkit-border-radius: 7px !important;
+  -moz-border-radius: 7px !important;
+  -ms-border-radius: 7px !important;
+  border-radius: 7px !important;
+  display: -webkit-box !important;
+  display: -moz-box !important;
+  display: -ms-flexbox !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-box-align: center !important;
+  -moz-box-align: center !important;
+  -ms-flex-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
 }
 
 .yipyip-info-panel-button:hover {
-  border: 1px solid rgba(255,255,255,0.9);
-  color: white;
-  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.9) !important;
+  color: white !important;
+  text-decoration: none !important;
 }
 
 #yipyip-discord-icon-container, #yipyip-github-icon-container {
-  margin-right: 15px;
-  height: 18px;
-  width: 18px;
+  margin-right: 15px !important;
+  height: 18px !important;
+  width: 18px !important;
 }
 
 #yipyip-discord-icon, #yipyip-github-icon {
@@ -370,9 +357,9 @@
 
 .yipyip-info-panel-button:hover #yipyip-discord-icon,
 .yipyip-info-panel-button:hover #yipyip-github-icon {
-  fill: rgba(255, 255, 255, 1);
+  fill: rgba(255, 255, 255, 1) !important;
 }
 
 #yipyip-comake-link {
-  text-transform: uppercase;
+  text-transform: uppercase !important;
 }

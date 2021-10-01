@@ -12,7 +12,7 @@ const useWindowSize = (listen=true, timeoutDuration=0) => {
   const resize = React.useCallback(() => {
     if (resizeTimeout.current) { clearTimeout(resizeTimeout.current) }
 
-    if (timeoutDuration == 0) {
+    if (timeoutDuration === 0) {
       setWindowSize(getWindowDimensions())
     } else {
       resizeTimeout.current = setTimeout(() => setWindowSize(getWindowDimensions()), timeoutDuration);

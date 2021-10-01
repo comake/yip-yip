@@ -30,8 +30,6 @@ const keyboardShortcuts = [
   }
 ]
 
-const STYLE = {};
-
 const InfoPanel = () => {
   return (
     <div id={'yipyip-info-panel'}>
@@ -56,12 +54,12 @@ const InfoPanel = () => {
       }
 
       <div class={'yipyip-info-panel-section-header yipyip-info-panel-margin-top-section-header'}>
-        Made with ❤️ by <a id={'yipyip-comake-link'} href={COMAKE_LANDING_PAGE_LINK} target='_blank'>COMAKE</a>
+        Made with ❤️ by <a id={'yipyip-comake-link'} href={COMAKE_LANDING_PAGE_LINK} target='_blank' rel="noreferrer">COMAKE</a>
       </div>
-      <a class={'yipyip-info-panel-button'} href={GITHUB_REPO_LINK} target='_blank'>
+      <a class={'yipyip-info-panel-button'} href={GITHUB_REPO_LINK} target='_blank' rel="noreferrer">
         <GithubIcon /> Contribute on Github
       </a>
-      <a class={'yipyip-info-panel-button'} href={DISCORD_INVITE_LINK} target='_blank'>
+      <a class={'yipyip-info-panel-button'} href={DISCORD_INVITE_LINK} target='_blank' rel="noreferrer">
         <DiscordIcon /> Join us on Discord
       </a>
     </div>

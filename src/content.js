@@ -5,8 +5,6 @@ import "./content.css";
 import useWindowEvent from "./hooks/use_window_event.js";
 import useDocumentEvent from "./hooks/use_document_event.js";
 import useHighlights from "./hooks/use_highlights.js";
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
 import { F_KEYCODE, ENTER_KEY, TAB_KEY, BACKSPACE_KEY, YIPYIP_ROOT_ID } from "./constants.js";
 
 import Utils from "./utils.js";
@@ -149,7 +147,7 @@ const YipYip = (props) => {
   useHighlights({ searchText, matchingNodes })
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <>
       { !hideSelections && <Selections
           refresh={scrollOrResizeRefresh}
           selectedSelectionIndex={selectedSelectionIndex}
@@ -168,7 +166,7 @@ const YipYip = (props) => {
         />
         <InfoDropdown />
       </DraggableContainer>
-    </DndProvider>
+    </>
   )
 }
 

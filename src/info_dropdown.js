@@ -1,6 +1,5 @@
 import React from 'react';
 import useHover from './hooks/use_hover.js'
-import KeyboardIcon from './icons/keyboard_icon.js';
 import InfoPanel from './info_panel.js';
 import Tooltip from './tooltip.js';
 

@@ -15,7 +15,7 @@ const Tooltip = (props) => {
   const windowSize = useWindowSize(true, 100)
 
   const STYLE = React.useMemo(() => {
-    if (!containerRef.current || !panelRef.current) {
+    if (!containerRef.current || !panelRef.current || !hasMounted) {
       return {
         panel: { opacity: 0 },
         arrow: { opacity: 0 }
@@ -53,7 +53,7 @@ const Tooltip = (props) => {
         arrow: { left: arrowLeft, top: arrowTop, borderWidth: arrowBorderWidth }
       }
     }
-  }, [hasMounted, windowSize])
+  }, [hasMounted, windowSize, containerRef])
 
   React.useEffect(() => setHasMounted(true), [])
 
