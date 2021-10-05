@@ -7,6 +7,10 @@
     "tag": ["label"],
     "last": ["newer"],
     "previous": ["newer"],
-    "next": ["older"]
+    "next": ["older"],
+    "reload": ["refresh"],
+    "help": ["support"],
+    "later": ["snooze"],
+    "pop": ["in new window"]
   }
 }

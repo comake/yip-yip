@@ -55,13 +55,28 @@ function clampNumber(number, min, max) {
   return Math.min(Math.max(number, min), max);
 }
 
+function stringContainsSubstringInList(string, substrings) {
+  return substrings.some(substring => stringContainsSubstringWithOrWithoutSpaces(string, substring))
+}
+
+function stringContainsSubstringWithOrWithoutSpaces(string, substring) {
+  return string.includes(substring) || string.replace(/\s/g, '').includes(substring)
+}
+
+function compareDescending(a, b) {
+  return b - a
+}
+
 const Utils = {
   differentInputIsActive,
   clickOrFocusNode,
   keyValidForFocus,
   regexpMatchingTextAtStartOrEndOrSurroundedByNonWordChars,
   getTextContentOfNode,
-  clampNumber
+  clampNumber,
+  stringContainsSubstringInList,
+  stringContainsSubstringWithOrWithoutSpaces,
+  compareDescending
 }
 
 export default Utils

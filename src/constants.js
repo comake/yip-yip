@@ -18,6 +18,19 @@ export const YIPYIP_CONTAINER_WIDTH = 300;
 export const YIPYIP_CONTAINER_DEFAULT_EDGE_MARGIN = 10;
 
 export const INPUT_NODE_TYPES = ['INPUT', 'TEXTAREA', 'SELECT'];
-export const LINK_OR_BUTTON_TYPES = ['BUTTON', 'A', 'LINK', 'INPUT'];
-export const LINK_OR_BUTTON_ROLE_VALUES = ['link', 'button', 'checkbox'];
+export const LINK_OR_BUTTON_OR_INPUT_TYPES = ['BUTTON', 'A', 'LINK', 'INPUT', 'TEXTAREA', 'SELECT'];
+export const LINK_OR_BUTTON_ROLE_VALUES = ['link', 'button', 'checkbox', 'tab'];
 export const DO_NOT_SEARCH_NODE_TYPES = ['SCRIPT'];
+
+export const FIELD_BOOSTS = {
+  innerText: 1,
+  attribute: 0.9
+}
+
+export const SEARCH_TERM_BOOSTS = {
+  searchText: 1,
+  synonym: 0.7
+}
+
+export const STARTS_WITH_BOOST = 1.5;
+export const RELEVANT_WORD_BOOST = 1.2;

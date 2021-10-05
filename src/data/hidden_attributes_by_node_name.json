@@ -1,0 +1,9 @@
+{
+  "A": ["title", "aria-label", "href"],
+  "INPUT": ["name", "placeholder", "value", "aria-label"],
+  "SELECT": ["name"],
+  "TEXTAREA": ["name", "placeholder"],
+  "BUTTON": ["name", "aria-label"],
+  "DIV": ["title", "aria-label", "data-tooltip"],
+  "SPAN": ["title", "aria-label", "data-tooltip"]
+}

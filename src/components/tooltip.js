@@ -57,10 +57,10 @@ const Tooltip = (props) => {
 
   React.useEffect(() => setHasMounted(true), [])
 
-  return <>
+  return <div>
     <Portal><div class={'yipyip-tooltip-panel'} style={STYLE.panel} ref={panelRef}>{children}</div></Portal>
     <Portal><div class={'yipyip-tooltip-arrow'} style={STYLE.arrow} ref={arrowRef}></div></Portal>
-  </>
+  </div>
 }
 
 export default Tooltip

@@ -1,116 +1,101 @@
 import {
   YIPYIP_ROOT_ID,
-  LINK_OR_BUTTON_TYPES,
+  LINK_OR_BUTTON_OR_INPUT_TYPES,
   LINK_OR_BUTTON_ROLE_VALUES,
   DO_NOT_SEARCH_NODE_TYPES
 } from "../constants.js";
 
 import Utils from "./utils.js";
 import Synonyms from './synonyms.js';
-import hiddenAttributeSettingsByNodeName from '../data/hidden_attribute_settings.json';
+import RelevantWords from './relevant_words.js';
+import NodeScorer from './node_scorer.js';
+import HiddenAttributeSettings from './hidden_attribute_settings.js';
 
-const NODES_WITH_HIDDEN_ATTRIBUTES_QUERY_SELECTOR = Object.keys(hiddenAttributeSettingsByNodeName)
-  .map(nodeName => selectorsForNodeTypeWithHiddenAttributes(nodeName))
-  .join(', ');
+class FindInPage {
+  constructor(searchText) {
+    this.searchText = searchText.trim();
+    this.domain = window.location.host;
+    this.synonyms = Synonyms.getSynonymsForTextInDomain(this.domain, searchText);
+    this.relevantWords = RelevantWords.getRelevantWordsForDomain(this.domain);
+    this.nodeScorer = new NodeScorer(this.searchText, this.synonyms, this.relevantWords);
+  }
 
-function selectorsForNodeTypeWithHiddenAttributes(nodeName) {
-  const nodeNameSettings = hiddenAttributeSettingsByNodeName[nodeName];
-  if (!nodeNameSettings.attributeFilter) {
-    return nodeName.toLowerCase()
-  } else {
-    return nodeNameSettings.attributeFilterValues.map(attributeValue => {
-      return `${nodeName.toLowerCase()}[${nodeNameSettings.attributeFilter}="${attributeValue}"]`
-    })
-    .join(', ')
+  findMatches() {
+    if (this.searchText.length > 1) {
+      const matches = this.findMatchesInNode(document.body);
+      const matchingNodes = matches.map(match => match.node);
+      const matchesWhereNodeIsLinkOrButtons = matches.filter(match => this.isLinkOrButtonOrInput(match.node));
+      console.debug(matchesWhereNodeIsLinkOrButtons);
+      const matchingLinksAndButtons = matchesWhereNodeIsLinkOrButtons.map(match => match.node);
+      const bestMatchingLinkOrButtonIndex = this.findIndexOfBestMatch(matchesWhereNodeIsLinkOrButtons);
+      return { matchingNodes, matchingLinksAndButtons, bestMatchingLinkOrButtonIndex }
+    } else {
+      return { matchingNodes: [], matchingLinksAndButtons: [], bestMatchingLinkOrButtonIndex: null }
+    }
+  }
+
+  findMatchesInNode(node, parentNode=null, parentNodeScore=0, matches=[]) {
+    if (!this.canSearchNode(node)) { return matches }
+
+    const score = this.nodeScorer.scoreNode(node);
+    if (node.nodeType === Node.TEXT_NODE && score > 0 &&
+      parentNode && !matches.some(match => match.node === parentNode)
+    ) {
+      matches.push({ score, node: parentNode });
+    } else if (node.nodeType === Node.TEXT_NODE && parentNodeScore > 0 &&
+      parentNode && !matches.some(match => match.node === parentNode)
+    ) {
+      matches.push({ score: parentNodeScore, node: parentNode });
+    } else if (node.nodeType === Node.ELEMENT_NODE && this.isVisible(node)) {
+      matches.concat(this.findMatchesInElement(node, parentNode, parentNodeScore, matches));
+    }
+
+    return matches
+  }
+
+  findMatchesInElement(element, parentNode=null, parentNodeScore=0, matches=[]) {
+    const score = this.nodeScorer.scoreNode(element)
+    const elementHasChildren = element.childNodes && element.childNodes.length > 0;
+    const searchableChildren = element.querySelectorAll(HiddenAttributeSettings.nodesWithHiddenAttributesQuerySelector);
+    const elementHasSearchableChildren = elementHasChildren && searchableChildren.length > 0;
+    if (score > 0 && (!elementHasChildren || this.isLinkOrButtonOrInput(element))) {
+      matches.push({ score, node: element });
+    } else if (score > 0 || elementHasSearchableChildren) {
+      const newParentNode = score > 0 ? element : parentNode;
+      const newParentNodeScore = score > 0 ? score : parentNodeScore;
+      [...element.childNodes].forEach(childNode => {
+        this.findMatchesInNode(childNode, newParentNode, newParentNodeScore, matches)
+      })
+    }
+
+    return matches
+  }
+
+  findIndexOfBestMatch(matches) {
+    if (matches.length > 0) {
+      const sortedMatchesWithIndex = matches
+        .map((match, index) => ({ ...match, index }))
+        .sort((a, b) => b.score - a.score);
+
+      return sortedMatchesWithIndex[0].index;
+    } else {
+      return 0;
+    }
+  }
+
+  canSearchNode(node) {
+    return !DO_NOT_SEARCH_NODE_TYPES.includes(node.nodeName) && node.id !== YIPYIP_ROOT_ID
+  }
+
+  isLinkOrButtonOrInput(node) {
+    return LINK_OR_BUTTON_OR_INPUT_TYPES.includes(node.nodeName) || LINK_OR_BUTTON_ROLE_VALUES.includes(node.getAttribute('role'));
+  }
+
+  isVisible(node) {
+    const computedStyle = window.getComputedStyle(node);
+    return !!(node.offsetWidth || node.offsetHeight || node.getClientRects().length || computedStyle.display === 'contents') &&
+      computedStyle.visibility !== "hidden" && computedStyle.opacity !== '0'
   }
 }
 
-function findNodesInPageMatchingText(text) {
-  if (text.length > 1) {
-    const matchingNodes = findMatchesInNode(text, document.body);
-    const matchingLinksAndButtons = matchingNodes.filter(node => isLinkOrButton(node));
-    return { matchingNodes, matchingLinksAndButtons }
-  } else {
-    return { matchingNodes: [], matchingLinksAndButtons: [] }
-  }
-}
-
-function findMatchesInNode(text, node, parentNode=null, matches=[]) {
-  if (!canSearchNode(node)) { return matches }
-
-  if (node.nodeType === Node.TEXT_NODE && nodeContainsTextOrSynonym(node, text) && parentNode && !matches.includes(parentNode)) {
-    matches.push(parentNode)
-  } else if (node.nodeType === Node.ELEMENT_NODE && isVisible(node)) {
-    matches.concat(findMatchesInElement(text, node, matches))
-  }
-
-  return matches
-}
-
-function findMatchesInElement(text, element, matches=[]) {
-  const containsText = nodeContainsTextOrSynonym(element, text);
-  const elementHasChildren = element.childNodes && element.childNodes.length > 0;
-  const searchableChildren = element.querySelectorAll(NODES_WITH_HIDDEN_ATTRIBUTES_QUERY_SELECTOR);
-  const elementHasSearchableChildren = elementHasChildren && searchableChildren.length > 0;
-  if (containsText && (!elementHasChildren || isLinkOrButton(element))) {
-    matches.push(element)
-  } else if (element.nodeType === Node.ELEMENT_NODE && (containsText || elementHasSearchableChildren)) {
-    [...element.childNodes].forEach(childNode => {
-      findMatchesInNode(text, childNode, element, matches)
-    })
-  }
-
-  return matches
-}
-
-function nodeContainsTextOrSynonym(node, text) {
-  const synonyms = getSynonyms(text);
-  return nodeInnerTextContainsStringInList(node, synonyms) || nodeContainsStringInListInHiddenAttribute(node, synonyms)
-}
-
-function getSynonyms(text) {
-  const domain = window.location.host;
-  const synonymsForDomain = Synonyms.getSynonymsByDomain(domain)
-  const synonymWord = synonymsForDomain && Object.keys(synonymsForDomain).find(word => word.includes(text))
-  if (synonymWord) {
-    return [text].concat(synonymsForDomain[synonymWord])
-  } else {
-    return [text]
-  }
-}
-
-function nodeInnerTextContainsStringInList(node, strings) {
-  const lowercaseText = Utils.getTextContentOfNode(node).slice().toLowerCase();
-  return lowercaseText && strings.some(string => {
-    return lowercaseText.includes(string) || lowercaseText.replace(/\s/g, '').includes(string)
-  })
-}
-
-function nodeContainsStringInListInHiddenAttribute(node, strings) {
-  const hiddenAttributesSettingsForNodeName = hiddenAttributeSettingsByNodeName[node.nodeName];
-  return hiddenAttributesSettingsForNodeName && hiddenAttributesSettingsForNodeName.attributes.some(attributeName => {
-    return nodeAttributeContainsStringInList(node, attributeName, strings)
-  })
-}
-
-function nodeAttributeContainsStringInList(node, attributeName, strings) {
-  const attributeValue = node.getAttribute(attributeName);
-  return attributeValue != null && strings.some(string => attributeValue.toLowerCase().includes(string))
-}
-
-function canSearchNode(node) {
-  return !DO_NOT_SEARCH_NODE_TYPES.includes(node.nodeName) && node.id !== YIPYIP_ROOT_ID
-}
-
-function isLinkOrButton(node) {
-  return LINK_OR_BUTTON_TYPES.includes(node.nodeName) || LINK_OR_BUTTON_ROLE_VALUES.includes(node.getAttribute('role'));
-}
-
-function isVisible(node) {
-  const computedStyle = window.getComputedStyle(node);
-  return !!(node.offsetWidth || node.offsetHeight || node.getClientRects().length || computedStyle.display === 'contents') &&
-    computedStyle.visibility !== "hidden" && computedStyle.opacity !== '0'
-}
-
-const FindInPage = { findNodesInPageMatchingText }
 export default FindInPage;

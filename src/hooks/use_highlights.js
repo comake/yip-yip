@@ -33,7 +33,7 @@ function removeHighlights() {
 
 function removeHighlight(highlightNode) {
   const highlightNodeText = Utils.getTextContentOfNode(highlightNode)
-  const replacementTextNode = document.createTextNode(highlightNodeText)
+  const replacementTextNode = document.createTextNode(highlightNodeText);
   highlightNode.parentNode.replaceChild(replacementTextNode, highlightNode);
   replacementTextNode.parentNode.normalize();
 }

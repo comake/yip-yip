@@ -14,7 +14,8 @@ import MatchesSummary from "./matches_summary.js";
 import DraggableContainer from "./draggable_container.js";
 import InfoDropdown from "./info_dropdown.js";
 
-const SELECTION_UPDATE_TIMEOUT_DURATION = 100;
+const SCROLL_OR_RESIZE_UPDATE_TIMEOUT_DURATION = 100;
+const SEARCH_TEXT_UPDATE_TIMEOUT_DURATION = 150;
 
 function scrollToNodeAtIndexInList(nodeList, selectedIndex) {
   const selectedMatchingNode = nodeList.length > 0 ? nodeList[selectedIndex] : null;
@@ -70,12 +71,13 @@ const YipYip = (props) => {
   }, [matchingLinksAndButtons, selectedSelectionIndex, resetSearchTextAndMatches])
 
   const updateMatchingNodesAndScrollToSelectedIndex = React.useCallback(selectedIndex => {
-    const { matchingNodes, matchingLinksAndButtons } = FindInPage.findNodesInPageMatchingText(searchText);
+    const { matchingNodes, matchingLinksAndButtons, bestMatchingLinkOrButtonIndex } = new FindInPage(searchText).findMatches();
     setMatchingNodes(matchingNodes)
     setMatchingLinksAndButtons(matchingLinksAndButtons)
+    setSelectedSelectionIndex(bestMatchingLinkOrButtonIndex)
 
     if (matchingLinksAndButtons.length > 0) {
-      scrollToNodeAtIndexInList(matchingLinksAndButtons, selectedIndex)
+      scrollToNodeAtIndexInList(matchingLinksAndButtons, bestMatchingLinkOrButtonIndex)
       setScrollOrResizeRefresh(!scrollOrResizeRefresh)
     }
   }, [searchText, scrollOrResizeRefresh])
@@ -86,18 +88,16 @@ const YipYip = (props) => {
     scrollOrResizeUpdateTimeout.current = setTimeout(() => {
       setScrollOrResizeRefresh(!scrollOrResizeRefresh)
       setHideSelections(false)
-    }, SELECTION_UPDATE_TIMEOUT_DURATION)
+    }, SCROLL_OR_RESIZE_UPDATE_TIMEOUT_DURATION)
   }, [scrollOrResizeRefresh])
 
   const updateSelectionAndScrollToSelectedAfterTimeout = React.useCallback(() => {
     if (selectionUpdateTimeout.current) { clearTimeout(selectionUpdateTimeout.current) }
-    const newSelectedSelectionIndex = 0;
     clearMatchingNodes()
-    setSelectedSelectionIndex(newSelectedSelectionIndex)
 
     selectionUpdateTimeout.current = setTimeout(() => {
-      updateMatchingNodesAndScrollToSelectedIndex(newSelectedSelectionIndex);
-    }, SELECTION_UPDATE_TIMEOUT_DURATION)
+      updateMatchingNodesAndScrollToSelectedIndex();
+    }, SEARCH_TEXT_UPDATE_TIMEOUT_DURATION)
   }, [clearMatchingNodes, updateMatchingNodesAndScrollToSelectedIndex])
 
   const preventDefaultEventAndSelectNextMatchingNode = React.useCallback((event, forward) => {
@@ -153,7 +153,7 @@ const YipYip = (props) => {
   useHighlights({ searchText, matchingNodes })
 
   return (
-    <>
+    <div>
       { !hideSelections && <Selections
           refresh={scrollOrResizeRefresh}
           selectedSelectionIndex={selectedSelectionIndex}
@@ -172,7 +172,7 @@ const YipYip = (props) => {
         />
         <InfoDropdown />
       </DraggableContainer>
-    </>
+    </div>
   )
 }
 
