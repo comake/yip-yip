@@ -5,19 +5,13 @@ import {
   DO_NOT_SEARCH_NODE_TYPES
 } from "../constants.js";
 
-import Utils from "./utils.js";
-import Synonyms from './synonyms.js';
-import RelevantWords from './relevant_words.js';
 import NodeScorer from './node_scorer.js';
 import HiddenAttributeSettings from './hidden_attribute_settings.js';
 
 class FindInPage {
   constructor(searchText) {
     this.searchText = searchText.trim();
-    this.domain = window.location.host;
-    this.synonyms = Synonyms.getSynonymsForTextInDomain(this.domain, searchText);
-    this.relevantWords = RelevantWords.getRelevantWordsForDomain(this.domain);
-    this.nodeScorer = new NodeScorer(this.searchText, this.synonyms, this.relevantWords);
+    this.nodeScorer = new NodeScorer(this.searchText);
   }
 
   findMatches() {

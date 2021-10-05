@@ -29,8 +29,9 @@ export const FIELD_BOOSTS = {
 
 export const SEARCH_TERM_BOOSTS = {
   searchText: 1,
-  synonym: 0.7
+  synonym: 0.9
 }
 
 export const STARTS_WITH_BOOST = 1.5;
-export const RELEVANT_WORD_BOOST = 1.2;
+export const RELEVANT_WORD_BOOST = 1.4;
+export const RELEVANT_SELECTOR_BOOST = 1.4;

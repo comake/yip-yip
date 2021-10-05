@@ -1,4 +1,3 @@
-import Utils from "./utils.js";
 import { LINK_OR_BUTTON_OR_INPUT_TYPES, LINK_OR_BUTTON_ROLE_VALUES } from "../constants.js";
 import hiddenAttributesByNodeName from '../data/hidden_attributes_by_node_name.json';
 

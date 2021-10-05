@@ -1,0 +1,16 @@
+[
+  {
+    "nodeName": "DIV",
+    "attributes": {
+      "role": "button"
+    },
+    "_comment": "Increase score of the 'Add task' button vs. the 'Tasks' Button and the 'Snooze' button vs. the 'Snoozed' navigation item when viewing an email."
+  },
+  {
+    "nodeName": "DIV",
+    "attributes": {
+      "role": "checkbox"
+    },
+    "_comment": "Increase score of the 'Star' button vs. the 'Starred' navigation item when viewing an email."
+  }
+]

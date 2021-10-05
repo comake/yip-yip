@@ -1,7 +1,11 @@
 import Utils from "./utils.js";
-import { FIELD_BOOSTS, SEARCH_TERM_BOOSTS, STARTS_WITH_BOOST, RELEVANT_WORD_BOOST } from "../constants.js";
+import { FIELD_BOOSTS, SEARCH_TERM_BOOSTS, STARTS_WITH_BOOST, RELEVANT_WORD_BOOST,
+  RELEVANT_SELECTOR_BOOST
+} from "../constants.js";
+
 import Synonyms from './synonyms.js';
-import NodeMatchData from './node_match_data.js';
+import RelevantWords from './relevant_words.js';
+import RelevantSelectors from './relevant_selectors.js';
 import HiddenAttributeSettings from './hidden_attribute_settings.js';
 
 // TODO star over starred
@@ -13,16 +17,19 @@ const startsWithTextBoost = (indexOfWord, totalWords) => {
 const WHITESPACE_SPLIT_REGEX = /[\s,\/-]+/;
 
 class NodeScorer {
-  constructor(searchText, synonyms, relevantWords) {
+  constructor(searchText) {
     this.searchText = searchText;
-    this.synonyms = synonyms;
-    this.relevantWords = relevantWords;
+
+    this.domain = window.location.host;
+    this.synonyms = Synonyms.getSynonymsForTextInDomain(this.domain, searchText);
+    this.relevantWords = RelevantWords.getRelevantWordsForDomain(this.domain);
+    this.relevantSelectors = RelevantSelectors.getRelevantSelectorsForDomain(this.domain);
   }
 
   scoreNode(node) {
     const lowercaseNodeText = Utils.getTextContentOfNode(node).slice().toLowerCase().trim();
     const attributeValues = this.getSearchableHiddenAttributeValuesForNodeType(node);
-    return this.score(lowercaseNodeText, attributeValues)
+    return this.score(node, lowercaseNodeText, attributeValues)
   }
 
   getSearchableHiddenAttributeValuesForNodeType(node) {
@@ -37,11 +44,11 @@ class NodeScorer {
     }
   }
 
-  score(innerText, attributeTextValues) {
+  score(node, innerText, attributeTextValues) {
     let score = 0;
 
     if (innerText && innerText.length > 0) {
-      score += this.fieldScore(innerText, this.searchText, FIELD_BOOSTS.innerText, FIELD_BOOSTS.searchText)
+      score += this.fieldScore(innerText, this.searchText, FIELD_BOOSTS.innerText, SEARCH_TERM_BOOSTS.searchText)
     }
 
     if (attributeTextValues.length > 0) {
@@ -62,6 +69,10 @@ class NodeScorer {
           score = highestSynonymAttributePairScore;
         }
       }
+    }
+
+    if (score > 0 && this.relevantSelectors.some(selector => RelevantSelectors.nodeMatchesSelector(node, selector))) {
+      score = score * RELEVANT_SELECTOR_BOOST;
     }
 
     return score
@@ -96,7 +107,7 @@ class NodeScorer {
         attributeValue,
         queryText,
         FIELD_BOOSTS.attribute,
-        queryIsSynonym ? FIELD_BOOSTS.synonym : FIELD_BOOSTS.searchText
+        queryIsSynonym ? SEARCH_TERM_BOOSTS.synonym : SEARCH_TERM_BOOSTS.searchText
       )
     });
     return this.getHighestScore(attributeScores);
@@ -108,7 +119,7 @@ class NodeScorer {
         innerText,
         synonym,
         FIELD_BOOSTS.innerText,
-        FIELD_BOOSTS.synonym
+        SEARCH_TERM_BOOSTS.synonym
       )
     });
     return this.getHighestScore(synonymScores);

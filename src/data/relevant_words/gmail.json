@@ -1,4 +1,6 @@
 [
   "forward",
-  "compose"
+  "compose",
+  "reply",
+  "starred"
 ]
