@@ -2,11 +2,23 @@ import { INPUT_NODE_TYPES, KEYS_VALID_FOR_FOCUS_REGEX } from "../constants.js";
 
 function differentInputIsActive(inputElement) {
   return document.activeElement &&
-      document.activeElement !== inputElement &&
-      (
-        document.activeElement.isContentEditable ||
-        INPUT_NODE_TYPES.includes(document.activeElement.nodeName)
-      )
+    document.activeElement !== inputElement &&
+    (
+      elementIsEditable(document.activeElement) ||
+      elementHasEditableShadowRoot(document.activeElement)
+    )
+}
+
+function elementIsEditable(element) {
+  return element.isContentEditable || INPUT_NODE_TYPES.includes(element.nodeName)
+}
+
+function elementHasEditableShadowRoot(element) {
+  return element.shadowRoot && element.shadowRoot.activeElement &&
+    (
+      elementIsEditable(element.shadowRoot.activeElement) ||
+      elementHasEditableShadowRoot(element.shadowRoot.activeElement)
+    )
 }
 
 function clickOrFocusNode(node) {
@@ -67,6 +79,17 @@ function compareDescending(a, b) {
   return b - a
 }
 
+function nodeMatchesSelector(node, selector) {
+  return node.nodeName === selector.nodeName &&
+    (!selector.attributes || nodeMatchesAllSelectorAttributes(node, selector))
+}
+
+function nodeMatchesAllSelectorAttributes(node, selector) {
+  return Object.entries(selector.attributes).every(([attributeName, attributeValue]) => {
+    return node.getAttribute(attributeName) === attributeValue
+  })
+}
+
 const Utils = {
   differentInputIsActive,
   clickOrFocusNode,
@@ -76,7 +99,8 @@ const Utils = {
   clampNumber,
   stringContainsSubstringInList,
   stringContainsSubstringWithOrWithoutSpaces,
-  compareDescending
+  compareDescending,
+  nodeMatchesSelector
 }
 
 export default Utils

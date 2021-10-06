@@ -1,0 +1,9 @@
+[
+  {
+    "nodeName": "TR",
+    "attributes": {
+      "role": "row"
+    },
+    "_comment": "Allow selection of full email rows."
+  }
+]

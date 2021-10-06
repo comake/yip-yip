@@ -6,7 +6,7 @@ class Synonyms {
   };
 
   static getSynonymsByDomain(domain) {
-    return this.synonymsByDomain[domain];
+    return this.synonymsByDomain[domain] || [];
   }
 
   static getSynonymsForTextInDomain(domain, text) {

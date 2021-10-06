@@ -1,29 +1,28 @@
-import Utils from "./utils.js";
 import { FIELD_BOOSTS, SEARCH_TERM_BOOSTS, STARTS_WITH_BOOST, RELEVANT_WORD_BOOST,
   RELEVANT_SELECTOR_BOOST
 } from "../constants.js";
 
+import Utils from "./utils.js";
 import Synonyms from './synonyms.js';
 import RelevantWords from './relevant_words.js';
 import RelevantSelectors from './relevant_selectors.js';
 import HiddenAttributeSettings from './hidden_attribute_settings.js';
 
-// TODO star over starred
-
 const startsWithTextBoost = (indexOfWord, totalWords) => {
   return 1 + (0.5 / (Math.sqrt(indexOfWord + 1) * Math.sqrt(totalWords)))
 }
 
-const WHITESPACE_SPLIT_REGEX = /[\s,\/-]+/;
+const WHITESPACE_SPLIT_REGEX = /[(\s+)\.,\/-]+/;
+const UNICODE_ZERO_WIDTH_SPACES_REGEX = /[\u200B-\u200D\uFEFF\u200E\u200F]/g;
 
 class NodeScorer {
   constructor(searchText) {
     this.searchText = searchText;
 
-    this.domain = window.location.host;
-    this.synonyms = Synonyms.getSynonymsForTextInDomain(this.domain, searchText);
-    this.relevantWords = RelevantWords.getRelevantWordsForDomain(this.domain);
-    this.relevantSelectors = RelevantSelectors.getRelevantSelectorsForDomain(this.domain);
+    const domain = window.location.host;
+    this.synonyms = Synonyms.getSynonymsForTextInDomain(domain, searchText);
+    this.relevantWords = RelevantWords.getRelevantWordsForDomain(domain);
+    this.relevantSelectors = RelevantSelectors.getRelevantSelectorsForDomain(domain);
   }
 
   scoreNode(node) {
@@ -58,7 +57,7 @@ class NodeScorer {
       }
     }
 
-    if (score == 0) {
+    if (score == 0 && this.synonyms.length > 0) {
       if (innerText && innerText.length > 0) {
         score += this.getHighestSynonymScore(innerText)
       }
@@ -71,7 +70,7 @@ class NodeScorer {
       }
     }
 
-    if (score > 0 && this.relevantSelectors.some(selector => RelevantSelectors.nodeMatchesSelector(node, selector))) {
+    if (score > 0 && this.relevantSelectors.some(selector => Utils.nodeMatchesSelector(node, selector))) {
       score = score * RELEVANT_SELECTOR_BOOST;
     }
 
@@ -87,7 +86,7 @@ class NodeScorer {
       score += fieldBoost * queryTermBoost;
     }
 
-    const fieldWords = fieldText.trim().split(WHITESPACE_SPLIT_REGEX);
+    const fieldWords = this.getWordsFromSearchText(fieldText)
     const indexOfWordStartingWithQueryText = fieldWords.findIndex(word => word.startsWith(queryText));
     if (indexOfWordStartingWithQueryText !== -1) {
       score = score * startsWithTextBoost(indexOfWordStartingWithQueryText, fieldWords.length);
@@ -100,8 +99,14 @@ class NodeScorer {
     return score;
   }
 
+  getWordsFromSearchText(text) {
+    return text.trim()
+      .replace(UNICODE_ZERO_WIDTH_SPACES_REGEX, '')
+      .split(WHITESPACE_SPLIT_REGEX)
+      .filter(Boolean);
+  }
+
   getHighestAttributeScore(attributeTextValues, queryText, queryIsSynonym=false) {
-    // Only get the highest attribute score
     const attributeScores = attributeTextValues.map(attributeValue => {
       return this.fieldScore(
         attributeValue,
@@ -126,7 +131,6 @@ class NodeScorer {
   }
 
   getHighestSynonymAttributePairScore(attributeTextValues) {
-    // Only get the highest synonym & attribute pair score
     const synonymScores = this.synonyms.map(synonym => {
       return this.getHighestAttributeScore(attributeTextValues, synonym, true)
     });

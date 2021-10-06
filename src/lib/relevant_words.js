@@ -6,7 +6,7 @@ class RelevantWords {
   };
 
   static getRelevantWordsForDomain(domain) {
-    return this.relevantWordsByDomain[domain];
+    return this.relevantWordsByDomain[domain] || [];
   }
 }
 

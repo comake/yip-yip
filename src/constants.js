@@ -34,4 +34,4 @@ export const SEARCH_TERM_BOOSTS = {
 
 export const STARTS_WITH_BOOST = 1.5;
 export const RELEVANT_WORD_BOOST = 1.4;
-export const RELEVANT_SELECTOR_BOOST = 1.4;
+export const RELEVANT_SELECTOR_BOOST = 1.6;

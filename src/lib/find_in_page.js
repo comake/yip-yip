@@ -10,16 +10,17 @@ import HiddenAttributeSettings from './hidden_attribute_settings.js';
 
 class FindInPage {
   constructor(searchText) {
-    this.searchText = searchText.trim();
+    this.searchText = searchText.toLowerCase().trim();
     this.nodeScorer = new NodeScorer(this.searchText);
+    this.hiddenAttributeSettings = new HiddenAttributeSettings();
+    this.nodesWithHiddenAttributesQuerySelector = this.hiddenAttributeSettings.nodesWithHiddenAttributesQuerySelector;
   }
 
   findMatches() {
     if (this.searchText.length > 1) {
       const matches = this.findMatchesInNode(document.body);
       const matchingNodes = matches.map(match => match.node);
-      const matchesWhereNodeIsLinkOrButtons = matches.filter(match => this.isLinkOrButtonOrInput(match.node));
-      console.debug(matchesWhereNodeIsLinkOrButtons);
+      const matchesWhereNodeIsLinkOrButtons = matches.filter(match => this.hiddenAttributeSettings.isLinkOrButtonOrInput(match.node));
       const matchingLinksAndButtons = matchesWhereNodeIsLinkOrButtons.map(match => match.node);
       const bestMatchingLinkOrButtonIndex = this.findIndexOfBestMatch(matchesWhereNodeIsLinkOrButtons);
       return { matchingNodes, matchingLinksAndButtons, bestMatchingLinkOrButtonIndex }
@@ -50,9 +51,9 @@ class FindInPage {
   findMatchesInElement(element, parentNode=null, parentNodeScore=0, matches=[]) {
     const score = this.nodeScorer.scoreNode(element)
     const elementHasChildren = element.childNodes && element.childNodes.length > 0;
-    const searchableChildren = element.querySelectorAll(HiddenAttributeSettings.nodesWithHiddenAttributesQuerySelector);
+    const searchableChildren = element.querySelectorAll(this.nodesWithHiddenAttributesQuerySelector);
     const elementHasSearchableChildren = elementHasChildren && searchableChildren.length > 0;
-    if (score > 0 && (!elementHasChildren || this.isLinkOrButtonOrInput(element))) {
+    if (score > 0 && (!elementHasChildren || this.hiddenAttributeSettings.isLinkOrButtonOrInput(element))) {
       matches.push({ score, node: element });
     } else if (score > 0 || elementHasSearchableChildren) {
       const newParentNode = score > 0 ? element : parentNode;
@@ -79,10 +80,6 @@ class FindInPage {
 
   canSearchNode(node) {
     return !DO_NOT_SEARCH_NODE_TYPES.includes(node.nodeName) && node.id !== YIPYIP_ROOT_ID
-  }
-
-  isLinkOrButtonOrInput(node) {
-    return LINK_OR_BUTTON_OR_INPUT_TYPES.includes(node.nodeName) || LINK_OR_BUTTON_ROLE_VALUES.includes(node.getAttribute('role'));
   }
 
   isVisible(node) {

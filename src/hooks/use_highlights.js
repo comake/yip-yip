@@ -65,7 +65,7 @@ const useHighlights = (props) => {
   React.useEffect(() => {
     matchingNodes.forEach(node => {
       node.normalize();
-      const matchingNodesAndMatchData = findChildNodeAndMatchDataWithTextMatchingRegex(node, textRegex)
+      const matchingNodesAndMatchData = findChildNodeAndMatchDataWithTextMatchingRegex(node, textRegex);
       matchingNodesAndMatchData.forEach(matchingNodeAndMatchData => {
         highlightNodeWithMatchData(matchingNodeAndMatchData.node, matchingNodeAndMatchData.match)
       })

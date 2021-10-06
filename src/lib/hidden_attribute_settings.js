@@ -1,20 +1,29 @@
 import { LINK_OR_BUTTON_OR_INPUT_TYPES, LINK_OR_BUTTON_ROLE_VALUES } from "../constants.js";
+import Utils from './utils.js';
 import hiddenAttributesByNodeName from '../data/hidden_attributes_by_node_name.json';
+import AdditionalButtonSelectors from './additional_button_selectors.js';
 
 class HiddenAttributeSettings {
-  static nodesWithHiddenAttributesQuerySelector = this.hiddenAttributeSettingsByNodeNameToQuerySelector();
-
-  static hiddenAttributesForNode(node) {
-    return hiddenAttributesByNodeName[node.nodeName]
+  constructor() {
+    const domain = window.location.host;
+    this.additionalButtonSelectors = AdditionalButtonSelectors.getAdditionalButtonSelectorsByDomain(domain)
+    this.nodesWithHiddenAttributesQuerySelector = this.hiddenAttributeSettingsByNodeNameToQuerySelector();
   }
 
-  static hiddenAttributeSettingsByNodeNameToQuerySelector() {
-    return Object.keys(hiddenAttributesByNodeName)
-      .map(nodeName => this.selectorsForNodeTypeWithHiddenAttributes(nodeName))
-      .join(', ');
+  hiddenAttributeSettingsByNodeNameToQuerySelector() {
+    const defaultButtonOrLinkQuerySelectors =  Object.keys(hiddenAttributesByNodeName)
+      .map(nodeName => this.selectorsForNodeTypeWithHiddenAttributes(nodeName));
+
+    const additionalButtonQuerySelectors = this.additionalButtonSelectors
+      .map(selector => AdditionalButtonSelectors.selectorToQueryString(selector));
+
+    return [
+      ...defaultButtonOrLinkQuerySelectors,
+      ...additionalButtonQuerySelectors
+    ].join(', ');
   }
 
-  static selectorsForNodeTypeWithHiddenAttributes(nodeName) {
+  selectorsForNodeTypeWithHiddenAttributes(nodeName) {
     if (LINK_OR_BUTTON_OR_INPUT_TYPES.includes(nodeName)) {
       return nodeName.toLowerCase()
     } else {
@@ -23,6 +32,20 @@ class HiddenAttributeSettings {
       })
       .join(', ')
     }
+  }
+
+  isLinkOrButtonOrInput(node) {
+    return (
+      (
+        LINK_OR_BUTTON_OR_INPUT_TYPES.includes(node.nodeName) ||
+        LINK_OR_BUTTON_ROLE_VALUES.includes(node.getAttribute('role'))
+      ) ||
+      this.additionalButtonSelectors.some(selector => Utils.nodeMatchesSelector(node, selector))
+    );
+  }
+
+  static hiddenAttributesForNode(node) {
+    return hiddenAttributesByNodeName[node.nodeName]
   }
 }
 
