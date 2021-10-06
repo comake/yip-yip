@@ -160,7 +160,7 @@ const YipYip = (props) => {
           matchingLinksAndButtons={matchingLinksAndButtons}
         />
       }
-      <DraggableContainer>
+      <DraggableContainer searchInputRef={searchInputRef}>
         <SearchInput
           inputRef={searchInputRef}
           searchText={searchText}

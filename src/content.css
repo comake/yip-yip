@@ -1,4 +1,5 @@
 #yipyip-container {
+  cursor: grab !important;
   position: fixed !important;
   z-index: 2147483003 !important;
   pointer-events: all !important;
@@ -100,6 +101,7 @@
 }
 
 #yipyip-input-container {
+  height: 60% !important;
   -webkit-box-flex: 1 !important;
   -moz-box-flex: 1 !important;
   -webkit-flex: 1 !important;
@@ -119,6 +121,7 @@
 }
 
 #yipyip-input {
+  height: 100% !important;
   position: relative !important;
   display: inline-block !important;
   width: 100% !important;

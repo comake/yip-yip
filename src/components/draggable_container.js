@@ -7,7 +7,7 @@ const RIGHT_VALUE_MIN = 0;
 const BOTTOM_VALUE_MIN = 0
 
 const DraggableContainer = (props) => {
-  const { children } = props;
+  const { children, searchInputRef } = props;
 
   const [isDragging, setIsDragging] = React.useState(false)
   const [dragOffset, setDragOffset] = React.useState(null)
@@ -17,16 +17,21 @@ const DraggableContainer = (props) => {
   })
 
   const onDragStart = React.useCallback(event => {
-    event.preventDefault();
-    setDragOffset({
-      x: window.innerWidth - position.right - event.clientX,
-      y: window.innerHeight - position.bottom - event.clientY
-    })
-    setIsDragging(true)
+    if (!(event.target === searchInputRef.current && searchInputRef.current.value.length > 0)) {
+      event.preventDefault();
+      setDragOffset({
+        x: window.innerWidth - position.right - event.clientX,
+        y: window.innerHeight - position.bottom - event.clientY
+      })
+      setIsDragging(true)
+    }
   }, [position])
 
   const onDragEnd = React.useCallback(event => {
     setIsDragging(false)
+    if (event.target === searchInputRef.current) {
+      searchInputRef.current.focus()
+    }
   }, [])
 
   const drag = React.useCallback(event => {
@@ -60,8 +65,8 @@ const DraggableContainer = (props) => {
   }, [position])
 
   return (
-    <div id={'yipyip-container'} style={containerStyle}>
-      <DragHandle onMouseDown={onDragStart} />
+    <div id={'yipyip-container'} style={containerStyle} onMouseDown={onDragStart}>
+      <DragHandle />
       {children}
     </div>
   )

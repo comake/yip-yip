@@ -15,6 +15,10 @@ const SearchInput = (props) => {
         placeholder={'YipYip!'}
         value={searchText}
         onChange={onSearchTextChange}
+        autoComplete={'off'}
+        name={'yipyip-search'}
+        list="autocompleteOff"
+        data-lpignore='true'
       />
     </div>
   )
