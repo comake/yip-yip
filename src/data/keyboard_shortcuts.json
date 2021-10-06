@@ -10,11 +10,17 @@
   {
     "keys": ["Enter"],
     "text": "to click the selected match"
-  }, {
+  },
+  {
     "keys": ["Command", "Delete"],
     "text": "to clear the searchbar"
-  }, {
+  },
+  {
     "keys": ["Option", "F"],
+    "text": "focus YipYip (or just start typing)"
+  },
+  {
+    "keys": ["Option", "Escape"],
     "text": "to turn YipYip off and on"
   }
 ]

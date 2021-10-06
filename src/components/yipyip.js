@@ -4,7 +4,7 @@ import "../content.css";
 import useWindowEvent from "../hooks/use_window_event.js";
 import useDocumentEvent from "../hooks/use_document_event.js";
 import useHighlights from "../hooks/use_highlights.js";
-import { F_KEYCODE, ENTER_KEY, TAB_KEY, BACKSPACE_KEY } from "../constants.js";
+import { F_KEYCODE, ENTER_KEY, TAB_KEY, BACKSPACE_KEY, ESCAPE_KEY } from "../constants.js";
 
 import Utils from "../lib/utils.js";
 import FindInPage from "../lib/find_in_page.js";
@@ -128,11 +128,13 @@ const YipYip = (props) => {
 
   const handleKeyEvent = React.useCallback(event => {
     const differentInputIsActive = Utils.differentInputIsActive(searchInputRef.current);
-    if (isHidden && event.code === F_KEYCODE && event.altKey) {
+    if (isHidden && event.code === ESCAPE_KEY && event.altKey) {
       setIsHidden(false)
       preventDefaultEventAndFocusInput(event)
-    } else if (!isHidden && event.code === F_KEYCODE && event.altKey) {
+    } else if (!isHidden && event.code === ESCAPE_KEY && event.altKey) {
       hide()
+    } else if (!isHidden && event.code === F_KEYCODE && event.altKey) {
+      preventDefaultEventAndFocusInput(event)
     } else if (!isHidden && event.key === ENTER_KEY) {
       clickSelectedMatchingNodeAndReset(event)
     } else if (!isHidden && event.key === TAB_KEY && (document.activeElement === searchInputRef.current || !differentInputIsActive)) {

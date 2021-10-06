@@ -24,7 +24,7 @@ const VisibilityButton = (props) => {
               <div>Turn YipYip off</div>
               <div id={'yipyip-visibility-tooltip-keyboard-shortcuts'}>
                 <div class={'yipyip-info-panel-shortcut-key'}>Option</div>
-                <div class={'yipyip-info-panel-shortcut-key'}>F</div>
+                <div class={'yipyip-info-panel-shortcut-key'}>Escape</div>
               </div>
             </div>
           </Tooltip>

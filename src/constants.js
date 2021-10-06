@@ -2,6 +2,7 @@ export const F_KEYCODE = 'KeyF';
 export const ENTER_KEY = 'Enter';
 export const TAB_KEY = 'Tab';
 export const BACKSPACE_KEY = 'Backspace';
+export const ESCAPE_KEY = 'Escape';
 
 export const KEYS_VALID_FOR_FOCUS_REGEX = /^[a-zA-Z0-9-_/]$/i;
 
