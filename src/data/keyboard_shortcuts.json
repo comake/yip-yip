@@ -14,7 +14,7 @@
     "keys": ["Command", "Delete"],
     "text": "to clear the searchbar"
   }, {
-    "keys": ["Alt", "F"],
-    "text": "to focus the searchbar (or just start typing)"
+    "keys": ["Option", "F"],
+    "text": "to turn YipYip off and on"
   }
 ]

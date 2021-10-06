@@ -13,6 +13,7 @@ import Selections from "./selections.js";
 import MatchesSummary from "./matches_summary.js";
 import DraggableContainer from "./draggable_container.js";
 import InfoDropdown from "./info_dropdown.js";
+import VisibilityButton from "./visibility_button.js";
 
 const SCROLL_OR_RESIZE_UPDATE_TIMEOUT_DURATION = 100;
 const SEARCH_TEXT_UPDATE_TIMEOUT_DURATION = 150;
@@ -28,6 +29,8 @@ const YipYip = (props) => {
   const scrollOrResizeUpdateTimeout = React.useRef();
   const selectionUpdateTimeout = React.useRef();
   const searchInputRef = React.useRef();
+
+  const [isHidden, setIsHidden] = React.useState(false);
   const [searchText, setSearchText] = React.useState('');
   const [prevSearchText, setPrevSearchText] = React.useState('');
   const [matchingNodes, setMatchingNodes] = React.useState([]);
@@ -47,6 +50,11 @@ const YipYip = (props) => {
     clearMatchingNodes()
     setSelectedSelectionIndex(0)
   }, [clearMatchingNodes])
+
+  const hide = React.useCallback(() => {
+    setIsHidden(true)
+    resetSearchTextAndMatches()
+  }, [resetSearchTextAndMatches])
 
   const resetSearchTextAndMatchesIfDifferentInputIsActive = React.useCallback(event => {
     if (Utils.differentInputIsActive(searchInputRef.current)) {
@@ -120,20 +128,23 @@ const YipYip = (props) => {
 
   const handleKeyEvent = React.useCallback(event => {
     const differentInputIsActive = Utils.differentInputIsActive(searchInputRef.current);
-    if (event.code === F_KEYCODE && event.altKey) {
+    if (isHidden && event.code === F_KEYCODE && event.altKey) {
+      setIsHidden(false)
       preventDefaultEventAndFocusInput(event)
-    } else if (event.key === ENTER_KEY) {
+    } else if (!isHidden && event.code === F_KEYCODE && event.altKey) {
+      hide()
+    } else if (!isHidden && event.key === ENTER_KEY) {
       clickSelectedMatchingNodeAndReset(event)
-    } else if (event.key === TAB_KEY && (document.activeElement === searchInputRef.current || !differentInputIsActive)) {
+    } else if (!isHidden && event.key === TAB_KEY && (document.activeElement === searchInputRef.current || !differentInputIsActive)) {
       preventDefaultEventAndSelectNextMatchingNode(event, !event.shiftKey)
-    } else if (!differentInputIsActive && Utils.keyValidForFocus(event.key) && !event.metaKey && !event.altKey) {
+    } else if (!isHidden && !differentInputIsActive && Utils.keyValidForFocus(event.key) && !event.metaKey && !event.altKey) {
       focusSearchInput()
-    } else if (event.key === BACKSPACE_KEY && event.metaKey && !differentInputIsActive) {
+    } else if (!isHidden && event.key === BACKSPACE_KEY && event.metaKey && !differentInputIsActive) {
       preventDefaultAndClearSearchText(event)
     }
   }, [preventDefaultEventAndFocusInput, clickSelectedMatchingNodeAndReset,
     preventDefaultEventAndSelectNextMatchingNode, focusSearchInput,
-    preventDefaultAndClearSearchText
+    preventDefaultAndClearSearchText, isHidden, hide
   ])
 
   React.useEffect(() => {
@@ -144,36 +155,41 @@ const YipYip = (props) => {
   }, [searchText, prevSearchText, updateSelectionAndScrollToSelectedAfterTimeout])
 
   const hasMatchingLinksOrButtons = React.useMemo(() => matchingLinksAndButtons.length > 0, [matchingLinksAndButtons])
-  useWindowEvent('scroll', hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
-  useWindowEvent('wheel', hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
-  useWindowEvent('resize', hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
-  useDocumentEvent('click', true, resetSearchTextAndMatchesIfDifferentInputIsActive)
+  useWindowEvent('scroll', !isHidden && hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
+  useWindowEvent('wheel', !isHidden && hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
+  useWindowEvent('resize', !isHidden && hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
+  useDocumentEvent('click', !isHidden, resetSearchTextAndMatchesIfDifferentInputIsActive)
   useDocumentEvent('keydown', true, handleKeyEvent)
 
   useHighlights({ searchText, matchingNodes })
 
-  return (
-    <div>
-      { !hideSelections && <Selections
-          refresh={scrollOrResizeRefresh}
-          selectedSelectionIndex={selectedSelectionIndex}
-          matchingLinksAndButtons={matchingLinksAndButtons}
-        />
-      }
-      <DraggableContainer searchInputRef={searchInputRef}>
-        <SearchInput
-          inputRef={searchInputRef}
-          searchText={searchText}
-          updateSearchText={setSearchText}
-        />
-        <MatchesSummary
-          selectedSelectionIndex={selectedSelectionIndex}
-          matchingLinksAndButtons={matchingLinksAndButtons}
-        />
-        <InfoDropdown />
-      </DraggableContainer>
-    </div>
-  )
+  if (isHidden) {
+    return ''
+  } else {
+    return (
+      <div>
+        { !hideSelections && <Selections
+            refresh={scrollOrResizeRefresh}
+            selectedSelectionIndex={selectedSelectionIndex}
+            matchingLinksAndButtons={matchingLinksAndButtons}
+          />
+        }
+        <DraggableContainer searchInputRef={searchInputRef}>
+          <SearchInput
+            inputRef={searchInputRef}
+            searchText={searchText}
+            updateSearchText={setSearchText}
+          />
+          <MatchesSummary
+            selectedSelectionIndex={selectedSelectionIndex}
+            matchingLinksAndButtons={matchingLinksAndButtons}
+          />
+          <VisibilityButton hide={hide} />
+          <InfoDropdown />
+        </DraggableContainer>
+      </div>
+    )
+  }
 }
 
 export default YipYip;
