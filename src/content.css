@@ -1,3 +1,7 @@
+.yipyip-hidden {
+  display: none;
+}
+
 #yipyip-container {
   cursor: grab !important;
   position: fixed !important;

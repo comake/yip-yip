@@ -5,6 +5,7 @@ import useWindowEvent from "../hooks/use_window_event.js";
 import useDocumentEvent from "../hooks/use_document_event.js";
 import useHighlights from "../hooks/use_highlights.js";
 import useKeyboardShortcuts from "../hooks/use_keyboard_shortcuts.js";
+import useExtensionStorage from "../hooks/use_extension_storage.js";
 
 import Utils from "../lib/utils.js";
 import FindInPage from "../lib/find_in_page.js";
@@ -18,24 +19,21 @@ import VisibilityButton from "./visibility_button.js";
 const SCROLL_OR_RESIZE_UPDATE_TIMEOUT_DURATION = 100;
 const SEARCH_TEXT_UPDATE_TIMEOUT_DURATION = 150;
 
-const HIDDEN_STYLE = { display: 'none' }
-const SHOWN_STYLE = { display: 'block' }
-
-function scrollToNodeAtIndexInList(nodeList, selectedIndex) {
-  const selectedMatchingNode = nodeList.length > 0 ? nodeList[selectedIndex] : null;
-  if (selectedMatchingNode) {
-    selectedMatchingNode.scrollIntoViewIfNeeded()
-  }
-}
-
 const YipYip = (props) => {
   const scrollOrResizeUpdateTimeout = React.useRef();
   const selectionUpdateTimeout = React.useRef();
   const containerRef = React.useRef();
   const searchInputRef = React.useRef();
 
-  const [autoHide, setAutoHide] = React.useState(true);
-  const [isHidden, setIsHidden] = React.useState(true);
+  const {
+    autoHide,
+    updateAutoHide,
+    useOnEveryWebsite,
+    updateUseOnEveryWebsite
+  } = useExtensionStorage()
+
+  const [prevAutoHide, setPrevAutoHide] = React.useState(autoHide)
+  const [isHidden, setIsHidden] = React.useState(autoHide);
   const [searchText, setSearchText] = React.useState('');
   const [prevSearchText, setPrevSearchText] = React.useState('');
   const [matchingNodes, setMatchingNodes] = React.useState([]);
@@ -45,6 +43,7 @@ const YipYip = (props) => {
   const [hideSelections, setHideSelections] = React.useState(false);
 
   const focusSearchInput = React.useCallback(() => searchInputRef.current.focus(), [])
+
   const clearMatchingNodes = React.useCallback(() => {
     setMatchingNodes([])
     setMatchingLinksAndButtons([])
@@ -68,12 +67,6 @@ const YipYip = (props) => {
     resetSearchTextAndMatches()
   }, [autoHide, resetSearchTextAndMatches])
 
-  const preventDefaultEventAndFocusInput = React.useCallback(event => {
-    event.preventDefault();
-    event.stopPropagation();
-    focusSearchInput()
-  }, [focusSearchInput]);
-
   const clickSelectedMatchingNodeAndReset = React.useCallback(event => {
     if (matchingLinksAndButtons.length > 0) {
       event.preventDefault()
@@ -96,7 +89,7 @@ const YipYip = (props) => {
     setSelectedSelectionIndex(bestMatchingLinkOrButtonIndex)
 
     if (matchingLinksAndButtons.length > 0) {
-      scrollToNodeAtIndexInList(matchingLinksAndButtons, bestMatchingLinkOrButtonIndex)
+      Utils.scrollToNodeAtIndexInList(matchingLinksAndButtons, bestMatchingLinkOrButtonIndex)
       setScrollOrResizeRefresh(!scrollOrResizeRefresh)
     }
   }, [searchText, scrollOrResizeRefresh])
@@ -126,7 +119,7 @@ const YipYip = (props) => {
     if (matchingLinksAndButtons.length > 1) {
       const newSelectedSelectionIndex = (selectedSelectionIndex + (forward ? 1 : (matchingLinksAndButtons.length-1))) % matchingLinksAndButtons.length;
       setSelectedSelectionIndex(newSelectedSelectionIndex)
-      scrollToNodeAtIndexInList(matchingLinksAndButtons, newSelectedSelectionIndex)
+      Utils.scrollToNodeAtIndexInList(matchingLinksAndButtons, newSelectedSelectionIndex)
       setScrollOrResizeRefresh(!scrollOrResizeRefresh)
     }
   }, [matchingLinksAndButtons, selectedSelectionIndex, scrollOrResizeRefresh])
@@ -166,39 +159,28 @@ const YipYip = (props) => {
 
   const handleFocusShortcut = React.useCallback(event => {
     setIsHidden(false)
-    preventDefaultEventAndFocusInput(event)
-  }, [preventDefaultEventAndFocusInput])
+    event.preventDefault();
+    event.stopPropagation();
+    focusSearchInput()
+  }, [focusSearchInput])
 
   const toggleAutoHide = React.useCallback(() => {
-    setAutoHide(!autoHide)
-
-    if (autoHide) {
-      setIsHidden(false)
-      focusSearchInput()
-    } else {
-      hide()
-    }
-  }, [focusSearchInput, hide, autoHide])
+    updateAutoHide(!autoHide)
+  }, [autoHide, updateAutoHide])
 
   const handleToggleAutohideShortcut = React.useCallback(event => {
-    setAutoHide(!autoHide)
-
-    if (autoHide) {
-      setIsHidden(false)
-      preventDefaultEventAndFocusInput(event)
-    } else {
-      hide()
-    }
-  }, [preventDefaultEventAndFocusInput, hide, autoHide])
+    event.preventDefault()
+    toggleAutoHide()
+  }, [toggleAutoHide])
 
   const keyboardShortcutHandlerMapping = React.useMemo(() => {
     return {
-      next_match: handleNextMatchShortcut,
-      previous_match: handlePreviousMatchShortcut,
-      select: handleSelectShortcut,
-      clear_searchbar: handleClearShortcut,
-      focus_searchbar: handleFocusShortcut,
-      toggle_autohide: handleToggleAutohideShortcut
+      "next_match": handleNextMatchShortcut,
+      "previous_match": handlePreviousMatchShortcut,
+      "select_match": handleSelectShortcut,
+      "clear_searchbar": handleClearShortcut,
+      "focus_searchbar": handleFocusShortcut,
+      "toggle_autohide": handleToggleAutohideShortcut
     }
   }, [handleNextMatchShortcut, handlePreviousMatchShortcut, handleSelectShortcut,
     handleClearShortcut, handleFocusShortcut, handleToggleAutohideShortcut
@@ -226,18 +208,29 @@ const YipYip = (props) => {
     }
   }, [searchText, prevSearchText, updateSelectionAndScrollToSelectedAfterTimeout])
 
+  React.useEffect(() => {
+    if (autoHide !== prevAutoHide) {
+      setPrevAutoHide(autoHide)
+
+      if (autoHide) {
+        hide()
+      } else {
+        setIsHidden(false)
+        focusSearchInput()
+      }
+    }
+  }, [autoHide, prevAutoHide, hide, focusSearchInput])
+
   const hasMatchingLinksOrButtons = React.useMemo(() => matchingLinksAndButtons.length > 0, [matchingLinksAndButtons])
   useWindowEvent('scroll', !isHidden && hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
   useWindowEvent('wheel', !isHidden && hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
   useWindowEvent('resize', !isHidden && hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
-  // useDocumentEvent('click', !isHidden, handleClick)
   useDocumentEvent('keydown', true, handleKeydown)
   useKeyboardShortcuts(handleShortcut)
-
   useHighlights({ searchText, matchingNodes })
 
   return (
-    <div style={isHidden ? HIDDEN_STYLE : SHOWN_STYLE}>
+    <div class={isHidden ? 'yipyip-hidden' : ''}>
       { !hideSelections && <Selections
           refresh={scrollOrResizeRefresh}
           selectedSelectionIndex={selectedSelectionIndex}

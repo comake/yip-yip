@@ -40,11 +40,14 @@ module.exports = {
       return {
         ...webpackConfig,
         entry: {
-          content: './src/components/content.js',
+          content: './src/content.js',
+          background: './src/background.js',
         },
         output: {
           ...webpackConfig.output,
-          filename: 'static/js/[name].js',
+          filename: (pathData) => {
+            return pathData.chunk.name === 'content' ? 'static/js/[name].js' : '[name].js';
+          },
         },
         optimization: {
           ...webpackConfig.optimization,

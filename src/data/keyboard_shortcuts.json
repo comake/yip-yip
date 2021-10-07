@@ -26,7 +26,7 @@
     "text": "to jump to the previous match"
   },
   {
-    "name": "select",
+    "name": "select_match",
     "eventMatcher": {
       "code": "Enter"
     },

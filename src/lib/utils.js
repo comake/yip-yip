@@ -106,6 +106,13 @@ function nodeIsInViewport(node) {
   );
 }
 
+function scrollToNodeAtIndexInList(nodeList, selectedIndex) {
+  const selectedMatchingNode = nodeList.length > 0 ? nodeList[selectedIndex] : null;
+  if (selectedMatchingNode) {
+    selectedMatchingNode.scrollIntoViewIfNeeded()
+  }
+}
+
 const Utils = {
   differentInputIsActive,
   clickOrFocusNode,
@@ -118,7 +125,8 @@ const Utils = {
   compareDescending,
   nodeMatchesSelector,
   isMacOS,
-  nodeIsInViewport
+  nodeIsInViewport,
+  scrollToNodeAtIndexInList
 }
 
 export default Utils
