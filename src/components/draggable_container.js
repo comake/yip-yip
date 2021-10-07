@@ -17,7 +17,7 @@ const DraggableContainer = (props) => {
   })
 
   const onDragStart = React.useCallback(event => {
-    if (!(event.target === searchInputRef.current && searchInputRef.current.value.length > 0)) {
+    if (!(event.target === searchInputRef.current && searchInputRef.current.value.length > 0) && !event.metaKey) {
       event.preventDefault();
       setDragOffset({
         x: window.innerWidth - position.right - event.clientX,

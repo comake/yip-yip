@@ -12,7 +12,7 @@
   -ms-border-radius: 12px !important;
   border-radius: 12px !important;
   border: 1px solid rgba(180, 180, 180, 0.20) !important;
-  background-color: rgba(45, 45, 45, 0.5) !important;
+  background-color: rgba(35, 35, 35, 0.6) !important;
   box-shadow: none !important;
   -webkit-backdrop-filter: blur(16px) !important;
   backdrop-filter: blur(16px) !important;
@@ -239,7 +239,7 @@
 
 .yipyip-tooltip-panel {
   font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif !important;
-  background-color: rgba(45, 45, 45, 0.5) !important;
+  background-color: rgba(35, 35, 35, 0.6) !important;
   -webkit-backdrop-filter: blur(16px) !important;
   backdrop-filter: blur(16px) !important;
   position: fixed !important;
@@ -253,14 +253,15 @@
 .yipyip-tooltip-arrow {
   position: fixed !important;
   border-style: solid !important;
-  border-color: rgba(45, 45, 45, 0.5) transparent !important;
+  border-color: rgba(35, 35, 35, 0.6) transparent !important;
   z-index: 2147483004 !important;
 }
 
 #yipyip-info-panel {
-  width: 320px !important;
-  min-width: 320px !important;
+  width: 500px !important;
+  min-width: 500px !important;
   padding: 20px !important;
+  box-sizing: border-box !important;
 }
 
 #yipyip-info-panel ol {
@@ -273,7 +274,7 @@
 }
 
 .yipyip-info-panel-section-header {
-  margin-bottom: 12px !important;
+  margin-bottom: 10px !important;
   font-size: 13px !important;
   font-weight: 500 !important;
   color: rgba(255, 255, 255, 0.65) !important;
@@ -290,10 +291,13 @@
 }
 
 .yipyip-info-panel-list-item, .yipyip-info-panel-row {
-  padding: 7px 0 !important;
+  padding: 4px 0 !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   color: white !important;
+  box-sizing: border-box !important;
+  line-height: 1.35em !important;
+  letter-spacing: normal !important;
 }
 
 .yipyip-info-panel-row {
@@ -308,6 +312,14 @@
   -ms-flex-align: center !important;
   -webkit-align-items: center !important;
   align-items: center !important;
+}
+
+.yipyip-info-panel-setting-row {
+  -webkit-box-align: flex-start !important;
+  -moz-box-align: flex-start !important;
+  -ms-flex-align: flex-start !important;
+  -webkit-align-items: flex-start !important;
+  align-items: flex-start !important;
 }
 
 .yipyip-info-panel-shortcut-key {
@@ -334,7 +346,43 @@
   margin-left: 3px !important;
 }
 
+.yipyip-info-panel-setting-text {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+}
+
+.yipyip-info-panel-setting-description {
+  margin-top: 5px;
+  font-size: 12px !important;
+  color: rgba(255,255,255, 0.7) !important;
+}
+
+.yipyip-info-panel-setting-checkbox {
+  margin: 2px 12px 0 0 !important;
+  -webkit-appearance: checkbox !important;
+  height: 16px !important;
+  width: 16px !important;
+  display: block !important;
+  position: relative !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  left: 0 !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+.yipyip-info-panel-setting-checkbox:after {
+  content: none !important;
+}
+
 .yipyip-info-panel-button {
+  box-sizing: border-box !important;
+  line-height: 1.35em !important;
+  letter-spacing: normal !important;
   text-decoration: none !important;
   margin: 10px 15px 0 15px !important;
   padding: 7px 15px !important;
@@ -344,7 +392,7 @@
   font-weight: 500 !important;
   appearance: none !important;
   outline: none !important;
-  border: 1px solid rgba(255,255,255,0.65);
+  border: 1px solid rgba(255,255,255,0.65) !important;
   -webkit-border-radius: 7px !important;
   -moz-border-radius: 7px !important;
   -ms-border-radius: 7px !important;
@@ -367,7 +415,7 @@
   text-decoration: none !important;
 }
 
-#yipyip-discord-icon-container, #yipyip-github-icon-container {
+#yipyip-discord-icon-container, #yipyip-github-icon-container, #yipyip-twitter-icon-container {
   margin-right: 15px !important;
   height: 18px !important;
   width: 18px !important;

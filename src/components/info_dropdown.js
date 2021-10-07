@@ -5,6 +5,7 @@ import Tooltip from './tooltip.js';
 import HelpIcon from './icons/help.js';
 
 const InfoDropdown = (props) => {
+  const { autoHide, toggleAutoHide, useOnEveryWebsite, toggleUseOnEveryWebsite } = props;
   const containerRef = React.useRef();
   const [hover, onMouseEnter, onMouseLeave] = useHover();
 
@@ -19,7 +20,12 @@ const InfoDropdown = (props) => {
       <HelpIcon />
       { hover && (
           <Tooltip containerRef={containerRef}>
-            <InfoPanel />
+            <InfoPanel
+              autoHide={autoHide}
+              toggleAutoHide={toggleAutoHide}
+              useOnEveryWebsite={useOnEveryWebsite}
+              toggleUseOnEveryWebsite={toggleUseOnEveryWebsite}
+            />
           </Tooltip>
         )
       }

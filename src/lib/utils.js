@@ -113,6 +113,10 @@ function scrollToNodeAtIndexInList(nodeList, selectedIndex) {
   }
 }
 
+function hostIsGmail() {
+  return window.location.host == 'mail.google.com'
+}
+
 const Utils = {
   differentInputIsActive,
   clickOrFocusNode,
@@ -126,7 +130,8 @@ const Utils = {
   nodeMatchesSelector,
   isMacOS,
   nodeIsInViewport,
-  scrollToNodeAtIndexInList
+  scrollToNodeAtIndexInList,
+  hostIsGmail
 }
 
 export default Utils

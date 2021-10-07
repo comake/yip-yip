@@ -6,4 +6,4 @@ const ShowIcon = () => {
   )
 }
 
-export default ShowIcon
+export default ShowIcon;

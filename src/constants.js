@@ -14,7 +14,8 @@ export const YIPYIP_FOLLOWING_HIGHLIGHT_CLASS = 'yipyip-following-highlight';
 
 export const DISCORD_INVITE_LINK = 'https://discord.gg/CnaC38Ch2p';
 export const COMAKE_LANDING_PAGE_LINK = 'https://comake.io';
-export const GITHUB_REPO_LINK = 'https://github.com/comake/yip-yip'
+export const GITHUB_REPO_LINK = 'https://github.com/comake/yip-yip';
+export const TWITTER_LINK = "https://twitter.com/intent/tweet?text=Loving%20%40comake_io's%20YipYip%20Extension!";
 
 export const YIPYIP_CONTAINER_HEIGHT = 50;
 export const YIPYIP_CONTAINER_WIDTH = 300;

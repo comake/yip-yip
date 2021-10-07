@@ -6,9 +6,9 @@ const SETTINGS_KEYS = {
   USE_ON_EVERY_WEBSITE: 'useOnEveryWebsite'
 }
 
-const useExtensionStorage = () => {
-  const [autoHide, setAutoHide] = React.useState(true)
-  const [useOnEveryWebsite, setUseOnEveryWebsite] = React.useState(false)
+const useStoredSettings = () => {
+  const [autoHide, setAutoHide] = React.useState(false)
+  const [useOnEveryWebsite, setUseOnEveryWebsite] = React.useState(true)
 
   const updateAutoHide = React.useCallback(newAutoHide => {
     setAutoHide(newAutoHide)
@@ -53,4 +53,4 @@ const useExtensionStorage = () => {
   }
 }
 
-export default useExtensionStorage;
+export default useStoredSettings;

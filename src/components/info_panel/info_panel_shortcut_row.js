@@ -1,4 +1,5 @@
 import React from 'react';
+import InfoPanelRow from './info_panel_row.js'
 
 const InfoPanelShortcutRow = (props) => {
   const { isMacOS, shortcut } = props;
@@ -8,13 +9,13 @@ const InfoPanelShortcutRow = (props) => {
   }, [shortcut, isMacOS])
 
   return (
-    <div class={'yipyip-info-panel-row'}>
+    <InfoPanelRow>
       { keys.map(key => {
           return <div key={key} class={'yipyip-info-panel-shortcut-key'}>{key}</div>
         })
       }
       <div class={'yipyip-info-panel-shortcut-text'}>{ shortcut.text }</div>
-    </div>
+    </InfoPanelRow>
   )
 }
 
