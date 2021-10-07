@@ -2,7 +2,7 @@ import React from 'react';
 import "../content.css";
 
 const SearchInput = (props) => {
-  const { searchText, updateSearchText, inputRef } = props;
+  const { searchText, updateSearchText, inputRef, onBlur } = props;
 
   const onSearchTextChange = React.useCallback(event => updateSearchText(event.target.value), [updateSearchText])
 
@@ -19,6 +19,7 @@ const SearchInput = (props) => {
         name={'yipyip-search'}
         list="autocompleteOff"
         data-lpignore='true'
+        onBlur={onBlur}
       />
     </div>
   )

@@ -1,26 +1,81 @@
 [
   {
-    "keys": ["Tab"],
+    "name": "next_match",
+    "eventMatcher": {
+      "code": "Tab",
+      "discludedFlags": {
+        "default": ["shiftKey"]
+      }
+    },
+    "displayKeys": {
+      "default": ["Tab"]
+    },
     "text": "to jump to the next match"
   },
   {
-    "keys": ["Shift", "Tab"],
+    "name": "previous_match",
+    "eventMatcher": {
+      "code": "Tab",
+      "flags": {
+        "default": ["shiftKey"]
+      }
+    },
+    "displayKeys": {
+      "default": ["Shift", "Tab"]
+    },
     "text": "to jump to the previous match"
   },
   {
-    "keys": ["Enter"],
+    "name": "select",
+    "eventMatcher": {
+      "code": "Enter"
+    },
+    "displayKeys": {
+      "default": ["Enter"]
+    },
     "text": "to click the selected match"
   },
   {
-    "keys": ["Command", "Delete"],
+    "name": "clear_searchbar",
+    "eventMatcher": {
+      "code": "Backspace",
+      "flags": {
+        "default": ["ctrlKey"],
+        "mac": ["metaKey"]
+      }
+    },
+    "displayKeys": {
+      "default": ["Control", "Delete"],
+      "mac": ["Command", "Delete"]
+    },
     "text": "to clear the searchbar"
   },
   {
-    "keys": ["Option", "F"],
+    "name": "focus_searchbar",
+    "eventMatcher": {
+      "code": "KeyF",
+      "flags": {
+        "default": ["altKey"]
+      }
+    },
+    "displayKeys": {
+      "default": ["Alt", "F"],
+      "mac": ["Option", "F"]
+    },
     "text": "to focus YipYip (or just start typing)"
   },
   {
-    "keys": ["Option", "Escape"],
-    "text": "to turn YipYip off and on"
+    "name": "toggle_autohide",
+    "eventMatcher": {
+      "code": "Escape",
+      "flags": {
+        "default": ["altKey"]
+      }
+    },
+    "displayKeys": {
+      "default": ["Alt", "Escape"],
+      "mac": ["Option", "Escape"]
+    },
+    "text": "to toggle Autohide"
   }
 ]

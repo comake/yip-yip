@@ -7,7 +7,7 @@ const RIGHT_VALUE_MIN = 0;
 const BOTTOM_VALUE_MIN = 0
 
 const DraggableContainer = (props) => {
-  const { children, searchInputRef } = props;
+  const { children, searchInputRef, containerRef } = props;
 
   const [isDragging, setIsDragging] = React.useState(false)
   const [dragOffset, setDragOffset] = React.useState(null)
@@ -65,7 +65,12 @@ const DraggableContainer = (props) => {
   }, [position])
 
   return (
-    <div id={'yipyip-container'} style={containerStyle} onMouseDown={onDragStart}>
+    <div
+      id={'yipyip-container'}
+      style={containerStyle}
+      onMouseDown={onDragStart}
+      ref={containerRef}
+    >
       <DragHandle />
       {children}
     </div>

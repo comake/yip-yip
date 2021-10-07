@@ -1,4 +1,4 @@
-import { INPUT_NODE_TYPES, KEYS_VALID_FOR_FOCUS_REGEX } from "../constants.js";
+import { INPUT_NODE_TYPES, KEYS_VALID_FOR_FOCUS_REGEX, MAC_OS_PLATFORMS } from "../constants.js";
 
 function differentInputIsActive(inputElement) {
   return document.activeElement &&
@@ -90,6 +90,22 @@ function nodeMatchesAllSelectorAttributes(node, selector) {
   })
 }
 
+function isMacOS() {
+  const platform = window.navigator.platform;
+  return MAC_OS_PLATFORMS.includes(platform)
+}
+
+function nodeIsInViewport(node) {
+  const element = node.nodeType === Node.TEXT_NODE ? node.parentNode : node
+  const boundingRect = element.getBoundingClientRect();
+  return (
+    boundingRect.top >= 0 &&
+    boundingRect.left >= 0 &&
+    boundingRect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    boundingRect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+}
+
 const Utils = {
   differentInputIsActive,
   clickOrFocusNode,
@@ -100,7 +116,9 @@ const Utils = {
   stringContainsSubstringInList,
   stringContainsSubstringWithOrWithoutSpaces,
   compareDescending,
-  nodeMatchesSelector
+  nodeMatchesSelector,
+  isMacOS,
+  nodeIsInViewport
 }
 
 export default Utils

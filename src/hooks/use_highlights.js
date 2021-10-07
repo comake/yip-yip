@@ -6,7 +6,7 @@ import { YIPYIP_HIGHLIGHT_CLASS } from "../constants.js"
 function matchDataFromNodeTextMatchingRegex(node, textRegex) {
   const nodeText = Utils.getTextContentOfNode(node)
   // Use a regular expression to check if this text node contains the target text.
-  return textRegex.exec(nodeText);
+  return nodeText.length > 0 ? textRegex.exec(nodeText) : null;
 }
 
 function findChildNodeAndMatchDataWithTextMatchingRegex(node, textRegex, matches=[]) {

@@ -2,7 +2,9 @@ export const F_KEYCODE = 'KeyF';
 export const ENTER_KEY = 'Enter';
 export const TAB_KEY = 'Tab';
 export const BACKSPACE_KEY = 'Backspace';
-export const ESCAPE_KEY = 'Escape';
+export const ESCAPE_KEYCODE = 'Escape';
+
+export const MAC_OS_PLATFORMS = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
 
 export const KEYS_VALID_FOR_FOCUS_REGEX = /^[a-zA-Z0-9-_/]$/i;
 
@@ -33,6 +35,7 @@ export const SEARCH_TERM_BOOSTS = {
   synonym: 0.9
 }
 
+export const IS_VISIBLE_BOOST = 1.1;
 export const STARTS_WITH_BOOST = 1.5;
-export const RELEVANT_WORD_BOOST = 1.4;
+export const RELEVANT_WORD_BOOST = 1.5;
 export const RELEVANT_SELECTOR_BOOST = 1.6;
