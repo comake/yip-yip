@@ -478,3 +478,13 @@
   -webkit-align-items: center !important;
   align-items: center !important;
 }
+
+#yipyip-temporarily-enabled-message {
+  padding: 20px !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: white !important;
+  box-sizing: border-box !important;
+  line-height: 1.35em !important;
+  letter-spacing: normal !important;
+}

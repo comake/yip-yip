@@ -7,6 +7,7 @@ import useHighlights from "../hooks/use_highlights.js";
 import useKeyboardShortcuts from "../hooks/use_keyboard_shortcuts.js";
 import useStoredSettings from "../hooks/use_stored_settings.js";
 import useUrlChangeSubscription from "../hooks/use_url_change_subscription.js";
+import useExtensionMessaging from "../hooks/use_extension_messaging.js";
 
 import Utils from "../lib/utils.js";
 import FindInPage from "../lib/find_in_page.js";
@@ -39,6 +40,7 @@ const YipYip = (props) => {
   const [isHidden, setIsHidden] = React.useState(autoHide);
   const [prevAutoHide, setPrevAutoHide] = React.useState(autoHide);
   const [isDisabled, setIsDisabled] = React.useState(!useOnEveryWebsite);
+  const [temporarilyEnabled, setTemporarilyEnabled] = React.useState(false);
   const [prevUseOnEveryWebsite, setPrevUseOnEveryWebsite] = React.useState(useOnEveryWebsite);
   const [searchText, setSearchText] = React.useState('');
   const [prevSearchText, setPrevSearchText] = React.useState('');
@@ -49,10 +51,8 @@ const YipYip = (props) => {
   const [hideSelections, setHideSelections] = React.useState(false);
 
   const focusSearchInput = React.useCallback(() => {
-    if (!isDisabled) {
-      searchInputRef.current.focus()
-    }
-  }, [isDisabled])
+    searchInputRef.current.focus()
+  }, [])
 
   const clearMatchingNodes = React.useCallback(() => {
     setMatchingNodes([])
@@ -65,17 +65,25 @@ const YipYip = (props) => {
     setSelectedSelectionIndex(0)
   }, [clearMatchingNodes])
 
+  const resetTemporarilyEnabled = React.useCallback(() => {
+    if (isDisabled && temporarilyEnabled) {
+      setTemporarilyEnabled(false)
+    }
+  }, [isDisabled, temporarilyEnabled])
+
   const hide = React.useCallback(() => {
     setIsHidden(true)
     resetSearchTextAndMatches()
-  }, [resetSearchTextAndMatches])
+    resetTemporarilyEnabled()
+  }, [resetSearchTextAndMatches, resetTemporarilyEnabled])
 
   const handleBlur = React.useCallback(event => {
     if (autoHide) {
       setIsHidden(true)
     }
     resetSearchTextAndMatches()
-  }, [autoHide, resetSearchTextAndMatches])
+    resetTemporarilyEnabled()
+  }, [autoHide, resetSearchTextAndMatches, resetTemporarilyEnabled])
 
   const clickSelectedMatchingNodeAndReset = React.useCallback(event => {
     if (matchingLinksAndButtons.length > 0) {
@@ -142,39 +150,39 @@ const YipYip = (props) => {
 
   const handleNextMatchShortcut = React.useCallback(event => {
     const differentInputIsActive = Utils.differentInputIsActive(searchInputRef.current);
-    if (!isHidden && !isDisabled && (document.activeElement === searchInputRef.current || !differentInputIsActive)) {
+    if (!isHidden && (!isDisabled || temporarilyEnabled) && (document.activeElement === searchInputRef.current || !differentInputIsActive)) {
       preventDefaultEventAndSelectNextMatchingNode(event)
     }
-  }, [isHidden, isDisabled, preventDefaultEventAndSelectNextMatchingNode])
+  }, [isHidden, isDisabled, temporarilyEnabled, preventDefaultEventAndSelectNextMatchingNode])
 
   const handlePreviousMatchShortcut = React.useCallback(event => {
     const differentInputIsActive = Utils.differentInputIsActive(searchInputRef.current);
-    if (!isHidden && !isDisabled && (document.activeElement === searchInputRef.current || !differentInputIsActive)) {
+    if (!isHidden && (!isDisabled || temporarilyEnabled) && (document.activeElement === searchInputRef.current || !differentInputIsActive)) {
       preventDefaultEventAndSelectNextMatchingNode(event, false)
     }
-  }, [isHidden, isDisabled, preventDefaultEventAndSelectNextMatchingNode])
+  }, [isHidden, isDisabled, temporarilyEnabled, preventDefaultEventAndSelectNextMatchingNode])
 
   const handleSelectShortcut = React.useCallback(event => {
-    if (!isDisabled && !isHidden) {
+    if ((!isDisabled || temporarilyEnabled) && !isHidden) {
       clickSelectedMatchingNodeAndReset(event)
     }
-  }, [isHidden, isDisabled, clickSelectedMatchingNodeAndReset])
+  }, [isHidden, isDisabled, temporarilyEnabled, clickSelectedMatchingNodeAndReset])
 
   const handleClearShortcut = React.useCallback(event => {
     const differentInputIsActive = Utils.differentInputIsActive(searchInputRef.current);
-    if (!isDisabled && !isHidden && !differentInputIsActive) {
+    if ((!isDisabled || temporarilyEnabled) && !isHidden && !differentInputIsActive) {
       preventDefaultAndClearSearchText(event)
     }
-  }, [isHidden, isDisabled, preventDefaultAndClearSearchText])
+  }, [isHidden, isDisabled, temporarilyEnabled, preventDefaultAndClearSearchText])
 
   const handleFocusShortcut = React.useCallback(event => {
-    if (!isDisabled) {
-      setIsHidden(false)
+    if (!isDisabled || temporarilyEnabled) {
       event.preventDefault();
       event.stopPropagation();
+      setIsHidden(false)
       focusSearchInput();
     }
-  }, [focusSearchInput, isDisabled])
+  }, [focusSearchInput, isDisabled, temporarilyEnabled])
 
   const toggleUseOnEveryWebsite = React.useCallback(() => {
     updateUseOnEveryWebsite(!useOnEveryWebsite)
@@ -217,6 +225,15 @@ const YipYip = (props) => {
     }
   }, [focusSearchInput])
 
+  const handleBrowserActionClicked = React.useCallback(() => {
+    if (isDisabled) {
+      setTemporarilyEnabled(true)
+    }
+
+    setIsHidden(false)
+    focusSearchInput();
+  }, [isDisabled])
+
   React.useEffect(() => {
     if (searchText !== prevSearchText) {
       setPrevSearchText(searchText)
@@ -232,10 +249,13 @@ const YipYip = (props) => {
         hide()
       } else {
         setIsHidden(false)
-        focusSearchInput()
+        
+        if (!isDisabled || temporarilyEnabled) {
+          focusSearchInput()
+        }
       }
     }
-  }, [autoHide, prevAutoHide, hide, focusSearchInput])
+  }, [autoHide, prevAutoHide, hide, focusSearchInput, isDisabled, temporarilyEnabled])
 
   React.useEffect(() => {
     const useOnEveryWebsiteChanged = useOnEveryWebsite !== prevUseOnEveryWebsite;
@@ -253,20 +273,27 @@ const YipYip = (props) => {
       setIsDisabled(newIsDisabled)
       if (newIsDisabled) {
         resetSearchTextAndMatches()
+      } else if (temporarilyEnabled) {
+        setTemporarilyEnabled(false)
       }
     }
-  }, [useOnEveryWebsite, prevUseOnEveryWebsite, resetSearchTextAndMatches, host, prevHost])
+  }, [useOnEveryWebsite, prevUseOnEveryWebsite, resetSearchTextAndMatches, temporarilyEnabled, host, prevHost])
+
+  const shouldBindEvents = React.useMemo(() => {
+    return (!isDisabled || temporarilyEnabled) && !isHidden && hasMatchingLinksOrButtons
+  }, [isDisabled, temporarilyEnabled, isHidden, hasMatchingLinksOrButtons])
 
   const hasMatchingLinksOrButtons = React.useMemo(() => matchingLinksAndButtons.length > 0, [matchingLinksAndButtons])
-  useWindowEvent('scroll', !isDisabled && !isHidden && hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
-  useWindowEvent('wheel', !isDisabled && !isHidden && hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
-  useWindowEvent('resize', !isDisabled && !isHidden && hasMatchingLinksOrButtons, updateSelectionPositionsAfterTimeout)
-  useDocumentEvent('keydown', !isDisabled, handleKeydown)
+  useWindowEvent('scroll', shouldBindEvents, updateSelectionPositionsAfterTimeout)
+  useWindowEvent('wheel', shouldBindEvents, updateSelectionPositionsAfterTimeout)
+  useWindowEvent('resize', shouldBindEvents, updateSelectionPositionsAfterTimeout)
+  useDocumentEvent('keydown', !isDisabled || temporarilyEnabled, handleKeydown)
   useKeyboardShortcuts(handleShortcut)
   useHighlights({ searchText, matchingNodes })
+  useExtensionMessaging({ handleBrowserActionClicked })
 
   return (
-    <div class={(isDisabled || isHidden) ? 'yipyip-hidden' : ''}>
+    <div class={((isDisabled && !temporarilyEnabled) || isHidden) ? 'yipyip-hidden' : ''}>
       { !hideSelections && <Selections
           refresh={scrollOrResizeRefresh}
           selectedSelectionIndex={selectedSelectionIndex}
@@ -289,6 +316,7 @@ const YipYip = (props) => {
           toggleAutoHide={toggleAutoHide}
         />
         <InfoDropdown
+          temporarilyEnabled={temporarilyEnabled}
           autoHide={autoHide}
           toggleAutoHide={toggleAutoHide}
           useOnEveryWebsite={useOnEveryWebsite}

@@ -3,11 +3,26 @@ import useHover from '../hooks/use_hover.js'
 import InfoPanel from './info_panel/info_panel.js';
 import Tooltip from './tooltip.js';
 import HelpIcon from './icons/help.js';
+import TemporarilyEnabledMessage from './temporarily_enabled_message.js';
 
 const InfoDropdown = (props) => {
-  const { autoHide, toggleAutoHide, useOnEveryWebsite, toggleUseOnEveryWebsite } = props;
+  const { autoHide, toggleAutoHide, useOnEveryWebsite, toggleUseOnEveryWebsite, temporarilyEnabled } = props;
   const containerRef = React.useRef();
   const [hover, onMouseEnter, onMouseLeave] = useHover();
+
+  let tooltipContents;
+  if (hover) {
+    tooltipContents = (
+      <InfoPanel
+        autoHide={autoHide}
+        toggleAutoHide={toggleAutoHide}
+        useOnEveryWebsite={useOnEveryWebsite}
+        toggleUseOnEveryWebsite={toggleUseOnEveryWebsite}
+      />
+    )
+  } else if (temporarilyEnabled) {
+    tooltipContents = <TemporarilyEnabledMessage />
+  }
 
   return (
     <div
@@ -18,14 +33,9 @@ const InfoDropdown = (props) => {
       onMouseLeave={onMouseLeave}
     >
       <HelpIcon />
-      { hover && (
-          <Tooltip containerRef={containerRef}>
-            <InfoPanel
-              autoHide={autoHide}
-              toggleAutoHide={toggleAutoHide}
-              useOnEveryWebsite={useOnEveryWebsite}
-              toggleUseOnEveryWebsite={toggleUseOnEveryWebsite}
-            />
+      { tooltipContents && (
+          <Tooltip containerRef={containerRef} key={hover ? 'hover' : temporarilyEnabled}>
+            {tooltipContents}
           </Tooltip>
         )
       }

@@ -1,7 +1,7 @@
 {
   "name": "YipYip",
   "short_name": "YipYip",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Super fast browsing",
   "manifest_version": 3,
   "content_security_policy": {
@@ -16,8 +16,17 @@
       "run_at": "document_idle"
     }
   ],
+  "action": {
+    "default_icon": {
+      "16": "images/icon-16.png",
+      "24": "images/icon-24.png",
+      "32": "images/icon-32.png"
+    },
+    "default_title": "Search with YipYip!"
+  },
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "background.js",
+    "type": "module"
   },
   "permissions": [
     "storage",
