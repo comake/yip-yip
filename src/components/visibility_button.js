@@ -1,8 +1,8 @@
 import React from 'react';
 import useHover from '../hooks/use_hover.js'
 import Tooltip from './tooltip.js';
-import ShowIcon from './icons/show.js';
-import HideIcon from './icons/hide.js';
+import { ReactComponent as ShowIcon } from '../icons/show.svg';
+import { ReactComponent as HideIcon } from '../icons/hide.svg';
 
 const VisibilityButton = (props) => {
   const { autoHide, toggleAutoHide } = props;

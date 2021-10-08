@@ -18,11 +18,22 @@
   ],
   "action": {
     "default_icon": {
-      "16": "images/icon-16.png",
-      "24": "images/icon-24.png",
-      "32": "images/icon-32.png"
+      "16": "logo-16.png",
+      "24": "logo-24.png",
+      "32": "logo-32.png",
+      "48": "logo-48.png",
+      "64": "logo-64.png",
+      "128": "logo-128.png"
     },
     "default_title": "Search with YipYip!"
+  },
+  "icons": {
+    "16": "logo-16.png",
+    "24": "logo-24.png",
+    "32": "logo-32.png",
+    "48": "logo-48.png",
+    "64": "logo-64.png",
+    "128": "logo-128.png"
   },
   "background": {
     "service_worker": "background.js",

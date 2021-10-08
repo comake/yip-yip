@@ -17,6 +17,7 @@ import MatchesSummary from "./matches_summary.js";
 import DraggableContainer from "./draggable_container.js";
 import InfoDropdown from "./info_dropdown.js";
 import VisibilityButton from "./visibility_button.js";
+import { ReactComponent as Logo } from '../icons/logo.svg';
 
 const SCROLL_OR_RESIZE_UPDATE_TIMEOUT_DURATION = 100;
 const SEARCH_TEXT_UPDATE_TIMEOUT_DURATION = 150;
@@ -249,7 +250,7 @@ const YipYip = (props) => {
         hide()
       } else {
         setIsHidden(false)
-        
+
         if (!isDisabled || temporarilyEnabled) {
           focusSearchInput()
         }
@@ -301,6 +302,7 @@ const YipYip = (props) => {
         />
       }
       <DraggableContainer containerRef={containerRef} searchInputRef={searchInputRef}>
+        <Logo />
         <SearchInput
           inputRef={searchInputRef}
           searchText={searchText}

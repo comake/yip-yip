@@ -3,6 +3,7 @@
 }
 
 #yipyip-container {
+  padding-left: 15px !important;
   cursor: grab !important;
   position: fixed !important;
   z-index: 2147483003 !important;
@@ -38,73 +39,15 @@
   box-sizing: border-box !important;
 }
 
-#yipyip-drag-handle {
-  cursor: grab !important;
-  padding: 0 15px !important;
-  height: 100% !important;
-  box-sizing: border-box !important;
-  display: -webkit-box !important;
-  display: -moz-box !important;
-  display: -ms-flexbox !important;
-  display: -webkit-flex !important;
-  display: flex !important;
-  -webkit-box-orient: vertical !important;
-  -ms-box-orient: vertical !important;
-  -moz-box-orient: vertical !important;
-  box-orient: vertical !important;
-  -webkit-box-direction: normal !important;
-  -webkit-flex-direction: column !important;
-  -ms-flex-direction: column !important;
-  flex-direction: column !important;
-  -webkit-box-align: center !important;
-  -moz-box-align: center !important;
-  -ms-flex-align: center !important;
-  -webkit-align-items: center !important;
-  align-items: center !important;
-  -webkit-box-pack: center !important;
-  -moz-box-pack: center !important;
-  -ms-flex-pack: center !important;
-  -webkit-justify-content: center !important;
-  justify-content: center !important;
-}
-
-.yipyip-drag-handle-row {
-  margin: 2px 0 !important;
-  box-sizing: border-box !important;
-  display: -webkit-box !important;
-  display: -moz-box !important;
-  display: -ms-flexbox !important;
-  display: -webkit-flex !important;
-  display: flex !important;
-  -webkit-box-orient: horizontal !important;
-  -ms-box-orient: horizontal !important;
-  -moz-box-orient: horizontal !important;
-  box-orient: horizontal !important;
-  -webkit-box-direction: normal !important;
-  -webkit-flex-direction: row !important;
-  -ms-flex-direction: row !important;
-  flex-direction: row !important;
-  -webkit-box-align: center !important;
-  -moz-box-align: center !important;
-  -ms-flex-align: center !important;
-  -webkit-align-items: center !important;
-  align-items: center !important;
-  box-sizing: border-box !important;
-}
-
-.yipyip-drag-handle-item {
-  height: 2px !important;
-  width: 2px !important;
-  min-width: 2px !important;
-  margin: 0 2px !important;
-  -webkit-border-radius: 50% !important;
-  -moz-border-radius: 50% !important;
-  -ms-border-radius: 50% !important;
-  border-radius: 50% !important;
-  background-color: rgba(255, 255, 255, 0.65) !important;
+#yipyip-container > svg {
+  height: 18px;
+  width: 18px;
+  min-width: 18px;
+  fill: rgba(255, 255, 255, 0.75) !important;
 }
 
 #yipyip-input-container {
+  margin-left: 15px !important;
   height: 60% !important;
   -webkit-box-flex: 1 !important;
   -moz-box-flex: 1 !important;
@@ -222,19 +165,6 @@
 
 #yipyip-info-dropdown-button {
   margin-right: 6px !important;
-}
-
-#yipyip-keyboard-icon-container {
-  height: 20px !important;
-  width: 20px !important;
-}
-
-#yipyip-keyboard-icon {
-  fill: rgba(255, 255, 255, 0.65);
-}
-
-#yipyip-info-dropdown-button:hover #yipyip-keyboard-icon {
-  fill: rgba(255, 255, 255, 0.75) !important;
 }
 
 .yipyip-tooltip-panel {
@@ -415,23 +345,24 @@
   text-decoration: none !important;
 }
 
-#yipyip-discord-icon-container, #yipyip-github-icon-container, #yipyip-twitter-icon-container {
+.yipyip-info-panel-button svg {
   margin-right: 15px !important;
   height: 18px !important;
   width: 18px !important;
 }
 
-.yipyip-icon-button .yipyip-icon-container {
+.yipyip-icon-button svg {
   width: 16px !important;
   height: 16px !important;
 }
 
-.yipyip-icon {
-  fill: rgba(255, 255, 255, 0.75)
+.yipyip-info-panel-button svg,
+.yipyip-icon-button svg {
+  fill: rgba(255, 255, 255, 0.75) !important;
 }
 
-.yipyip-info-panel-button:hover .yipyip-icon,
-.yipyip-icon-button:hover .yipyip-icon {
+.yipyip-info-panel-button:hover svg,
+.yipyip-icon-button:hover svg {
   fill: rgba(255, 255, 255, 1) !important;
 }
 

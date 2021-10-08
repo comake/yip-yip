@@ -13,7 +13,6 @@ const useExtensionMessaging = ({ handleBrowserActionClicked }) => {
   }, [handleBrowserActionClicked])
 
   React.useEffect(() => {
-    console.debug('adding addListener')
     chrome.runtime.onMessage.addListener(handleExtensionMessage);
     return () => {
       chrome.runtime.onMessage.removeListener(handleExtensionMessage);
