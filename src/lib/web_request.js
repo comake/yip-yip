@@ -13,6 +13,10 @@ class WebRequest {
     return this.get({ url: `/${COMAKE_API_VERSION}/users/verify_login_email`, data: reqData });
   }
 
+  static getMe(reqData={}) {
+    return this.get({ url: `/${COMAKE_API_VERSION}/users/me`, data: reqData });
+  }
+
   static get(args) {
     return this.performFetchRequest('GET', args);
   }
