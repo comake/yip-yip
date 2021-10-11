@@ -1,5 +1,7 @@
 # About YipYip
 
+![image](https://user-images.githubusercontent.com/13453719/136746212-e744bc0e-4830-4abf-9a47-59c21892d72a.png)
+
 YipYip is an always-on search assitant that turns Gmail (and any other website) into a keyboard-first product.
 
 Just type to search.
@@ -11,6 +13,8 @@ Press Tab to jump through the matches.
 Press Enter to select the current match.
 
 Voila!
+
+Video Demo: https://www.youtube.com/watch?v=87tqknjluKU
 
 ## Extension store listings:
 
