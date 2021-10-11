@@ -28,7 +28,7 @@ class WebRequest {
     }
 
     return new Promise((resolve, reject) => {
-      fetch(`https://api.comake.localhost${args.url}${query}`, params)
+      fetch(`https://api.comake.io${args.url}${query}`, params)
         .then((response, textStatus, xhr) => {
           const responseJSONPromise = response.json()
           if (response.ok) {
