@@ -1,8 +1,8 @@
 import React from 'react';
-import useHover from '../hooks/use_hover.js'
+import useHover from '../../hooks/use_hover.js'
 import InfoPanel from './info_panel/info_panel.js';
 import Tooltip from './tooltip.js';
-import { ReactComponent as HelpIcon } from '../icons/help.svg';
+import { ReactComponent as HelpIcon } from '../../icons/help.svg';
 import TemporarilyEnabledMessage from './temporarily_enabled_message.js';
 
 const InfoDropdown = (props) => {

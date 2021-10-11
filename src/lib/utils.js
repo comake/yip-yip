@@ -114,7 +114,7 @@ function scrollToNodeAtIndexInList(nodeList, selectedIndex) {
 }
 
 function hostIsGmail() {
-  return window.location.host == 'mail.google.com'
+  return window.location.host === 'mail.google.com'
 }
 
 const Utils = {

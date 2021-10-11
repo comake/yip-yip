@@ -1,5 +1,4 @@
 import React from 'react';
-import "../content.css";
 import Utils from "../lib/utils.js";
 import { YIPYIP_HIGHLIGHT_CLASS } from "../constants.js"
 

@@ -1,4 +1,3 @@
-
 const TemporarilyEnabledMessage = () => {
   return (
     <div id={'yipyip-temporarily-enabled-message'}>

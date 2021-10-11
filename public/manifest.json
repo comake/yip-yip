@@ -7,15 +7,6 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
-  "content_scripts": [
-    {
-      "matches": ["<all_urls>"],
-      "css": ["/static/css/content.css"],
-      "js": ["/static/js/content.js"],
-      "all_frames": false,
-      "run_at": "document_idle"
-    }
-  ],
   "action": {
     "default_icon": {
       "16": "logo-16.png",
@@ -23,7 +14,8 @@
       "32": "logo-32.png",
       "48": "logo-48.png",
       "64": "logo-64.png",
-      "128": "logo-128.png"
+      "128": "logo-128.png",
+      "192": "logo-192.png"
     },
     "default_title": "Search with YipYip!"
   },
@@ -33,7 +25,8 @@
     "32": "logo-32.png",
     "48": "logo-48.png",
     "64": "logo-64.png",
-    "128": "logo-128.png"
+    "128": "logo-128.png",
+    "192": "logo-192.png"
   },
   "background": {
     "service_worker": "background.js",

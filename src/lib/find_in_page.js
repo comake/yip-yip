@@ -25,7 +25,6 @@ class FindInPage {
   findMatchesInNode(node, parentNode=null, matches=[]) {
     if (!this.canSearchNode(node)) { return matches }
 
-    const matchesSearch = this.nodeScorer.nodeMatches(node);
     if (node.nodeType === Node.TEXT_NODE && parentNode && !matches.some(match => match === parentNode)) {
       matches.push(parentNode);
     } else if (node.nodeType === Node.ELEMENT_NODE && this.isVisible(node)) {

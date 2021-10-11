@@ -34,19 +34,20 @@ function unsetDefaultMainEntryInManifestPlugin(webpackConfig) {
 module.exports = {
   webpack: {
     configure: (webpackConfig, {env, paths}) => {
-      removeContentHashFromMiniCssExtractPlugin(webpackConfig)
-      unsetDefaultMainEntryInManifestPlugin(webpackConfig)
+      removeContentHashFromMiniCssExtractPlugin(webpackConfig);
+      unsetDefaultMainEntryInManifestPlugin(webpackConfig);
 
       return {
         ...webpackConfig,
         entry: {
+          login: './src/login.js',
           content: './src/content.js',
           background: './src/background.js',
         },
         output: {
           ...webpackConfig.output,
           filename: (pathData) => {
-            return pathData.chunk.name === 'content' ? 'static/js/[name].js' : '[name].js';
+            return pathData.chunk.name === 'background' ? '[name].js' : 'static/js/[name].js';
           },
         },
         optimization: {

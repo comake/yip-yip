@@ -1,9 +1,9 @@
-import { ReactComponent as DiscordIcon } from '../../icons/discord.svg';
-import { ReactComponent as GithubIcon } from '../../icons/github.svg';
-import { ReactComponent as TwitterIcon } from '../../icons/twitter.svg';
+import { ReactComponent as DiscordIcon } from '../../../icons/discord.svg';
+import { ReactComponent as GithubIcon } from '../../../icons/github.svg';
+import { ReactComponent as TwitterIcon } from '../../../icons/twitter.svg';
 import InfoPanelButton from './info_panel_button.js';
 
-import { DISCORD_INVITE_LINK, GITHUB_REPO_LINK, TWITTER_LINK } from '../../constants.js';
+import { DISCORD_INVITE_LINK, GITHUB_REPO_LINK, TWITTER_LINK } from '../../../constants.js';
 
 const InfoPanelButtons = (props) => {
   const buttons = [

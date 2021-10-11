@@ -1,28 +1,26 @@
 import React from 'react';
-import "../content.css";
+import useWindowEvent from "../../hooks/use_window_event.js";
+import useDocumentEvent from "../../hooks/use_document_event.js";
+import useHighlights from "../../hooks/use_highlights.js";
+import useKeyboardShortcuts from "../../hooks/use_keyboard_shortcuts.js";
+import useStoredSettings from "../../hooks/use_stored_settings.js";
+import useUrlChangeSubscription from "../../hooks/use_url_change_subscription.js";
+import useExtensionMessaging from "../../hooks/use_extension_messaging.js";
 
-import useWindowEvent from "../hooks/use_window_event.js";
-import useDocumentEvent from "../hooks/use_document_event.js";
-import useHighlights from "../hooks/use_highlights.js";
-import useKeyboardShortcuts from "../hooks/use_keyboard_shortcuts.js";
-import useStoredSettings from "../hooks/use_stored_settings.js";
-import useUrlChangeSubscription from "../hooks/use_url_change_subscription.js";
-import useExtensionMessaging from "../hooks/use_extension_messaging.js";
-
-import Utils from "../lib/utils.js";
-import FindInPage from "../lib/find_in_page.js";
+import Utils from "../../lib/utils.js";
+import FindInPage from "../../lib/find_in_page.js";
 import SearchInput from "./search_input.js";
 import Selections from "./selections.js";
 import MatchesSummary from "./matches_summary.js";
 import DraggableContainer from "./draggable_container.js";
 import InfoDropdown from "./info_dropdown.js";
 import VisibilityButton from "./visibility_button.js";
-import { ReactComponent as Logo } from '../icons/logo.svg';
+import { ReactComponent as Logo } from '../../icons/logo-without-color.svg';
 
 const SCROLL_OR_RESIZE_UPDATE_TIMEOUT_DURATION = 100;
 const SEARCH_TEXT_UPDATE_TIMEOUT_DURATION = 150;
 
-const YipYip = (props) => {
+const Searchbar = (props) => {
   const scrollOrResizeUpdateTimeout = React.useRef();
   const selectionUpdateTimeout = React.useRef();
   const containerRef = React.useRef();
@@ -233,7 +231,7 @@ const YipYip = (props) => {
 
     setIsHidden(false)
     focusSearchInput();
-  }, [isDisabled])
+  }, [isDisabled, focusSearchInput])
 
   React.useEffect(() => {
     if (searchText !== prevSearchText) {
@@ -280,11 +278,12 @@ const YipYip = (props) => {
     }
   }, [useOnEveryWebsite, prevUseOnEveryWebsite, resetSearchTextAndMatches, temporarilyEnabled, host, prevHost])
 
+  const hasMatchingLinksOrButtons = React.useMemo(() => matchingLinksAndButtons.length > 0, [matchingLinksAndButtons]);
+
   const shouldBindEvents = React.useMemo(() => {
     return (!isDisabled || temporarilyEnabled) && !isHidden && hasMatchingLinksOrButtons
   }, [isDisabled, temporarilyEnabled, isHidden, hasMatchingLinksOrButtons])
 
-  const hasMatchingLinksOrButtons = React.useMemo(() => matchingLinksAndButtons.length > 0, [matchingLinksAndButtons])
   useWindowEvent('scroll', shouldBindEvents, updateSelectionPositionsAfterTimeout)
   useWindowEvent('wheel', shouldBindEvents, updateSelectionPositionsAfterTimeout)
   useWindowEvent('resize', shouldBindEvents, updateSelectionPositionsAfterTimeout)
@@ -329,4 +328,4 @@ const YipYip = (props) => {
   )
 }
 
-export default YipYip;
+export default Searchbar;
