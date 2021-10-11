@@ -1,3 +1,22 @@
+# About YipYip
+
+YipYip is an always-on search assitant that turns Gmail (and any other website) into a keyboard-first product.
+
+Just type to search.
+
+YipYip highlights any buttons or links in the page matching your search.
+
+Press Tab to jump through the matches.
+
+Press Enter to select the current match.
+
+Voila!
+
+## Extension store listings:
+
+Chrome Webstore: https://chrome.google.com/webstore/detail/yipyip/flbkmacappdledphgdoolmenldginemg/
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
