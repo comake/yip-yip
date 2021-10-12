@@ -4,20 +4,16 @@ import { FIELD_BOOSTS, SEARCH_TERM_BOOSTS, STARTS_WITH_BOOST, RELEVANT_WORD_BOOS
 
 import Utils from "./utils.js";
 import Synonyms from './synonyms.js';
-import RelevantWords from './relevant_words.js';
-import RelevantSelectors from './relevant_selectors.js';
 import HiddenAttributeSettings from './hidden_attribute_settings.js';
 
 const WHITESPACE_SPLIT_REGEX = /[(\s+)\-.,/\u200B-\u200D\uFEFF\u200E\u200F]+/;
 
 class NodeScorer {
-  constructor(searchText) {
+  constructor(searchText, appSpecificSynonyms, appSpecificRelevantWords, appSpecificRelevantSelectors) {
     this.searchText = searchText;
-
-    const domain = window.location.host;
-    this.synonyms = Synonyms.getSynonymsForTextInDomain(domain, searchText);
-    this.relevantWords = RelevantWords.getRelevantWordsForDomain(domain);
-    this.relevantSelectors = RelevantSelectors.getRelevantSelectorsForDomain(domain);
+    this.synonyms = Synonyms.getSynonymsForTextFromSettings(searchText, appSpecificSynonyms);
+    this.relevantWords = appSpecificRelevantWords;
+    this.relevantSelectors = appSpecificRelevantSelectors;
   }
 
   scoreNode(node) {

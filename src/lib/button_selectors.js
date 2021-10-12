@@ -1,14 +1,4 @@
-import gmailAdditionalButtonSelectorsData from '../data/additional_button_selectors/gmail.json';
-
-class AdditionalButtonSelectors {
-  static additionalButtonSelectorsByDomain = {
-    'mail.google.com': gmailAdditionalButtonSelectorsData
-  };
-
-  static getAdditionalButtonSelectorsByDomain(domain) {
-    return this.additionalButtonSelectorsByDomain[domain] || [];
-  }
-
+class ButtonSelectors {
   static selectorToQueryString(selector) {
     if (!selector.attributes) {
       return selector.nodeName.toLowerCase()
@@ -24,4 +14,4 @@ class AdditionalButtonSelectors {
   }
 }
 
-export default AdditionalButtonSelectors;
+export default ButtonSelectors;

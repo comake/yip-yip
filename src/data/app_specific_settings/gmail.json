@@ -1,0 +1,50 @@
+{
+  "domain": "mail.google.com",
+  "additional_button_selectors": [
+    {
+      "nodeName": "TR",
+      "attributes": {
+        "role": "row"
+      },
+      "_comment": "Allow selection of full email rows."
+    }
+  ],
+  "relevant_selectors": [
+    {
+      "nodeName": "DIV",
+      "attributes": {
+        "role": "button"
+      },
+      "_comment": "Increase score of the 'Add task' button vs. the 'Tasks' Button and the 'Snooze' button vs. the 'Snoozed' navigation item when viewing an email."
+    },
+    {
+      "nodeName": "DIV",
+      "attributes": {
+        "role": "checkbox"
+      },
+      "_comment": "Increase score of the 'Star' button vs. the 'Starred' navigation item when viewing an email."
+    }
+  ],
+  "relevant_words": [
+    "forward",
+    "compose",
+    "reply",
+    "starred"
+  ],
+  "synonyms": {
+    "mutual": [
+      ["delete", "trash", "discard"]
+    ],
+    "directed": {
+      "new": ["compose"],
+      "tag": ["label"],
+      "last": ["newer"],
+      "previous": ["newer"],
+      "next": ["older"],
+      "reload": ["refresh"],
+      "help": ["support"],
+      "later": ["snooze"],
+      "pop": ["in new window"]
+    }
+  }
+}

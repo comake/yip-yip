@@ -1,14 +1,23 @@
 import { YIPYIP_ROOT_ID, DO_NOT_SEARCH_NODE_TYPES } from "../constants.js";
 
+import AppSpecificSettings from './app_specific_settings.js';
+import Synonyms from './synonyms.js';
 import NodeScorer from './node_scorer.js';
 import HiddenAttributeSettings from './hidden_attribute_settings.js';
 
 class FindInPage {
   constructor(searchText) {
     this.searchText = searchText.toLowerCase().trim();
-    this.nodeScorer = new NodeScorer(this.searchText);
-    this.hiddenAttributeSettings = new HiddenAttributeSettings();
-    this.nodesWithHiddenAttributesQuerySelector = this.hiddenAttributeSettings.nodesWithHiddenAttributesQuerySelector;
+    const domain = window.location.host;
+    const appSpecificSettings = AppSpecificSettings.getSettingsForDomain(domain)
+    const appSpecificSynonyms = Synonyms.mergeMutualSynonymsIntoDirected(appSpecificSettings.synonyms || {});
+    const appSpecificRelevantWords = appSpecificSettings.relevant_words || [];
+    const appSpecificRelevantSelectors = appSpecificSettings.relevant_selectors || [];
+    const appSpecificAdditionalButtonSelectors = appSpecificSettings.additional_button_selectors || []
+
+    this.nodeScorer = new NodeScorer(this.searchText, appSpecificSynonyms, appSpecificRelevantWords, appSpecificRelevantSelectors);
+    this.hiddenAttributeSettings = new HiddenAttributeSettings(appSpecificAdditionalButtonSelectors);
+    this.nodesWithHiddenAttributesQuerySelector = this.hiddenAttributeSettings.hiddenAttributeSettingsByNodeNameToQuerySelector();
   }
 
   findMatches() {

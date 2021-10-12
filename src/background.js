@@ -10,16 +10,13 @@ chrome.tabs.onUpdated.addListener(handleTabUpdatedEvent);
 
 function handleInstallationEvent(details) {
   if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
-    WebRequest.getMe({ product: 'yipyip' })
-      .then(respData => {
-        if (respData.user) {
-          chrome.storage.local.set({ [SETTINGS_KEYS.USER_EMAIL]: respData.user.email });
-          turnBrowserExtensionStoreIntoWelcomePage()
-        } else {
-          turnBrowserExtensionStoreIntoLoginPage()
-        }
-      })
-      .catch(() => turnBrowserExtensionStoreIntoLoginPage())
+    chrome.storage.local.get([SETTINGS_KEYS.USER_EMAIL], (data) => {
+      if (data[SETTINGS_KEYS.USER_EMAIL] != null) {
+        turnBrowserExtensionStoreIntoWelcomePage()
+      } else {
+        turnBrowserExtensionStoreIntoLoginPage()
+      }
+    })
   }
 }
 
@@ -68,7 +65,7 @@ function turnBrowserExtensionStoreIntoWelcomePage() {
   chrome.tabs.query({ currentWindow: true, active: true })
     .then(tabs => {
       if (tabs && tabs[0]) {
-        chrome.tabs.update({ url: YIPYIP_WELCOME_LINK });
+        chrome.tabs.update(tabs[0].id, { url: YIPYIP_WELCOME_LINK });
       }
     });
 }
@@ -78,7 +75,7 @@ function turnBrowserExtensionStoreIntoLoginPage() {
     .then(tabs => {
       if (tabs && tabs[0]) {
         const loginPageUrl = getLoginURL();
-        chrome.tabs.update({ url: loginPageUrl });
+        chrome.tabs.update(tabs[0].id, { url: loginPageUrl });
       }
     });
 }

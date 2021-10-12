@@ -101,7 +101,7 @@ body, html, #root {
 
 #yipyip-login-page-input.yipyip-login-page-input-disabled {
   pointer-events: none;
-  background-color: #2B2B2B;
+  opacity: 0.6;
 }
 
 #yipyip-login-page-terms {

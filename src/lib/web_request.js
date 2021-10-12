@@ -25,7 +25,7 @@ class WebRequest {
     const params = { ...FETCH_REQUEST_DEFAULT_ARGS, method: method }
 
     let query = ''
-    if (method == 'GET' && args.data) {
+    if (method === 'GET' && args.data) {
       query += `?${this.JSONParamsToUrlString(args.data)}`
     } else if (args.data) {
       params.body = JSON.stringify(args.data)

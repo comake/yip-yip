@@ -7,9 +7,11 @@ import WebRequest from '../../lib/web_request.js';
 import LoadingSpinner from './loading_spinner.js';
 
 const LoginPage = (props) => {
+  const { userEmail, updateUserEmail } = useStoredSettings();
   const inputRef = React.useRef();
   const [loading, setLoading] = React.useState(false);
-  const [email, setEmail] = React.useState('');
+  const [email, setEmail] = React.useState(userEmail);
+  const [prevStoredUserEmail, setPrevStoredUserEmail] = React.useState(null);
   const hasValidEmail = React.useMemo(() => EMAIL_REGEX.test(email), [email]);
   const [errors, setErrors] = React.useState(null);
 
@@ -17,8 +19,6 @@ const LoginPage = (props) => {
     setEmail(event.target.value)
     setErrors(null);
   }, []);
-
-  const { updateUserEmail } = useStoredSettings();
 
   const submitEmail = React.useCallback(() => {
     setLoading(true)
@@ -30,14 +30,14 @@ const LoginPage = (props) => {
           window.location.href = YIPYIP_WELCOME_LINK;
         },
         (errors) => {
+          setLoading(false)
           setErrors(errors);
         }
-      )
-      .finally(() => setLoading(false));
+      );
   }, [email, updateUserEmail])
 
   const handleKeydown = React.useCallback(event => {
-    if (event.code == ENTER_KEYCODE && hasValidEmail && !loading) {
+    if (event.code === ENTER_KEYCODE && hasValidEmail && !loading) {
       submitEmail()
     }
   }, [hasValidEmail, submitEmail, loading])
@@ -45,7 +45,34 @@ const LoginPage = (props) => {
   useDocumentEvent('keydown', hasValidEmail, handleKeydown)
 
   React.useEffect(() => {
+    if (userEmail != prevStoredUserEmail) {
+      setPrevStoredUserEmail(userEmail)
+
+      if (userEmail) {
+        setEmail(userEmail)
+        window.location.href = YIPYIP_WELCOME_LINK;
+      }
+    }
+
+  }, [userEmail, prevStoredUserEmail])
+
+  React.useEffect(() => {
     inputRef.current.focus()
+  }, [])
+
+  React.useEffect(() => {
+    setLoading(true)
+
+    WebRequest.getMe({ product: 'yipyip' })
+      .then(respData => {
+        if (respData.user) {
+          updateUserEmail(respData.user.email)
+          window.location.href = YIPYIP_WELCOME_LINK;
+        } else {
+          setLoading(false)
+        }
+      })
+      .catch(() => setLoading(false))
   }, [])
 
   return (
