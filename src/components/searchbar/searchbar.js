@@ -196,6 +196,18 @@ const Searchbar = (props) => {
     toggleAutoHide()
   }, [toggleAutoHide])
 
+  const handleClearSearchOrHideShortcut = React.useCallback(event => {
+    const differentInputIsActive = Utils.differentInputIsActive(searchInputRef.current);
+    const isEnabled = (!isDisabled || temporarilyEnabled) && !isHidden && !differentInputIsActive;
+    if (isEnabled && searchText.length > 0) {
+      preventDefaultAndClearSearchText(event)
+    } else if (isEnabled && document.activeElement === searchInputRef.current) {
+      searchInputRef.current.blur()
+    } else {
+      handleBlur()
+    }
+  }, [searchText, preventDefaultAndClearSearchText, isDisabled, temporarilyEnabled, isHidden, handleBlur])
+
   const keyboardShortcutHandlerMapping = React.useMemo(() => {
     return {
       "next_match": handleNextMatchShortcut,
@@ -203,10 +215,12 @@ const Searchbar = (props) => {
       "select_match": handleSelectShortcut,
       "clear_searchbar": handleClearShortcut,
       "focus_searchbar": handleFocusShortcut,
-      "toggle_autohide": handleToggleAutohideShortcut
+      "toggle_autohide": handleToggleAutohideShortcut,
+      "clear_search_or_hide": handleClearSearchOrHideShortcut
     }
   }, [handleNextMatchShortcut, handlePreviousMatchShortcut, handleSelectShortcut,
-    handleClearShortcut, handleFocusShortcut, handleToggleAutohideShortcut
+    handleClearShortcut, handleFocusShortcut, handleToggleAutohideShortcut,
+    handleClearSearchOrHideShortcut
   ])
 
   const handleShortcut = React.useCallback((keyboardShortcutName, event) => {

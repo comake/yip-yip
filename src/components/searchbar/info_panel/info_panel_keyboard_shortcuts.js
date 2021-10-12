@@ -8,13 +8,15 @@ const InfoPanelKeyboardShortcuts = () => {
 
   return (
     <>
-      { keyboardShortcuts.map(shortcut => {
-          return <InfoPanelShortcutRow
-            key={shortcut.text}
-            isMacOS={isMacOS}
-            shortcut={shortcut}
-          />
-        })
+      { keyboardShortcuts
+          .filter(shortcut => shortcut.text && shortcut.displayKeys)
+          .map(shortcut => {
+            return <InfoPanelShortcutRow
+              key={shortcut.text}
+              isMacOS={isMacOS}
+              shortcut={shortcut}
+            />
+          })
       }
     </>
   )

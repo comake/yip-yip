@@ -77,5 +77,14 @@
       "mac": ["Option", "Escape"]
     },
     "text": "to toggle Autohide"
+  },
+  {
+    "name": "clear_search_or_hide",
+    "eventMatcher": {
+      "code": "Escape",
+      "discludedFlags": {
+        "default": ["altKey", "shiftKey", "metaKey", "ctrlKey"]
+      }
+    }
   }
 ]
