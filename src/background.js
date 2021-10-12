@@ -7,9 +7,10 @@ chrome.action.onClicked.addListener(tab => sendBrowserActionClickedMessageToTab(
 chrome.runtime.onInstalled.addListener(handleInstallationEvent);
 
 function handleInstallationEvent(details) {
-  injectContentScriptToAllTabs()
 
   if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
+    injectContentScriptToAllTabs()
+    
     chrome.storage.local.get([SETTINGS_KEYS.USER_EMAIL], (data) => {
       if (data[SETTINGS_KEYS.USER_EMAIL] != null) {
         turnBrowserExtensionStoreIntoWelcomePage()
