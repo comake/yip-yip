@@ -188,8 +188,8 @@
 }
 
 #yipyip-info-panel {
-  width: 500px !important;
-  min-width: 500px !important;
+  width: 510px !important;
+  min-width: 510px !important;
   padding: 20px !important;
   box-sizing: border-box !important;
 }
@@ -309,12 +309,28 @@
   content: none !important;
 }
 
+.yipyip-info-panel-button-row {
+  display: -webkit-box !important;
+  display: -moz-box !important;
+  display: -ms-flexbox !important;
+  display: -webkit-flex !important;
+  display: flex !important;
+  -webkit-box-align: center !important;
+  -moz-box-align: center !important;
+  -ms-flex-align: center !important;
+  -webkit-align-items: center !important;
+  align-items: center !important;
+  margin: 12px 9px 0 9px !important;
+}
+
 .yipyip-info-panel-button {
+  flex-basis: 50% !important;
+  white-space: nowrap;
   box-sizing: border-box !important;
   line-height: 1.35em !important;
   letter-spacing: normal !important;
   text-decoration: none !important;
-  margin: 10px 15px 0 15px !important;
+  margin: 0px 6px !important;
   padding: 7px 15px !important;
   background-color: none !important;
   color: white !important;

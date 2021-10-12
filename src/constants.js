@@ -19,6 +19,7 @@ export const GITHUB_REPO_LINK = 'https://github.com/comake/yip-yip';
 export const TWITTER_LINK = "https://twitter.com/intent/tweet?text=Loving%20%40comake_io's%20YipYip%20Extension!";
 export const YIPYIP_FAQS_LINK = 'https://www.yip-yip.com/#FAQs';
 export const YIPYIP_WELCOME_LINK = 'https://www.yip-yip.com/welcome';
+export const TYPEFORM_FEEDBACK_LINK = 'https://comake1.typeform.com/to/auw8nYZg';
 
 export const YIPYIP_CONTAINER_HEIGHT = 50;
 export const YIPYIP_CONTAINER_WIDTH = 300;
