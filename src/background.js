@@ -4,36 +4,17 @@ import WebRequest from './lib/web_request.js';
 import { SETTINGS_KEYS, YIPYIP_WELCOME_LINK } from './constants.js';
 
 chrome.action.onClicked.addListener(tab => sendBrowserActionClickedMessageToTab(tab))
-chrome.storage.onChanged.addListener(handleStorageChangeEvent);
 chrome.runtime.onInstalled.addListener(handleInstallationEvent);
-chrome.tabs.onUpdated.addListener(handleTabUpdatedEvent);
 
 function handleInstallationEvent(details) {
+  injectContentScriptToAllTabs()
+
   if (details.reason === chrome.runtime.OnInstalledReason.INSTALL) {
     chrome.storage.local.get([SETTINGS_KEYS.USER_EMAIL], (data) => {
       if (data[SETTINGS_KEYS.USER_EMAIL] != null) {
         turnBrowserExtensionStoreIntoWelcomePage()
       } else {
         turnBrowserExtensionStoreIntoLoginPage()
-      }
-    })
-  }
-}
-
-function handleStorageChangeEvent(changes, storageNamespace) {
-  if (storageNamespace === 'local' &&
-    changes.hasOwnProperty(SETTINGS_KEYS.USER_EMAIL) &&
-    changes[SETTINGS_KEYS.USER_EMAIL].newValue != null
-  ) {
-    injectContentScriptToAllTabs()
-  }
-}
-
-function handleTabUpdatedEvent(tabId, changeInfo) {
-  if (changeInfo && ['loading', 'complete'].includes(changeInfo.status)) {
-    chrome.storage.local.get([SETTINGS_KEYS.USER_EMAIL], (data) => {
-      if (data[SETTINGS_KEYS.USER_EMAIL] != null) {
-        injectContentScriptToTab(tabId)
       }
     })
   }

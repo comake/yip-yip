@@ -33,12 +33,14 @@ const Searchbar = (props) => {
     autoHide,
     updateAutoHide,
     useOnEveryWebsite,
-    updateUseOnEveryWebsite
+    updateUseOnEveryWebsite,
+    userEmail
   } = useStoredSettings()
 
+  const [prevUserEmail, setPrevUserEmail] = React.useState(null);
   const [isHidden, setIsHidden] = React.useState(autoHide);
   const [prevAutoHide, setPrevAutoHide] = React.useState(autoHide);
-  const [isDisabled, setIsDisabled] = React.useState(!useOnEveryWebsite);
+  const [isDisabled, setIsDisabled] = React.useState(!userEmail || !useOnEveryWebsite);
   const [temporarilyEnabled, setTemporarilyEnabled] = React.useState(false);
   const [prevUseOnEveryWebsite, setPrevUseOnEveryWebsite] = React.useState(useOnEveryWebsite);
   const [searchText, setSearchText] = React.useState('');
@@ -192,9 +194,11 @@ const Searchbar = (props) => {
   }, [autoHide, updateAutoHide])
 
   const handleToggleAutohideShortcut = React.useCallback(event => {
-    event.preventDefault()
-    toggleAutoHide()
-  }, [toggleAutoHide])
+    if (!isDisabled || temporarilyEnabled) {
+      event.preventDefault()
+      toggleAutoHide()
+    }
+  }, [toggleAutoHide, isDisabled, temporarilyEnabled])
 
   const handleClearSearchOrHideShortcut = React.useCallback(event => {
     const differentInputIsActive = Utils.differentInputIsActive(searchInputRef.current);
@@ -239,13 +243,15 @@ const Searchbar = (props) => {
   }, [focusSearchInput])
 
   const handleBrowserActionClicked = React.useCallback(() => {
-    if (isDisabled) {
-      setTemporarilyEnabled(true)
-    }
+    if (userEmail) {
+      if (isDisabled) {
+        setTemporarilyEnabled(true)
+      }
 
-    setIsHidden(false)
-    focusSearchInput();
-  }, [isDisabled, focusSearchInput])
+      setIsHidden(false)
+      focusSearchInput();
+    }
+  }, [userEmail, isDisabled, focusSearchInput])
 
   React.useEffect(() => {
     if (searchText !== prevSearchText) {
@@ -281,8 +287,13 @@ const Searchbar = (props) => {
       setPrevHost(host)
     }
 
-    if (useOnEveryWebsiteChanged || hostChanged) {
-      const newIsDisabled = !useOnEveryWebsite && !Utils.hostIsGmail();
+    const userEmailChanged = userEmail != prevUserEmail;
+    if (userEmailChanged) {
+      setPrevUserEmail(userEmail)
+    }
+
+    if (useOnEveryWebsiteChanged || hostChanged || userEmailChanged) {
+      const newIsDisabled = !userEmail || (!useOnEveryWebsite && !Utils.hostIsGmail());
       setIsDisabled(newIsDisabled)
       if (newIsDisabled) {
         resetSearchTextAndMatches()
@@ -290,7 +301,8 @@ const Searchbar = (props) => {
         setTemporarilyEnabled(false)
       }
     }
-  }, [useOnEveryWebsite, prevUseOnEveryWebsite, resetSearchTextAndMatches, temporarilyEnabled, host, prevHost])
+  }, [useOnEveryWebsite, prevUseOnEveryWebsite, resetSearchTextAndMatches,
+    temporarilyEnabled, host, prevHost, userEmail, prevUserEmail])
 
   const hasMatchingLinksOrButtons = React.useMemo(() => matchingLinksAndButtons.length > 0, [matchingLinksAndButtons]);
 

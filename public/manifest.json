@@ -7,6 +7,15 @@
   "content_security_policy": {
     "extension_pages": "script-src 'self'; object-src 'self'"
   },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "css": ["/static/css/content.css"],
+      "js": ["/static/js/content.js"],
+      "all_frames": false,
+      "run_at": "document_idle"
+    }
+  ],
   "action": {
     "default_icon": {
       "16": "logo-16.png",

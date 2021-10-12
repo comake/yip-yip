@@ -4,13 +4,10 @@ import ExtensionMessageTypes from '../extension_message_types.js';
 
 const useExtensionMessaging = ({ handleBrowserActionClicked }) => {
 
-  const handleExtensionMessage = React.useCallback((message, sender, sendResponse) => {
+  const handleExtensionMessage = React.useCallback(message => {
     switch (message.type) {
       case ExtensionMessageTypes.BROWSER_ACTION_CLICKED:
         handleBrowserActionClicked()
-        break;
-      case ExtensionMessageTypes.CONTENT_SCRIPT_INSTALLED:
-        sendResponse({ status: true })
         break;
     }
   }, [handleBrowserActionClicked])
