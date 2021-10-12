@@ -30,7 +30,7 @@ function handleStorageChangeEvent(changes, storageNamespace) {
 }
 
 function handleTabUpdatedEvent(tabId, changeInfo) {
-  if (changeInfo && changeInfo.status === 'complete') {
+  if (changeInfo && ['loading', 'complete'].includes(changeInfo.status)) {
     chrome.storage.local.get([SETTINGS_KEYS.USER_EMAIL], (data) => {
       if (data[SETTINGS_KEYS.USER_EMAIL] != null) {
         injectContentScriptToTab(tabId)
@@ -57,8 +57,13 @@ function injectContentScriptToAllTabs() {
 }
 
 function injectContentScriptToTab(tabId) {
-  chrome.scripting.executeScript({ target: { tabId: tabId }, files: ['static/js/content.js'] });
-  chrome.scripting.insertCSS({ target: { tabId: tabId }, files: ['static/css/content.css'] });
+  chrome.tabs.sendMessage(tabId, { type: ExtensionMessageTypes.CONTENT_SCRIPT_INSTALLED }, (msg) => {
+    msg = msg || {};
+    if (!msg.status) {
+      chrome.scripting.executeScript({ target: { tabId: tabId }, files: ['static/js/content.js'] });
+      chrome.scripting.insertCSS({ target: { tabId: tabId }, files: ['static/css/content.css'] });
+    }
+  });
 }
 
 function turnBrowserExtensionStoreIntoWelcomePage() {
