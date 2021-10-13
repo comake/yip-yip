@@ -34,7 +34,7 @@ After finding all nodes matching the user's query, we filter those nodes down to
 2. If the node's `role` attributte specifies that it's a button, link, or input
 3. If the node matches an additional selector defined in that App's configuration file, under the `additional_button_selectors` config
 
-We now score each of the matched buttons, links, and inputs which will be selected. These scores are used to determine which is the "best" matching node that will be selected first. Of course the "best" matching node is highly contextual based on several factors. A nodes score is increased if:
+We now score each of the matched buttons, links, and inputs which will be selected. These scores are used to determine which is the "best" matching node that will be selected first. Of course the "best" matching node is highly contextual based on several factors. A node's score is increased if:
 - the match was made through text on the screen vs. a hidden attribute of the node, 
 - the match was made through the user's exact query vs. a synonym,
 - the match is on the screen vs. not,
@@ -49,7 +49,7 @@ Once the matching buttons, links, and inputs are found and sorted according to s
 ## Contributing
 Please use [GitHub issues](https://github.com/comake/yip-yip/issues) to report any bugs or feature requests. If you can, send in a PR and we will review.
 
-### To Install from source
+### Work with the code
 1. Run these commands in your terminal
 ```
 git clone https://github.com/comake/yip-yip.git
