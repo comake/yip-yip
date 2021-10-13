@@ -58,7 +58,7 @@ yarn build
 ```
 2. Go to chrome://extensions
 3. Turn on [Developer Mode](https://developer.chrome.com/docs/extensions/mv3/faq/#faq-dev-01) in the top right
-4. Click "Load unpacked" in the top left of chrome://extensions and select the `build` folder within your local `yip-yip` folder, or just drag the `build` folder into the chrome://extensions page.
+4. Click `Load unpacked` in the top left of chrome://extensions and select the `build` folder within your local `yip-yip` folder, or just drag the `build` folder into the chrome://extensions page.
 5. Every time you make a change to the code, run `yarn build` then refresh the extension in the browser.
 
 ### Changing data
