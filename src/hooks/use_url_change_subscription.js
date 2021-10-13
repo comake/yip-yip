@@ -1,12 +1,7 @@
-/*global history*/
 import React from 'react';
 
 const useUrlChangeSubscription = () => {
   const [host, setHost] = React.useState(window.location.host);
-  const updateHost = React.useCallback(() => {
-    console.debug('updating host')
-    setHost(window.location.host)
-  })
 
   React.useEffect(() => {
     const pushState = window.history.pushState;
@@ -14,15 +9,15 @@ const useUrlChangeSubscription = () => {
 
     window.history.pushState = function () {
       pushState.apply(window.history, arguments);
-      updateHost()
+      setHost(window.location.host)
     };
 
     window.history.replaceState = function () {
       replaceState.apply(window.history, arguments);
-      updateHost()
+      setHost(window.location.host)
     };
 
-    window.addEventListener('popstate', () => updateHost());
+    window.addEventListener('popstate', () => setHost(window.location.host));
   }, [])
 
   return { host }

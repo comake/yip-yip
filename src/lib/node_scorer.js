@@ -4,20 +4,17 @@ import { FIELD_BOOSTS, SEARCH_TERM_BOOSTS, STARTS_WITH_BOOST, RELEVANT_WORD_BOOS
 
 import Utils from "./utils.js";
 import Synonyms from './synonyms.js';
-import RelevantWords from './relevant_words.js';
-import RelevantSelectors from './relevant_selectors.js';
 import HiddenAttributeSettings from './hidden_attribute_settings.js';
 
 const WHITESPACE_SPLIT_REGEX = /[(\s+)\-.,/\u200B-\u200D\uFEFF\u200E\u200F]+/;
+const NO_BREAK_SPACE_REGEX = /\u00a0/g;
 
 class NodeScorer {
-  constructor(searchText) {
-    this.searchText = searchText;
-
-    const domain = window.location.host;
-    this.synonyms = Synonyms.getSynonymsForTextInDomain(domain, searchText);
-    this.relevantWords = RelevantWords.getRelevantWordsForDomain(domain);
-    this.relevantSelectors = RelevantSelectors.getRelevantSelectorsForDomain(domain);
+  constructor(searchText, appSpecificSynonyms, appSpecificRelevantWords, appSpecificRelevantSelectors) {
+    this.queryText = searchText;
+    this.synonyms = Synonyms.getSynonymsForTextFromSettings(searchText, appSpecificSynonyms);
+    this.relevantWords = appSpecificRelevantWords;
+    this.relevantSelectors = appSpecificRelevantSelectors;
   }
 
   scoreNode(node) {
@@ -27,14 +24,14 @@ class NodeScorer {
   }
 
   nodeMatches(node) {
-    const innerText = Utils.getTextContentOfNode(node).slice().toLowerCase().trim();
+    const innerText = Utils.getTextContentOfNode(node).slice().toLowerCase().trim().replace(NO_BREAK_SPACE_REGEX, " ");
     const attributeValues = this.getSearchableHiddenAttributeValuesForNodeType(node);
 
-    if (innerText && innerText.length > 0 && innerText.includes(this.searchText)) {
+    if (innerText && innerText.length > 0 && innerText.includes(this.queryText)) {
       return true
     }
 
-    if (attributeValues.length > 0 && attributeValues.some(attributeValue => attributeValue.includes(this.searchText))) {
+    if (attributeValues.length > 0 && attributeValues.some(attributeValue => attributeValue.includes(this.queryText))) {
       return true
     }
 
@@ -66,13 +63,14 @@ class NodeScorer {
   score(node, innerText, attributeValues) {
     let score = 0;
 
+    innerText = innerText.replace(NO_BREAK_SPACE_REGEX, " ")
     const innerTextWords = this.getWordsFromText(innerText)
     if (innerText && innerText.length > 0) {
-      score += this.fieldScore(innerText, innerTextWords, this.searchText, FIELD_BOOSTS.innerText, SEARCH_TERM_BOOSTS.searchText)
+      score += this.fieldScore(innerText, innerTextWords, this.queryText, FIELD_BOOSTS.innerText, SEARCH_TERM_BOOSTS.searchText)
     }
 
     if (attributeValues.length > 0) {
-      const highestAttributeScore = this.getHighestAttributeScore(attributeValues, this.searchText)
+      const highestAttributeScore = this.getHighestAttributeScore(attributeValues, this.queryText)
       if (highestAttributeScore > score) {
         score = highestAttributeScore;
       }
@@ -114,12 +112,13 @@ class NodeScorer {
     }
 
     if (score > 0) {
-      const hasWordStartingWithQueryText = fieldWords.some(word => word.startsWith(queryText));
+      const queryWords = this.getWordsFromText(queryText)
+      const hasWordStartingWithQueryText = fieldWords.some(word => queryWords.some(qWord => word.startsWith(qWord)));
       if (hasWordStartingWithQueryText) {
         score = score * STARTS_WITH_BOOST
       }
 
-      const relevantWord = this.relevantWords.find(word => word.includes(queryText) && fieldWords.includes(word))
+      const relevantWord = this.relevantWords.find(word => queryWords.some(qWord => word.includes(qWord)) && fieldWords.includes(word))
       if (relevantWord) {
         score = score * RELEVANT_WORD_BOOST;
       }

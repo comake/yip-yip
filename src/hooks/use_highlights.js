@@ -1,5 +1,4 @@
 import React from 'react';
-import "../content.css";
 import Utils from "../lib/utils.js";
 import { YIPYIP_HIGHLIGHT_CLASS } from "../constants.js"
 
@@ -44,11 +43,11 @@ function highlightNodeWithMatchData(node, match) {
   // Create a new text node for any preceding text.
   fragment.appendChild(document.createTextNode(match[1]));
 
-  // Create the wrapper span and add the matched text to it.
-  const spanNode = document.createElement('span');
-  spanNode.setAttribute('class', YIPYIP_HIGHLIGHT_CLASS)
-  spanNode.appendChild(document.createTextNode(match[2]));
-  fragment.appendChild(spanNode);
+  // Create the wrapper mark tag and add the matched text to it.
+  const markNode = document.createElement('mark');
+  markNode.setAttribute('class', YIPYIP_HIGHLIGHT_CLASS)
+  markNode.appendChild(document.createTextNode(match[2]));
+  fragment.appendChild(markNode);
 
   // Create a new text node for any following text.
   fragment.appendChild(document.createTextNode(match[3]));

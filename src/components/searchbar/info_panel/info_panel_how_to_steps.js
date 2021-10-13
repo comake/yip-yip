@@ -1,4 +1,4 @@
-import howToSteps from '../../data/how_to_steps.json';
+import howToSteps from '../../../data/how_to_steps.json';
 
 const InfoPanelHowToSteps = () => {
   return (

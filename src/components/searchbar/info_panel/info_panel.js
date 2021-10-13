@@ -4,7 +4,7 @@ import InfoPanelButtons from './info_panel_buttons.js';
 import InfoPanelSectionHeader from './info_panel_section_header.js';
 import InfoPanelSettings from './info_panel_settings.js';
 
-import { COMAKE_LANDING_PAGE_LINK } from '../../constants.js';
+import { COMAKE_LANDING_PAGE_LINK } from '../../../constants.js';
 
 const InfoPanel = (props) => {
   const { autoHide, toggleAutoHide, useOnEveryWebsite, toggleUseOnEveryWebsite } = props;

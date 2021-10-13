@@ -1,5 +1,4 @@
 import React from 'react';
-import "../content.css";
 
 const MatchesSummary = (props) => {
   const { selectedSelectionIndex, matchingLinksAndButtons } = props;

@@ -1,6 +1,11 @@
 import React from 'react';
-import { YIPYIP_CONTAINER_DEFAULT_EDGE_MARGIN, YIPYIP_CONTAINER_HEIGHT, YIPYIP_CONTAINER_WIDTH } from '../constants.js'
-import Utils from '../lib/utils.js'
+import {
+  YIPYIP_CONTAINER_DEFAULT_EDGE_MARGIN,
+  YIPYIP_CONTAINER_HEIGHT,
+  YIPYIP_CONTAINER_WIDTH
+} from '../../constants.js';
+
+import Utils from '../../lib/utils.js';
 
 const RIGHT_VALUE_MIN = 0;
 const BOTTOM_VALUE_MIN = 0
@@ -24,14 +29,14 @@ const DraggableContainer = (props) => {
       })
       setIsDragging(true)
     }
-  }, [position])
+  }, [position, searchInputRef])
 
   const onDragEnd = React.useCallback(event => {
     setIsDragging(false)
     if (event.target === searchInputRef.current) {
       searchInputRef.current.focus()
     }
-  }, [])
+  }, [searchInputRef])
 
   const drag = React.useCallback(event => {
     event.preventDefault();

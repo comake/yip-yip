@@ -1,28 +1,26 @@
 import React from 'react';
-import "../content.css";
+import useWindowEvent from "../../hooks/use_window_event.js";
+import useDocumentEvent from "../../hooks/use_document_event.js";
+import useHighlights from "../../hooks/use_highlights.js";
+import useKeyboardShortcuts from "../../hooks/use_keyboard_shortcuts.js";
+import useStoredSettings from "../../hooks/use_stored_settings.js";
+import useUrlChangeSubscription from "../../hooks/use_url_change_subscription.js";
+import useExtensionMessaging from "../../hooks/use_extension_messaging.js";
 
-import useWindowEvent from "../hooks/use_window_event.js";
-import useDocumentEvent from "../hooks/use_document_event.js";
-import useHighlights from "../hooks/use_highlights.js";
-import useKeyboardShortcuts from "../hooks/use_keyboard_shortcuts.js";
-import useStoredSettings from "../hooks/use_stored_settings.js";
-import useUrlChangeSubscription from "../hooks/use_url_change_subscription.js";
-import useExtensionMessaging from "../hooks/use_extension_messaging.js";
-
-import Utils from "../lib/utils.js";
-import FindInPage from "../lib/find_in_page.js";
+import Utils from "../../lib/utils.js";
+import FindInPage from "../../lib/find_in_page.js";
 import SearchInput from "./search_input.js";
 import Selections from "./selections.js";
 import MatchesSummary from "./matches_summary.js";
 import DraggableContainer from "./draggable_container.js";
 import InfoDropdown from "./info_dropdown.js";
 import VisibilityButton from "./visibility_button.js";
-import { ReactComponent as Logo } from '../icons/logo.svg';
+import { ReactComponent as Logo } from '../../icons/logo-without-color.svg';
 
 const SCROLL_OR_RESIZE_UPDATE_TIMEOUT_DURATION = 100;
 const SEARCH_TEXT_UPDATE_TIMEOUT_DURATION = 150;
 
-const YipYip = (props) => {
+const Searchbar = (props) => {
   const scrollOrResizeUpdateTimeout = React.useRef();
   const selectionUpdateTimeout = React.useRef();
   const containerRef = React.useRef();
@@ -35,12 +33,14 @@ const YipYip = (props) => {
     autoHide,
     updateAutoHide,
     useOnEveryWebsite,
-    updateUseOnEveryWebsite
+    updateUseOnEveryWebsite,
+    userEmail
   } = useStoredSettings()
 
+  const [prevUserEmail, setPrevUserEmail] = React.useState(null);
   const [isHidden, setIsHidden] = React.useState(autoHide);
   const [prevAutoHide, setPrevAutoHide] = React.useState(autoHide);
-  const [isDisabled, setIsDisabled] = React.useState(!useOnEveryWebsite);
+  const [isDisabled, setIsDisabled] = React.useState(!userEmail || !useOnEveryWebsite);
   const [temporarilyEnabled, setTemporarilyEnabled] = React.useState(false);
   const [prevUseOnEveryWebsite, setPrevUseOnEveryWebsite] = React.useState(useOnEveryWebsite);
   const [searchText, setSearchText] = React.useState('');
@@ -194,9 +194,23 @@ const YipYip = (props) => {
   }, [autoHide, updateAutoHide])
 
   const handleToggleAutohideShortcut = React.useCallback(event => {
-    event.preventDefault()
-    toggleAutoHide()
-  }, [toggleAutoHide])
+    if (!isDisabled || temporarilyEnabled) {
+      event.preventDefault()
+      toggleAutoHide()
+    }
+  }, [toggleAutoHide, isDisabled, temporarilyEnabled])
+
+  const handleClearSearchOrHideShortcut = React.useCallback(event => {
+    const differentInputIsActive = Utils.differentInputIsActive(searchInputRef.current);
+    const isEnabled = (!isDisabled || temporarilyEnabled) && !isHidden && !differentInputIsActive;
+    if (isEnabled && searchText.length > 0) {
+      preventDefaultAndClearSearchText(event)
+    } else if (isEnabled && document.activeElement === searchInputRef.current) {
+      searchInputRef.current.blur()
+    } else {
+      handleBlur()
+    }
+  }, [searchText, preventDefaultAndClearSearchText, isDisabled, temporarilyEnabled, isHidden, handleBlur])
 
   const keyboardShortcutHandlerMapping = React.useMemo(() => {
     return {
@@ -205,10 +219,12 @@ const YipYip = (props) => {
       "select_match": handleSelectShortcut,
       "clear_searchbar": handleClearShortcut,
       "focus_searchbar": handleFocusShortcut,
-      "toggle_autohide": handleToggleAutohideShortcut
+      "toggle_autohide": handleToggleAutohideShortcut,
+      "clear_search_or_hide": handleClearSearchOrHideShortcut
     }
   }, [handleNextMatchShortcut, handlePreviousMatchShortcut, handleSelectShortcut,
-    handleClearShortcut, handleFocusShortcut, handleToggleAutohideShortcut
+    handleClearShortcut, handleFocusShortcut, handleToggleAutohideShortcut,
+    handleClearSearchOrHideShortcut
   ])
 
   const handleShortcut = React.useCallback((keyboardShortcutName, event) => {
@@ -227,13 +243,15 @@ const YipYip = (props) => {
   }, [focusSearchInput])
 
   const handleBrowserActionClicked = React.useCallback(() => {
-    if (isDisabled) {
-      setTemporarilyEnabled(true)
-    }
+    if (userEmail) {
+      if (isDisabled) {
+        setTemporarilyEnabled(true)
+      }
 
-    setIsHidden(false)
-    focusSearchInput();
-  }, [isDisabled])
+      setIsHidden(false)
+      focusSearchInput();
+    }
+  }, [userEmail, isDisabled, focusSearchInput])
 
   React.useEffect(() => {
     if (searchText !== prevSearchText) {
@@ -269,8 +287,13 @@ const YipYip = (props) => {
       setPrevHost(host)
     }
 
-    if (useOnEveryWebsiteChanged || hostChanged) {
-      const newIsDisabled = !useOnEveryWebsite && !Utils.hostIsGmail();
+    const userEmailChanged = userEmail != prevUserEmail;
+    if (userEmailChanged) {
+      setPrevUserEmail(userEmail)
+    }
+
+    if (useOnEveryWebsiteChanged || hostChanged || userEmailChanged) {
+      const newIsDisabled = !userEmail || (!useOnEveryWebsite && !Utils.hostIsGmail());
       setIsDisabled(newIsDisabled)
       if (newIsDisabled) {
         resetSearchTextAndMatches()
@@ -278,13 +301,15 @@ const YipYip = (props) => {
         setTemporarilyEnabled(false)
       }
     }
-  }, [useOnEveryWebsite, prevUseOnEveryWebsite, resetSearchTextAndMatches, temporarilyEnabled, host, prevHost])
+  }, [useOnEveryWebsite, prevUseOnEveryWebsite, resetSearchTextAndMatches,
+    temporarilyEnabled, host, prevHost, userEmail, prevUserEmail])
+
+  const hasMatchingLinksOrButtons = React.useMemo(() => matchingLinksAndButtons.length > 0, [matchingLinksAndButtons]);
 
   const shouldBindEvents = React.useMemo(() => {
     return (!isDisabled || temporarilyEnabled) && !isHidden && hasMatchingLinksOrButtons
   }, [isDisabled, temporarilyEnabled, isHidden, hasMatchingLinksOrButtons])
 
-  const hasMatchingLinksOrButtons = React.useMemo(() => matchingLinksAndButtons.length > 0, [matchingLinksAndButtons])
   useWindowEvent('scroll', shouldBindEvents, updateSelectionPositionsAfterTimeout)
   useWindowEvent('wheel', shouldBindEvents, updateSelectionPositionsAfterTimeout)
   useWindowEvent('resize', shouldBindEvents, updateSelectionPositionsAfterTimeout)
@@ -329,4 +354,4 @@ const YipYip = (props) => {
   )
 }
 
-export default YipYip;
+export default Searchbar;

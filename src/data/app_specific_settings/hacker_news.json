@@ -1,0 +1,20 @@
+{
+  "host": "news.ycombinator.com",
+  "relevant_selectors": [
+    {
+      "nodeName": "A",
+      "attributes": {
+        "href": "news"
+      },
+      "_comment": "Increase score of the 'Hacker News' button at the top of the page"
+    }
+  ],
+  "relevant_words": [
+    "hacker"
+  ],
+  "synonyms": {
+    "directed": {
+      "home": ["hacker news"]
+    }
+  }
+}
