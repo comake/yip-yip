@@ -16,24 +16,10 @@ Voila!
 
 Video Demo: https://www.youtube.com/watch?v=87tqknjluKU
 
-## Installation
-
-**Extension store listings**\
+## Extension store listings
 [Google Chrome Extension](https://chrome.google.com/webstore/detail/yipyip/flbkmacappdledphgdoolmenldginemg/)\
 Edge Add-On (Coming Soon)\
 Firefox Extension (Coming Soon)
-
-**To Install from source**
-1. Run these commands in your terminal
-```
-git clone https://github.com/comake/yip-yip.git
-cd yip-yip
-yarn build
-```
-2. Go to chrome://extensions
-3. Turn on [Developer Mode](https://developer.chrome.com/docs/extensions/mv3/faq/#faq-dev-01) in the top right
-4. Click "Load unpacked" in the top left of chrome://extensions and select the `build` folder within your local `yip-yip` folder, or just drag the `build` folder into the chrome://extensions page.
-5. Every time you make a change to the code, run `yarn build` then refresh the extension in the browser.
 
 # How it works
 
@@ -60,7 +46,47 @@ Each of these factors has a related weight which determines how much it effects 
 
 Once the matching buttons, links, and inputs are found and sorted according to score, we add a selection box around each node and focus and scroll to the one with the highest score. A user can then press the `tab` key to jump through the matches, then press  the `enter` key to click or focus the selected button, link, or input.
 
-# TODOs
+## Contributing
+Please use [GitHub issues](https://github.com/comake/yip-yip/issues) to report any bugs or feature requests. If you can, send in a PR and we will review.
+
+###To Install from source
+1. Run these commands in your terminal
+```
+git clone https://github.com/comake/yip-yip.git
+cd yip-yip
+yarn build
+```
+2. Go to chrome://extensions
+3. Turn on [Developer Mode](https://developer.chrome.com/docs/extensions/mv3/faq/#faq-dev-01) in the top right
+4. Click "Load unpacked" in the top left of chrome://extensions and select the `build` folder within your local `yip-yip` folder, or just drag the `build` folder into the chrome://extensions page.
+5. Every time you make a change to the code, run `yarn build` then refresh the extension in the browser.
+
+### Changing data
+Edit the data of a specific App in `src/data/app_specific_settings/{app_name}.json`.
+
+### Adding App Configurations
+Add a new file to `src/data/app_specific_settings`, for example `google_drive.json` with the following data:
+
+```
+{
+  "host": (required) "drive.google.com",
+  "additional_button_selectors": (optional) [],
+  "relevant_selectors": (optional) [],
+  "relevant_words": (optional) [],
+  "synonyms": (optional) {
+     "mutual": [],
+     "directed": {}
+  }
+}
+```
+
+## License
+YipYip is licensed under the BSD 4 License. See [LICENSE](https://github.com/comake/yip-yip/blob/main/LICENSE)
+
+## Maintained by
+Adler Faulkner: [@adlerfaulkner](https://github.com/adlerfaulkner)
+
+## TODOs
 - [ ] Testing with Jest
 - [ ] Allow score weights to be changed per App config?
 
