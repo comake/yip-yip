@@ -49,7 +49,7 @@ Once the matching buttons, links, and inputs are found and sorted according to s
 ## Contributing
 Please use [GitHub issues](https://github.com/comake/yip-yip/issues) to report any bugs or feature requests. If you can, send in a PR and we will review.
 
-###To Install from source
+### To Install from source
 1. Run these commands in your terminal
 ```
 git clone https://github.com/comake/yip-yip.git
