@@ -18,7 +18,7 @@ export const KNOWLEDGE_OS_ROOT_ID = 'chromake-dock';
 export const DISCORD_INVITE_LINK = 'https://discord.gg/CnaC38Ch2p';
 export const COMAKE_LANDING_PAGE_LINK = 'https://comake.io';
 export const GITHUB_REPO_LINK = 'https://github.com/comake/yip-yip';
-export const TWITTER_LINK = "https://twitter.com/intent/tweet?text=Loving%20%40comake_io's%20YipYip%20Extension!";
+export const TWITTER_LINK = "https://twitter.com/intent/tweet?text=So%20amazing%20to%20fly%20through%20the%20web%20with%20%40YipYipSearch,%20my%20always-on%20search%20assistant!%20Never%20have%20to%20take%20my%20fingers%20of%20the%20keyboard%F0%9F%94%A5%F0%9F%92%A8";
 export const YIPYIP_FAQS_LINK = 'https://www.yip-yip.com/#FAQs';
 export const YIPYIP_WELCOME_LINK = 'https://www.yip-yip.com/welcome';
 export const TYPEFORM_FEEDBACK_LINK = 'https://comake1.typeform.com/to/auw8nYZg';
