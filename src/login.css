@@ -35,7 +35,7 @@ body, html, #root {
 }
 
 #yipyip-login-page-width {
-  width: 400px;
+  width: 430px;
   max-height: 90%;
   position: relative;
   padding: 30px 10px;
@@ -112,12 +112,21 @@ body, html, #root {
   line-height: 1.35em;
 }
 
-#yipyip-login-page-terms a {
+#yipyip-login-page-terms a:not(.yipyip-blue-link) {
+  color: rgba(255,255,255,0.5);
+  text-decoration: none;
+}
+
+#yipyip-login-page-terms a:not(.yipyip-blue-link):hover {
+  color: rgba(255,255,255,0.6);
+}
+
+#yipyip-login-page-terms a.yipyip-blue-link {
   color: #4990E2;
   text-decoration: none;
 }
 
-#yipyip-login-page-terms a:hover {
+#yipyip-login-page-terms a.yipyip-blue-link:hover {
   color: #3B96FF;
 }
 

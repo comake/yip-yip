@@ -1,5 +1,6 @@
 import React from 'react';
-import { YIPYIP_FAQS_LINK, YIPYIP_WELCOME_LINK, EMAIL_REGEX, ENTER_KEYCODE } from '../../constants.js';
+import { YIPYIP_FAQS_LINK, YIPYIP_WELCOME_LINK, EMAIL_REGEX, ENTER_KEYCODE,
+  COMAKE_TERMS_LINK, COMAKE_PRIVACY_POLICY_LINK } from '../../constants.js';
 import { ReactComponent as Logo } from '../../icons/logo-with-color.svg';
 import useDocumentEvent from "../../hooks/use_document_event.js";
 import useStoredSettings from "../../hooks/use_stored_settings.js";
@@ -113,8 +114,15 @@ const LoginPage = (props) => {
         </div>
 
         <div id={'yipyip-login-page-terms'}>
-          <p>Your email will not be sold or given to any third party. It will only be used to help you get started and update you on improvements relating to YipYip and Comake.</p>
-          <p>By continuing you are agreeing to Comake's greater terms and privacy policy. <a href={YIPYIP_FAQS_LINK} target={'_blank'} rel="noreferrer">As explained on our webpage</a>, YipYip does not track your browsing history.</p>
+          <p>
+            Your email will not be sold or given to any third party. It will only be used to help you get started and update you on improvements relating to YipYip and Comake.
+          </p>
+          <p>
+            <a href={YIPYIP_FAQS_LINK} target={'_blank'} rel="noreferrer" class={'yipyip-blue-link'}>As explained on our webpage</a>, YipYip tracks who has our extension installed and how often it is used. We will never track or store your queries or browsing history.
+          </p>
+          <p>
+            By continuing you are agreeing to Comake's greater <a href={COMAKE_TERMS_LINK} target={'_blank'} rel="noreferrer">terms</a> and <a href={COMAKE_PRIVACY_POLICY_LINK} target={'_blank'} rel="noreferrer">privacy policy.</a>
+          </p>
         </div>
       </div>
     </div>
