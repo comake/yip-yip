@@ -36,7 +36,9 @@ class FindInPage {
   findMatchesInNode(node, parentNode=null, matches=[]) {
     if (!this.canSearchNode(node)) { return matches }
 
-    if (node.nodeType === Node.TEXT_NODE && parentNode && !matches.some(match => match === parentNode)) {
+    if (node.nodeType === Node.TEXT_NODE && parentNode &&
+      parentNode !== document.body && !matches.some(match => match === parentNode)
+    ) {
       matches.push(parentNode);
     } else if (node.nodeType === Node.ELEMENT_NODE && this.isVisible(node)) {
       matches.concat(this.findMatchesInElement(node, parentNode, matches));
@@ -51,7 +53,9 @@ class FindInPage {
     const matchesSearch = this.nodeScorer.nodeMatches(element)
     const elementHasChildren = element.childNodes && element.childNodes.length > 0;
     const searchableChildren = element.querySelectorAll(this.nodesWithHiddenAttributesQuerySelector);
-    if (matchesSearch && (!elementHasChildren || this.hiddenAttributeSettings.isLinkOrButtonOrInput(element))) {
+    if (matchesSearch && element !== document.body &&
+      (!elementHasChildren || this.hiddenAttributeSettings.isLinkOrButtonOrInput(element))
+    ) {
       matches.push(element);
     } else if (matchesSearch) {
       [...element.childNodes].forEach(childNode => {
