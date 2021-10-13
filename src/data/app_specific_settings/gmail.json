@@ -1,5 +1,5 @@
 {
-  "domain": "mail.google.com",
+  "host": "mail.google.com",
   "additional_button_selectors": [
     {
       "nodeName": "TR",

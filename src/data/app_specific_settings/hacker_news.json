@@ -1,5 +1,5 @@
 {
-  "domain": "news.ycombinator.com",
+  "host": "news.ycombinator.com",
   "relevant_selectors": [
     {
       "nodeName": "A",

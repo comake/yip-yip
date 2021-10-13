@@ -10,8 +10,8 @@ const DO_NOT_SEARCH_IDS = [YIPYIP_ROOT_ID, YIPYIP_INPUT_ID, KNOWLEDGE_OS_ROOT_ID
 class FindInPage {
   constructor(searchText) {
     this.searchText = searchText.toLowerCase().trimStart();
-    const domain = window.location.host;
-    const appSpecificSettings = AppSpecificSettings.getSettingsForDomain(domain)
+    const host = window.location.host;
+    const appSpecificSettings = AppSpecificSettings.getSettingsForHost(host)
     const appSpecificSynonyms = Synonyms.mergeMutualSynonymsIntoDirected(appSpecificSettings.synonyms || {});
     const appSpecificBoostedWords = appSpecificSettings.relevant_words || [];
     const appSpecificBoostedSelectors = appSpecificSettings.relevant_selectors || [];

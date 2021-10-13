@@ -1,17 +1,17 @@
-const appSpecificSettingsByDomain = {};
+const appSpecificSettingsByHost = {};
 
 const importAll = (requireContext) => {
   return requireContext.keys().forEach(key => {
     const appSpecificSettings = requireContext(key)
-    appSpecificSettingsByDomain[appSpecificSettings.domain] = appSpecificSettings;
+    appSpecificSettingsByHost[appSpecificSettings.host] = appSpecificSettings;
   })
 }
 
 importAll(require.context('../data/app_specific_settings', false, /.json$/));
 
 class AppSpecificSettings {
-  static getSettingsForDomain(domain) {
-    return appSpecificSettingsByDomain[domain] || [];
+  static getSettingsForHost(host) {
+    return appSpecificSettingsByHost[host] || [];
   }
 }
 
