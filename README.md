@@ -23,7 +23,7 @@ Video Demo: https://www.youtube.com/watch?v=87tqknjluKU
 Edge Add-On (Coming Soon)\
 Firefox Extension (Coming Soon)
 
-**To Install from source**\
+**To Install from source**
 1. Run these commands in your terminal
 ```
 git clone https://github.com/comake/yip-yip.git
@@ -54,7 +54,7 @@ We now score each of the matched buttons, links, and inputs which will be select
 - the match is on the screen vs. not,
 - any words in the match's fields start with the user's query vs. just including the query,
 - any words in the match's fields are in the user's query and are in a list of "relevant words" in the App's configuration,
-- the node matches one of the selectors listed in the "relevant selectors" in the App's configuration.
+- the node matches one of the selectors in the list of "relevant selectors" in the App's configuration.
 
 Each of these factors has a related weight which determines how much it effects the node's score.
 
