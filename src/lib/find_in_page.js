@@ -1,21 +1,23 @@
-import { YIPYIP_ROOT_ID, DO_NOT_SEARCH_NODE_TYPES } from "../constants.js";
+import { YIPYIP_ROOT_ID, YIPYIP_INPUT_ID, DO_NOT_SEARCH_NODE_TYPES, KNOWLEDGE_OS_ROOT_ID } from "../constants.js";
 
 import AppSpecificSettings from './app_specific_settings.js';
 import Synonyms from './synonyms.js';
 import NodeScorer from './node_scorer.js';
 import HiddenAttributeSettings from './hidden_attribute_settings.js';
 
+const DO_NOT_SEARCH_IDS = [YIPYIP_ROOT_ID, YIPYIP_INPUT_ID, KNOWLEDGE_OS_ROOT_ID];
+
 class FindInPage {
   constructor(searchText) {
-    this.searchText = searchText.toLowerCase().trim();
+    this.searchText = searchText.toLowerCase().trimStart();
     const domain = window.location.host;
     const appSpecificSettings = AppSpecificSettings.getSettingsForDomain(domain)
     const appSpecificSynonyms = Synonyms.mergeMutualSynonymsIntoDirected(appSpecificSettings.synonyms || {});
-    const appSpecificRelevantWords = appSpecificSettings.relevant_words || [];
-    const appSpecificRelevantSelectors = appSpecificSettings.relevant_selectors || [];
+    const appSpecificBoostedWords = appSpecificSettings.relevant_words || [];
+    const appSpecificBoostedSelectors = appSpecificSettings.relevant_selectors || [];
     const appSpecificAdditionalButtonSelectors = appSpecificSettings.additional_button_selectors || []
 
-    this.nodeScorer = new NodeScorer(this.searchText, appSpecificSynonyms, appSpecificRelevantWords, appSpecificRelevantSelectors);
+    this.nodeScorer = new NodeScorer(this.searchText, appSpecificSynonyms, appSpecificBoostedWords, appSpecificBoostedSelectors);
     this.hiddenAttributeSettings = new HiddenAttributeSettings(appSpecificAdditionalButtonSelectors);
     this.nodesWithHiddenAttributesQuerySelector = this.hiddenAttributeSettings.hiddenAttributeSettingsByNodeNameToQuerySelector();
   }
@@ -44,6 +46,8 @@ class FindInPage {
   }
 
   findMatchesInElement(element, parentNode=null, matches=[]) {
+    if (!this.canSearchNode(element)) { return matches }
+
     const matchesSearch = this.nodeScorer.nodeMatches(element)
     const elementHasChildren = element.childNodes && element.childNodes.length > 0;
     const searchableChildren = element.querySelectorAll(this.nodesWithHiddenAttributesQuerySelector);
@@ -75,7 +79,7 @@ class FindInPage {
   }
 
   canSearchNode(node) {
-    return !DO_NOT_SEARCH_NODE_TYPES.includes(node.nodeName) && node.id !== YIPYIP_ROOT_ID
+    return !DO_NOT_SEARCH_NODE_TYPES.includes(node.nodeName) && !DO_NOT_SEARCH_IDS.includes(node.id);
   }
 
   isVisible(node) {

@@ -9,9 +9,11 @@ export const MAC_OS_PLATFORMS = ['Macintosh', 'MacIntel', 'MacPPC', 'Mac68K'];
 export const KEYS_VALID_FOR_FOCUS_REGEX = /^[a-zA-Z0-9-_/]$/i;
 export const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@(([[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-export const YIPYIP_ROOT_ID = 'yipyip-root'
+export const YIPYIP_ROOT_ID = 'yipyip-root';
+export const YIPYIP_INPUT_ID = 'yipyip-input';
 export const YIPYIP_HIGHLIGHT_CLASS = 'yipyip-highlight';
 export const YIPYIP_FOLLOWING_HIGHLIGHT_CLASS = 'yipyip-following-highlight';
+export const KNOWLEDGE_OS_ROOT_ID = 'chromake-dock';
 
 export const DISCORD_INVITE_LINK = 'https://discord.gg/CnaC38Ch2p';
 export const COMAKE_LANDING_PAGE_LINK = 'https://comake.io';

@@ -1,4 +1,5 @@
 import React from 'react';
+import { YIPYIP_INPUT_ID } from '../../constants.js';
 
 const SearchInput = (props) => {
   const { searchText, updateSearchText, inputRef, onBlur } = props;
@@ -9,7 +10,7 @@ const SearchInput = (props) => {
     <div id={'yipyip-input-container'}>
       <input
         ref={inputRef}
-        id={'yipyip-input'}
+        id={YIPYIP_INPUT_ID}
         type='text'
         placeholder={'YipYip!'}
         value={searchText}
