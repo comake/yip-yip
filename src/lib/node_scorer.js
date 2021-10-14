@@ -9,12 +9,13 @@ const WHITESPACE_SPLIT_REGEX = /[(\s+)\-.,/\u200B-\u200D\uFEFF\u200E\u200F]+/;
 const NO_BREAK_SPACE_REGEX = /\u00a0/g;
 
 class NodeScorer {
-  constructor(searchText, appSpecificSynonyms, appSpecificRelevantWords, appSpecificRelevantSelectors, appSpecificSearchableAttributeSettings) {
+  constructor(searchText, synonyms, relevantWords, relevantSelectors, relevantWordToSelectorMappings, searchableAttributeSettings) {
     this.queryText = searchText;
-    this.synonyms = Synonyms.getSynonymsForTextFromSettings(searchText, appSpecificSynonyms);
-    this.relevantWords = appSpecificRelevantWords;
-    this.relevantSelectors = appSpecificRelevantSelectors;
-    this.searchableAttributeSettings = appSpecificSearchableAttributeSettings;
+    this.synonyms = Synonyms.getSynonymsForTextFromSettings(searchText, synonyms);
+    this.relevantWords = relevantWords;
+    this.relevantSelectors = relevantSelectors;
+    this.relevantWordToSelectorMappings = relevantWordToSelectorMappings;
+    this.searchableAttributeSettings = searchableAttributeSettings;
   }
 
   scoreNode(node) {
@@ -43,6 +44,11 @@ class NodeScorer {
       return true
     }
 
+    const wordWithSelectorMatchingQuery = Object.keys(this.relevantWordToSelectorMappings).find(word => word.startsWith(this.queryText))
+    if (wordWithSelectorMatchingQuery && node.matches(this.relevantWordToSelectorMappings[wordWithSelectorMatchingQuery])) {
+      return true
+    }
+
     return false
   }
 
@@ -52,7 +58,7 @@ class NodeScorer {
     innerText = innerText.replace(NO_BREAK_SPACE_REGEX, " ")
     const innerTextWords = this.getWordsFromText(innerText)
     if (innerText && innerText.length > 0) {
-      score += this.fieldScore(innerText, innerTextWords, this.queryText, FIELD_BOOSTS.innerText, SEARCH_TERM_BOOSTS.searchText)
+      score = this.fieldScore(innerText, innerTextWords, this.queryText, FIELD_BOOSTS.innerText, SEARCH_TERM_BOOSTS.searchText)
     }
 
     if (attributeValues.length > 0) {
@@ -64,7 +70,7 @@ class NodeScorer {
 
     if (score === 0 && this.synonyms.length > 0) {
       if (innerText && innerText.length > 0) {
-        score += this.getHighestSynonymScore(innerText, innerTextWords)
+        score = this.getHighestSynonymScore(innerText, innerTextWords)
       }
 
       if (attributeValues.length > 0) {
@@ -72,6 +78,13 @@ class NodeScorer {
         if (highestSynonymAttributePairScore > score) {
           score = highestSynonymAttributePairScore;
         }
+      }
+    }
+
+    if (score === 0) {
+      const wordWithSelectorMatchingQuery = Object.keys(this.relevantWordToSelectorMappings).find(word => word.startsWith(this.queryText))
+      if (wordWithSelectorMatchingQuery && node.matches(this.relevantWordToSelectorMappings[wordWithSelectorMatchingQuery])) {
+        score = this.fieldScore(wordWithSelectorMatchingQuery, [wordWithSelectorMatchingQuery], this.queryText, FIELD_BOOSTS.innerText, SEARCH_TERM_BOOSTS.searchText)
       }
     }
 

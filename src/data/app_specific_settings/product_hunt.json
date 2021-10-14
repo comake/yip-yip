@@ -10,6 +10,9 @@
       "_comment": "Increase score of the login with google, twitter, facebook, angellist, and apple buttons."
     }
   ],
+  "relevant_word_to_selector_mappings": {
+    "home": "a[href=\"/\"]"
+  },
   "relevant_words": [
     "comment"
   ],

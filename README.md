@@ -69,12 +69,13 @@ Add a new file to `src/data/app_specific_settings`, for example `google_drive.js
 
 ```
 {
-  "host": (required) "drive.google.com",
-  "additional_searchable_attributes_by_node_name": (optional) [],
-  "additional_button_selectors": (optional) [],
-  "relevant_selectors": (optional) [],
-  "relevant_words": (optional) [],
-  "synonyms": (optional) {
+  host: (required) "drive.google.com",
+  additional_searchable_attributes_by_node_name: (optional) [],
+  additional_button_selectors: (optional) [],
+  relevant_selectors: (optional) [],
+  relevant_words: (optional) [],
+  relevant_word_to_selector_mappings: (optional) [],
+  synonyms: (optional) {
      "mutual": [],
      "directed": {}
   }

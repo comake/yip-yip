@@ -12,19 +12,20 @@ class FindInPage {
     this.searchText = searchText.toLowerCase().trimStart();
     const host = window.location.host;
     const appSpecificSettings = AppSpecificSettings.getSettingsForHost(host)
-    const appSpecificSynonyms = Synonyms.mergeMutualSynonymsIntoDirected(appSpecificSettings.synonyms || {});
-    const appSpecificRelevantWords = appSpecificSettings.relevant_words || [];
+    const synonyms = Synonyms.mergeMutualSynonymsIntoDirected(appSpecificSettings.synonyms || {});
+    const relevantWords = appSpecificSettings.relevant_words || [];
+    const relevantWordToSelectorMappings = appSpecificSettings.relevant_word_to_selector_mappings || {};
 
-    const appSpecificRelevantSelectors = (appSpecificSettings.relevant_selectors || [])
+    const relevantSelectors = (appSpecificSettings.relevant_selectors || [])
       .map(selectorData => selectorData.selector);
 
-    const appSpecificAdditionalButtonSelectors = (appSpecificSettings.additional_button_selectors || [])
+    const additionalButtonSelectors = (appSpecificSettings.additional_button_selectors || [])
       .map(selectorData => selectorData.selector);
 
-    const appSecificAdditionalSearchableAttributesByNodeName = appSpecificSettings.additional_searchable_attributes_by_node_name || {};
+    const additionalSearchableAttributesByNodeName = appSpecificSettings.additional_searchable_attributes_by_node_name || {};
 
-    this.searchableAttributeSettings = new SearchableAttributeSettings(appSpecificAdditionalButtonSelectors, appSecificAdditionalSearchableAttributesByNodeName);
-    this.nodeScorer = new NodeScorer(this.searchText, appSpecificSynonyms, appSpecificRelevantWords, appSpecificRelevantSelectors, this.searchableAttributeSettings);
+    this.searchableAttributeSettings = new SearchableAttributeSettings(additionalButtonSelectors, additionalSearchableAttributesByNodeName);
+    this.nodeScorer = new NodeScorer(this.searchText, synonyms, relevantWords, relevantSelectors, relevantWordToSelectorMappings, this.searchableAttributeSettings);
     this.nodesWithSearchableAttributesQuerySelector = this.searchableAttributeSettings.searchableAttributeSettingsByNodeNameToQuerySelector();
   }
 
