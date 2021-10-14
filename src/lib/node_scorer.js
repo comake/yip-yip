@@ -4,28 +4,28 @@ import { FIELD_BOOSTS, SEARCH_TERM_BOOSTS, STARTS_WITH_BOOST, RELEVANT_WORD_BOOS
 
 import Utils from "./utils.js";
 import Synonyms from './synonyms.js';
-import HiddenAttributeSettings from './hidden_attribute_settings.js';
 
 const WHITESPACE_SPLIT_REGEX = /[(\s+)\-.,/\u200B-\u200D\uFEFF\u200E\u200F]+/;
 const NO_BREAK_SPACE_REGEX = /\u00a0/g;
 
 class NodeScorer {
-  constructor(searchText, appSpecificSynonyms, appSpecificRelevantWords, appSpecificRelevantSelectors) {
+  constructor(searchText, appSpecificSynonyms, appSpecificRelevantWords, appSpecificRelevantSelectors, appSpecificSearchableAttributeSettings) {
     this.queryText = searchText;
     this.synonyms = Synonyms.getSynonymsForTextFromSettings(searchText, appSpecificSynonyms);
     this.relevantWords = appSpecificRelevantWords;
     this.relevantSelectors = appSpecificRelevantSelectors;
+    this.searchableAttributeSettings = appSpecificSearchableAttributeSettings;
   }
 
   scoreNode(node) {
-    const innerText = Utils.getTextContentOfNode(node).slice().toLowerCase().trim();
-    const attributeValues = this.getSearchableHiddenAttributeValuesForNodeType(node);
+    const innerText = Utils.getTextContentOfNode(node).slice().toLowerCase().trim().replace(NO_BREAK_SPACE_REGEX, " ");
+    const attributeValues = this.searchableAttributeSettings.searchableAttributeValuesForNode(node);
     return this.score(node, innerText, attributeValues)
   }
 
   nodeMatches(node) {
     const innerText = Utils.getTextContentOfNode(node).slice().toLowerCase().trim().replace(NO_BREAK_SPACE_REGEX, " ");
-    const attributeValues = this.getSearchableHiddenAttributeValuesForNodeType(node);
+    const attributeValues = this.searchableAttributeSettings.searchableAttributeValuesForNode(node);
 
     if (innerText && innerText.length > 0 && innerText.includes(this.queryText)) {
       return true
@@ -35,29 +35,15 @@ class NodeScorer {
       return true
     }
 
-    if (this.synonyms.length > 0) {
-      if (innerText && innerText.length > 0 && this.synonyms.some(synonym => innerText.includes(synonym))) {
-        return true
-      }
+    if (innerText && innerText.length > 0 && this.synonyms.some(synonym => innerText.includes(synonym))) {
+      return true
+    }
 
-      if (attributeValues.length > 0 && this.synonyms.some(synonym => attributeValues.some(attributeValue => attributeValue.includes(synonym)))) {
-        return true
-      }
+    if (attributeValues.length > 0 && this.synonyms.some(synonym => attributeValues.some(attributeValue => attributeValue.includes(synonym)))) {
+      return true
     }
 
     return false
-  }
-
-  getSearchableHiddenAttributeValuesForNodeType(node) {
-    const hiddenAttributesForNode = HiddenAttributeSettings.hiddenAttributesForNode(node);
-    if (hiddenAttributesForNode) {
-      return hiddenAttributesForNode
-        .map(attributeName => node.getAttribute(attributeName))
-        .filter(Boolean)
-        .map(attributeValue => attributeValue.toLowerCase());
-    } else {
-      return []
-    }
   }
 
   score(node, innerText, attributeValues) {
@@ -90,7 +76,7 @@ class NodeScorer {
     }
 
     if (score > 0) {
-      if (this.relevantSelectors.some(selector => Utils.nodeMatchesSelector(node, selector))) {
+      if (this.relevantSelectors.some(selector => selector.nodeMatches(node))) {
         score = score * RELEVANT_SELECTOR_BOOST;
       }
 

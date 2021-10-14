@@ -23,9 +23,9 @@ Firefox Extension (Coming Soon)
 
 # How it works
 
-When a user types in the YipYip search bar on a webpage, YipYip recursively scans through the webpage's DOM node tree to find all nodes which match the users query. Whether a node matches the query or not is determined by detecting if any text within the node includes the user's query or if an attribute of the node includes the user's query. 
+When a user types in the YipYip search bar on a webpage, YipYip recursively scans through the webpage's DOM node tree to find all nodes which match the users query. Whether a node matches the query or not is determined by detecting if any text within the node includes the user's query or if an attribute of the node includes the user's query.
 
-Not all attributes a node may have are relevant for our purposes, thus, YipYip only searches a specific list of attributes per node based on it's tag name. These can be found in [hidden_attributes_by_node_name.json](https://github.com/comake/yip-yip/blob/main/src/data/hidden_attributes_by_node_name.json)
+Not all attributes a node may have are relevant for our purposes, thus, YipYip only searches a specific list of attributes per node based on it's tag name. These can be found in [searchable_attributes_by_node_name.json](https://github.com/comake/yip-yip/blob/main/src/data/searchable_attributes_by_node_name.json)
 
 In addition to matching nodes against the user's exact query, we also match against synonyms of the user's query. This helps in the case that a user describes their intention in a slightly different way than the webpage does (trash vs. delete vs. discard), especially for buttons which only display an icon and no text. We explored the idea of using a precompiled synonym library or a word similarity algorithm (like [word2vec](https://en.wikipedia.org/wiki/Word2vec)) but decided against such a "generalized" solution because the meaning of a link or button on a webpage is extremely context dependent. Instead, YipYip has a configuration file per URL host with synonyms specific to that host. Each configuration file can be thought of as mapping to an "App" used in the browser (eg. mail.google.com for Gmail, news.ycombinator.com for Hacker News).
 
@@ -35,7 +35,7 @@ After finding all nodes matching the user's query, we filter those nodes down to
 3. If the node matches an additional selector defined in that App's configuration file, under the `additional_button_selectors` config
 
 We now score each of the matched buttons, links, and inputs which will be selected. These scores are used to determine which is the "best" matching node that will be selected first. Of course the "best" matching node is highly contextual based on several factors. A nodes score is increased if:
-- the match was made through text on the screen vs. a hidden attribute of the node, 
+- the match was made through text on the screen vs. a hidden attribute of the node,
 - the match was made through the user's exact query vs. a synonym,
 - the match is on the screen vs. not,
 - any words in the match's fields start with the user's query vs. just including the query,
@@ -70,6 +70,7 @@ Add a new file to `src/data/app_specific_settings`, for example `google_drive.js
 ```
 {
   "host": (required) "drive.google.com",
+  "additional_searchable_attributes_by_node_name": (optional) [],
   "additional_button_selectors": (optional) [],
   "relevant_selectors": (optional) [],
   "relevant_words": (optional) [],
@@ -89,5 +90,3 @@ Adler Faulkner: [@adlerfaulkner](https://github.com/adlerfaulkner)
 ## TODOs
 - [ ] Testing with Jest
 - [ ] Allow score weights to be changed per App config?
-
-

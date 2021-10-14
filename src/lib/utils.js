@@ -79,17 +79,6 @@ function compareDescending(a, b) {
   return b - a
 }
 
-function nodeMatchesSelector(node, selector) {
-  return node.nodeName === selector.nodeName &&
-    (!selector.attributes || nodeMatchesAllSelectorAttributes(node, selector))
-}
-
-function nodeMatchesAllSelectorAttributes(node, selector) {
-  return Object.entries(selector.attributes).every(([attributeName, attributeValue]) => {
-    return node.getAttribute(attributeName) === attributeValue
-  })
-}
-
 function isMacOS() {
   const platform = window.navigator.platform;
   return MAC_OS_PLATFORMS.includes(platform)
@@ -127,7 +116,6 @@ const Utils = {
   stringContainsSubstringInList,
   stringContainsSubstringWithOrWithoutSpaces,
   compareDescending,
-  nodeMatchesSelector,
   isMacOS,
   nodeIsInViewport,
   scrollToNodeAtIndexInList,

@@ -1,0 +1,52 @@
+{
+  "host": "www.producthunt.com",
+  "additional_searchable_attributes_by_node_name": {
+    "BUTTON": ["data-test"],
+    "TEXTAREA": ["data-test"]
+  },
+  "relevant_selectors": [
+    {
+      "nodeName": "BUTTON",
+      "attributes": {
+        "data-test": "login-with-google"
+      },
+      "_comment": "Increase score of the login with google button."
+    },
+    {
+      "nodeName": "BUTTON",
+      "attributes": {
+        "data-test": "login-with-twitter"
+      },
+      "_comment": "Increase score of the login with twitter button."
+    },
+    {
+      "nodeName": "BUTTON",
+      "attributes": {
+        "data-test": "login-with-facebook"
+      },
+      "_comment": "Increase score of the login with facebook button."
+    },
+    {
+      "nodeName": "BUTTON",
+      "attributes": {
+        "data-test": "login-with-angellist"
+      },
+      "_comment": "Increase score of the login with angellist button."
+    },
+    {
+      "nodeName": "BUTTON",
+      "attributes": {
+        "data-test": "login-with-apple"
+      },
+      "_comment": "Increase score of the login with apple button."
+    }
+  ],
+  "relevant_words": [
+    "comment"
+  ],
+  "synonyms": {
+    "mutual": [
+      ["vote", "upvote"]
+    ]
+  }
+}

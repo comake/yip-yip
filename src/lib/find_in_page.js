@@ -3,7 +3,8 @@ import { YIPYIP_ROOT_ID, YIPYIP_INPUT_ID, DO_NOT_SEARCH_NODE_TYPES, KNOWLEDGE_OS
 import AppSpecificSettings from './app_specific_settings.js';
 import Synonyms from './synonyms.js';
 import NodeScorer from './node_scorer.js';
-import HiddenAttributeSettings from './hidden_attribute_settings.js';
+import Selector from './selector.js';
+import SearchableAttributeSettings from './searchable_attribute_settings.js';
 
 const DO_NOT_SEARCH_IDS = [YIPYIP_ROOT_ID, YIPYIP_INPUT_ID, KNOWLEDGE_OS_ROOT_ID];
 
@@ -13,19 +14,25 @@ class FindInPage {
     const host = window.location.host;
     const appSpecificSettings = AppSpecificSettings.getSettingsForHost(host)
     const appSpecificSynonyms = Synonyms.mergeMutualSynonymsIntoDirected(appSpecificSettings.synonyms || {});
-    const appSpecificBoostedWords = appSpecificSettings.relevant_words || [];
-    const appSpecificBoostedSelectors = appSpecificSettings.relevant_selectors || [];
-    const appSpecificAdditionalButtonSelectors = appSpecificSettings.additional_button_selectors || []
+    const appSpecificRelevantWords = appSpecificSettings.relevant_words || [];
 
-    this.nodeScorer = new NodeScorer(this.searchText, appSpecificSynonyms, appSpecificBoostedWords, appSpecificBoostedSelectors);
-    this.hiddenAttributeSettings = new HiddenAttributeSettings(appSpecificAdditionalButtonSelectors);
-    this.nodesWithHiddenAttributesQuerySelector = this.hiddenAttributeSettings.hiddenAttributeSettingsByNodeNameToQuerySelector();
+    const appSpecificRelevantSelectors = (appSpecificSettings.relevant_selectors || [])
+      .map(selectorData => new Selector(selectorData));
+
+    const appSpecificAdditionalButtonSelectors = (appSpecificSettings.additional_button_selectors || [])
+      .map(selectorData => new Selector(selectorData));
+
+    const appSecificAdditionalSearchableAttributesByNodeName = appSpecificSettings.additional_searchable_attributes_by_node_name || {};
+
+    this.searchableAttributeSettings = new SearchableAttributeSettings(appSpecificAdditionalButtonSelectors, appSecificAdditionalSearchableAttributesByNodeName);
+    this.nodeScorer = new NodeScorer(this.searchText, appSpecificSynonyms, appSpecificRelevantWords, appSpecificRelevantSelectors, this.searchableAttributeSettings);
+    this.nodesWithSearchableAttributesQuerySelector = this.searchableAttributeSettings.searchableAttributeSettingsByNodeNameToQuerySelector();
   }
 
   findMatches() {
     if (this.searchText.length > 1) {
       const matchingNodes = this.findMatchesInNode(document.body);
-      const matchingLinksAndButtons = matchingNodes.filter(node => this.hiddenAttributeSettings.isLinkOrButtonOrInput(node));
+      const matchingLinksAndButtons = matchingNodes.filter(node => this.searchableAttributeSettings.isLinkOrButtonOrInput(node));
       const bestMatchingLinkOrButtonIndex = this.findIndexOfBestMatchingNode(matchingLinksAndButtons);
       return { matchingNodes, matchingLinksAndButtons, bestMatchingLinkOrButtonIndex }
     } else {
@@ -52,9 +59,9 @@ class FindInPage {
 
     const matchesSearch = this.nodeScorer.nodeMatches(element)
     const elementHasChildren = element.childNodes && element.childNodes.length > 0;
-    const searchableChildren = element.querySelectorAll(this.nodesWithHiddenAttributesQuerySelector);
+    const searchableChildren = element.querySelectorAll(this.nodesWithSearchableAttributesQuerySelector);
     if (matchesSearch && element !== document.body &&
-      (!elementHasChildren || this.hiddenAttributeSettings.isLinkOrButtonOrInput(element))
+      (!elementHasChildren || this.searchableAttributeSettings.isLinkOrButtonOrInput(element))
     ) {
       matches.push(element);
     } else if (matchesSearch) {
