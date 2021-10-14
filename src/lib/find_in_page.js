@@ -3,7 +3,6 @@ import { YIPYIP_ROOT_ID, YIPYIP_INPUT_ID, DO_NOT_SEARCH_NODE_TYPES, KNOWLEDGE_OS
 import AppSpecificSettings from './app_specific_settings.js';
 import Synonyms from './synonyms.js';
 import NodeScorer from './node_scorer.js';
-import Selector from './selector.js';
 import SearchableAttributeSettings from './searchable_attribute_settings.js';
 
 const DO_NOT_SEARCH_IDS = [YIPYIP_ROOT_ID, YIPYIP_INPUT_ID, KNOWLEDGE_OS_ROOT_ID];
@@ -17,10 +16,10 @@ class FindInPage {
     const appSpecificRelevantWords = appSpecificSettings.relevant_words || [];
 
     const appSpecificRelevantSelectors = (appSpecificSettings.relevant_selectors || [])
-      .map(selectorData => new Selector(selectorData));
+      .map(selectorData => selectorData.selector);
 
     const appSpecificAdditionalButtonSelectors = (appSpecificSettings.additional_button_selectors || [])
-      .map(selectorData => new Selector(selectorData));
+      .map(selectorData => selectorData.selector);
 
     const appSecificAdditionalSearchableAttributesByNodeName = appSpecificSettings.additional_searchable_attributes_by_node_name || {};
 

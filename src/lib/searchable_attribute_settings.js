@@ -23,12 +23,9 @@ class SearchableAttributeSettings {
   }
 
   searchableAttributeSettingsByNodeNameToQuerySelector() {
-    const additionalButtonQuerySelectors = this.additionalButtonSelectors
-      .map(selector => selector.toQueryString(selector));
-
     return [
       ...defaultButtonOrLinkQuerySelectors,
-      ...additionalButtonQuerySelectors
+      ...(this.additionalButtonSelectors)
     ].join(', ');
   }
 
@@ -38,7 +35,7 @@ class SearchableAttributeSettings {
         LINK_OR_BUTTON_OR_INPUT_TYPES.includes(node.nodeName) ||
         LINK_OR_BUTTON_ROLE_VALUES.includes(node.getAttribute('role'))
       ) ||
-      this.additionalButtonSelectors.some(selector => selector.nodeMatches(node))
+      this.additionalButtonSelectors.some(selector => node.matches(selector))
     );
   }
 

@@ -76,7 +76,7 @@ class NodeScorer {
     }
 
     if (score > 0) {
-      if (this.relevantSelectors.some(selector => selector.nodeMatches(node))) {
+      if (this.relevantSelectors.some(selector => node.matches(selector))) {
         score = score * RELEVANT_SELECTOR_BOOST;
       }
 
