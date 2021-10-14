@@ -1,7 +1,7 @@
 {
   "name": "YipYip",
   "short_name": "YipYip",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Never touch your mouse again!",
   "manifest_version": 3,
   "content_security_policy": {
