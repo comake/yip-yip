@@ -34,7 +34,9 @@ const Searchbar = (props) => {
     updateAutoHide,
     useOnEveryWebsite,
     updateUseOnEveryWebsite,
-    userEmail
+    userEmail,
+    alwaysOn,
+    updateAlwaysOn
   } = useStoredSettings()
 
   const [prevUserEmail, setPrevUserEmail] = React.useState(null);
@@ -193,6 +195,10 @@ const Searchbar = (props) => {
     updateAutoHide(!autoHide)
   }, [autoHide, updateAutoHide])
 
+  const toggleAlwaysOn = React.useCallback(() => {
+    updateAlwaysOn(!alwaysOn)
+  }, [alwaysOn, updateAlwaysOn])
+
   const handleToggleAutohideShortcut = React.useCallback(event => {
     if (!isDisabled || temporarilyEnabled) {
       event.preventDefault()
@@ -236,11 +242,16 @@ const Searchbar = (props) => {
 
   const handleKeydown = React.useCallback(event => {
     const differentInputIsActive = Utils.differentInputIsActive(searchInputRef.current);
-    if (!differentInputIsActive && Utils.keyValidForFocus(event.key) && !event.metaKey && !event.altKey) {
-      setIsHidden(false)
-      focusSearchInput()
+    if (!differentInputIsActive && document.activeElement !== searchInputRef.current &&
+      Utils.keyValidForFocus(event.key) && !event.metaKey && !event.altKey && !event.ctrlKey
+    ) {
+      event.preventDefault();
+      event.stopPropagation();
+      setIsHidden(false);
+      setSearchText(`${searchText}${event.key}`);
+      focusSearchInput();
     }
-  }, [focusSearchInput])
+  }, [focusSearchInput, searchText])
 
   const handleBrowserActionClicked = React.useCallback(() => {
     if (userEmail) {
@@ -313,7 +324,7 @@ const Searchbar = (props) => {
   useWindowEvent('scroll', shouldBindEvents, updateSelectionPositionsAfterTimeout)
   useWindowEvent('wheel', shouldBindEvents, updateSelectionPositionsAfterTimeout)
   useWindowEvent('resize', shouldBindEvents, updateSelectionPositionsAfterTimeout)
-  useDocumentEvent('keydown', !isDisabled || temporarilyEnabled, handleKeydown)
+  useDocumentEvent('keydown', (!isDisabled || temporarilyEnabled) && alwaysOn, handleKeydown, true)
   useKeyboardShortcuts(handleShortcut)
   useHighlights({ searchText, matchingNodes })
   useExtensionMessaging({ handleBrowserActionClicked })
@@ -348,6 +359,8 @@ const Searchbar = (props) => {
           toggleAutoHide={toggleAutoHide}
           useOnEveryWebsite={useOnEveryWebsite}
           toggleUseOnEveryWebsite={toggleUseOnEveryWebsite}
+          alwaysOn={alwaysOn}
+          toggleAlwaysOn={toggleAlwaysOn}
         />
       </DraggableContainer>
     </div>

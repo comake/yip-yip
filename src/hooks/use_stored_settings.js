@@ -7,6 +7,7 @@ const useStoredSettings = () => {
   const [autoHide, setAutoHide] = React.useState(false);
   const [useOnEveryWebsite, setUseOnEveryWebsite] = React.useState(true);
   const [userEmail, setUserEmail] = React.useState(null);
+  const [alwaysOn, setAlwaysOn] = React.useState(true);
 
   const updateAutoHide = React.useCallback(newAutoHide => {
     setAutoHide(newAutoHide)
@@ -23,6 +24,11 @@ const useStoredSettings = () => {
     chrome.storage.local.set({ [SETTINGS_KEYS.USER_EMAIL]: newUserEmail });
   }, [])
 
+  const updateAlwaysOn = React.useCallback(newAlwaysOn => {
+    setAlwaysOn(newAlwaysOn)
+    chrome.storage.local.set({ [SETTINGS_KEYS.ALWAYS_ON]: newAlwaysOn });
+  }, [])
+
   const initializeStoredSettings = React.useCallback(data => {
     if (data.hasOwnProperty(SETTINGS_KEYS.AUTO_HIDE)) {
       setAutoHide(Boolean(data[SETTINGS_KEYS.AUTO_HIDE]));
@@ -32,6 +38,9 @@ const useStoredSettings = () => {
     }
     if (data.hasOwnProperty(SETTINGS_KEYS.USER_EMAIL)) {
       setUserEmail(data[SETTINGS_KEYS.USER_EMAIL]);
+    }
+    if (data.hasOwnProperty(SETTINGS_KEYS.ALWAYS_ON)) {
+      setAlwaysOn(data[SETTINGS_KEYS.ALWAYS_ON]);
     }
   }, [])
 
@@ -45,6 +54,9 @@ const useStoredSettings = () => {
       }
       if (changes.hasOwnProperty(SETTINGS_KEYS.USER_EMAIL)) {
         setUserEmail(changes[SETTINGS_KEYS.USER_EMAIL].newValue);
+      }
+      if (changes.hasOwnProperty(SETTINGS_KEYS.ALWAYS_ON)) {
+        setAlwaysOn(changes[SETTINGS_KEYS.ALWAYS_ON].newValue);
       }
     }
   }, [])
@@ -60,7 +72,9 @@ const useStoredSettings = () => {
     useOnEveryWebsite,
     updateUseOnEveryWebsite,
     userEmail,
-    updateUserEmail
+    updateUserEmail,
+    alwaysOn,
+    updateAlwaysOn
   }
 }
 

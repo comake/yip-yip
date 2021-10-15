@@ -52,5 +52,6 @@ export const RELEVANT_SELECTOR_BOOST = 1.6;
 export const SETTINGS_KEYS = {
   AUTO_HIDE: 'autoHide',
   USE_ON_EVERY_WEBSITE: 'useOnEveryWebsite',
-  USER_EMAIL: 'userEmail'
+  USER_EMAIL: 'userEmail',
+  ALWAYS_ON: 'alwaysOn'
 };

@@ -6,7 +6,10 @@ import { ReactComponent as HelpIcon } from '../../icons/help.svg';
 import TemporarilyEnabledMessage from './temporarily_enabled_message.js';
 
 const InfoDropdown = (props) => {
-  const { autoHide, toggleAutoHide, useOnEveryWebsite, toggleUseOnEveryWebsite, temporarilyEnabled } = props;
+  const { autoHide, toggleAutoHide, useOnEveryWebsite, toggleUseOnEveryWebsite,
+    temporarilyEnabled, alwaysOn, toggleAlwaysOn
+  } = props;
+
   const containerRef = React.useRef();
   const [hover, onMouseEnter, onMouseLeave] = useHover();
 
@@ -18,6 +21,8 @@ const InfoDropdown = (props) => {
         toggleAutoHide={toggleAutoHide}
         useOnEveryWebsite={useOnEveryWebsite}
         toggleUseOnEveryWebsite={toggleUseOnEveryWebsite}
+        alwaysOn={alwaysOn}
+        toggleAlwaysOn={toggleAlwaysOn}
       />
     )
   } else if (temporarilyEnabled) {

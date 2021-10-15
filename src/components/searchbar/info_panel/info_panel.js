@@ -7,7 +7,9 @@ import InfoPanelSettings from './info_panel_settings.js';
 import { COMAKE_LANDING_PAGE_LINK } from '../../../constants.js';
 
 const InfoPanel = (props) => {
-  const { autoHide, toggleAutoHide, useOnEveryWebsite, toggleUseOnEveryWebsite } = props;
+  const { autoHide, toggleAutoHide, useOnEveryWebsite, toggleUseOnEveryWebsite,
+    alwaysOn, toggleAlwaysOn
+  } = props;
 
   const madeWithLoveHeader = <>
     Made with ❤️ by <a id={'yipyip-comake-link'} href={COMAKE_LANDING_PAGE_LINK} target='_blank' rel="noreferrer">COMAKE</a>
@@ -25,6 +27,8 @@ const InfoPanel = (props) => {
         toggleAutoHide={toggleAutoHide}
         useOnEveryWebsite={useOnEveryWebsite}
         toggleUseOnEveryWebsite={toggleUseOnEveryWebsite}
+        alwaysOn={alwaysOn}
+        toggleAlwaysOn={toggleAlwaysOn}
       />
       <InfoPanelSectionHeader marginTop text={madeWithLoveHeader} />
       <InfoPanelButtons />

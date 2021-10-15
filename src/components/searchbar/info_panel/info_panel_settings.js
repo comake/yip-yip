@@ -1,7 +1,9 @@
 import InfoPanelSettingRow from './info_panel_setting_row.js';
 
 const InfoPanelSettings = (props) => {
-  const { autoHide, toggleAutoHide, useOnEveryWebsite, toggleUseOnEveryWebsite } = props;
+  const { autoHide, toggleAutoHide, useOnEveryWebsite, toggleUseOnEveryWebsite,
+    alwaysOn, toggleAlwaysOn
+  } = props;
 
   const settings = [
     {
@@ -9,6 +11,12 @@ const InfoPanelSettings = (props) => {
       description: 'YipYip is currently optimized for Gmail and may be buggy on other websites.',
       value: useOnEveryWebsite,
       onChange: toggleUseOnEveryWebsite
+    },
+    {
+      label: 'Always on',
+      description: 'Focus the YipYip searchbar anytime you press any key if another input is not focused.',
+      value: alwaysOn,
+      onChange: toggleAlwaysOn
     },
     {
       label: 'Autohide',
