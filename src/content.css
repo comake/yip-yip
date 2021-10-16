@@ -1,3 +1,7 @@
+#yipyip-root {
+  text-transform: none;
+}
+
 .yipyip-hidden {
   display: none;
 }
@@ -188,8 +192,8 @@
 }
 
 #yipyip-info-panel {
-  width: 510px !important;
-  min-width: 510px !important;
+  width: 545px !important;
+  min-width: 545px !important;
   padding: 20px !important;
   box-sizing: border-box !important;
 }
@@ -338,7 +342,8 @@
   font-weight: 500 !important;
   appearance: none !important;
   outline: none !important;
-  border: 1px solid rgba(255,255,255,0.65) !important;
+  border: none !important;
+  background-color: rgba(255,255,255,0.15) !important;
   -webkit-border-radius: 7px !important;
   -moz-border-radius: 7px !important;
   -ms-border-radius: 7px !important;
@@ -356,7 +361,7 @@
 }
 
 .yipyip-info-panel-button:hover {
-  border: 1px solid rgba(255,255,255,0.9) !important;
+  background-color: rgba(255,255,255,0.22) !important;
   color: white !important;
   text-decoration: none !important;
 }
@@ -434,4 +439,30 @@
   box-sizing: border-box !important;
   line-height: 1.35em !important;
   letter-spacing: normal !important;
+}
+
+#yipyip-learn-how-link {
+  text-decoration: none !important;
+  padding: 7px 15px !important;
+  color: white !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  -webkit-border-radius: 7px !important;
+  -moz-border-radius: 7px !important;
+  -ms-border-radius: 7px !important;
+  border-radius: 7px !important;
+  background-color: rgba(255,255,255,0.15) !important;
+}
+
+#yipyip-learn-how-link:hover {
+  background-color: rgba(255,255,255,0.22) !important;
+}
+
+#yipyip-root.yipyip-firefox #yipyip-container,
+#yipyip-root.yipyip-firefox .yipyip-tooltip-panel {
+  background-color: rgba(35, 35, 35, 0.9) !important;
+}
+
+#yipyip-root.yipyip-firefox .yipyip-tooltip-arrow {
+  border-color: rgba(35, 35, 35, 0.9) transparent !important;
 }

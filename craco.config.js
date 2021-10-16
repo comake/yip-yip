@@ -1,4 +1,15 @@
-const { getPlugin, pluginByName } = require("@craco/craco");
+const { addPlugins, getPlugin, pluginByName } = require("@craco/craco");
+const WebpackExtensionManifestPlugin = require('webpack-extension-manifest-plugin');
+
+const extensionManifestPlugin = new WebpackExtensionManifestPlugin({
+  config: {
+    base: './manifest.json',
+    extend: Boolean(process.env.IS_FIREFOX) ? './manifest_firefox.json' : './manifest_chrome.json'
+  },
+  pkgJsonProps: [
+    'version'
+  ]
+})
 
 function removeContentHashFromMiniCssExtractPlugin(webpackConfig) {
   const { isFound, match } = getPlugin(webpackConfig, pluginByName("MiniCssExtractPlugin"));
@@ -36,6 +47,7 @@ module.exports = {
     configure: (webpackConfig, {env, paths}) => {
       removeContentHashFromMiniCssExtractPlugin(webpackConfig);
       unsetDefaultMainEntryInManifestPlugin(webpackConfig);
+      addPlugins(webpackConfig, [extensionManifestPlugin])
 
       return {
         ...webpackConfig,

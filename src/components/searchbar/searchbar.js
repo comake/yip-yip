@@ -298,7 +298,7 @@ const Searchbar = (props) => {
       setPrevHost(host)
     }
 
-    const userEmailChanged = userEmail != prevUserEmail;
+    const userEmailChanged = userEmail !== prevUserEmail;
     if (userEmailChanged) {
       setPrevUserEmail(userEmail)
     }

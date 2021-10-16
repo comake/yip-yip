@@ -10,6 +10,8 @@
 
 # production
 /build
+/firefox_build
+/dist
 
 # misc
 .DS_Store

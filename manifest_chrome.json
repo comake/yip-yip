@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_icon": {
+      "16": "logo-16.png",
+      "24": "logo-24.png",
+      "32": "logo-32.png",
+      "48": "logo-48.png",
+      "64": "logo-64.png",
+      "128": "logo-128.png",
+      "192": "logo-192.png"
+    },
+    "default_title": "Search with YipYip!"
+  },
+  "host_permissions": [
+    "*://*/*"
+  ],
+  "permissions": [
+    "storage",
+    "scripting"
+  ]
+}

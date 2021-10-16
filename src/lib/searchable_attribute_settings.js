@@ -1,5 +1,4 @@
 import { LINK_OR_BUTTON_OR_INPUT_TYPES, LINK_OR_BUTTON_ROLE_VALUES } from "../constants.js";
-import Utils from './utils.js';
 import defaultSearchableAttributesByNodeName from '../data/searchable_attributes_by_node_name.json';
 
 const defaultButtonOrLinkQuerySelectors = Object.keys(defaultSearchableAttributesByNodeName)
