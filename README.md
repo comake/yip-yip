@@ -14,12 +14,13 @@ Press Enter to select the current match.
 
 Voila!
 
-Video Demo: https://www.youtube.com/watch?v=87tqknjluKU
+Video Demo: https://www.youtube.com/watch?v=y7wGtyeEoKQ
 
 ## Extension store listings
 [Google Chrome Extension](https://chrome.google.com/webstore/detail/yipyip/flbkmacappdledphgdoolmenldginemg/)\
-Edge Add-On (Coming Soon)\
-Firefox Extension (Coming Soon)
+[Firefox Extension](https://addons.mozilla.org/en-US/firefox/addon/yipyip/)\
+Edge Add-On (Coming Soon)
+
 
 # How it works
 
